@@ -68,7 +68,6 @@ public class Drivetrain extends SubsystemBase {
 
 
         follower = new Follower(aHardwareMap);
-        FollowerConstants.useBrakeModeInTeleOp = true;
         poseUpdater = new PoseUpdater(aHardwareMap);
 
         reset= new Pose(0,0,0);
