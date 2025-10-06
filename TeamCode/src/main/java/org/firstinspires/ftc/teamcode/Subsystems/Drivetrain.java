@@ -42,30 +42,28 @@ public class Drivetrain extends SubsystemBase {
     public Follower follower;
     private Pose reset;
 
-    private PoseUpdater poseUpdater;
-
     private Telemetry telemetry;
 
     public Drivetrain(HardwareMap aHardwareMap, Telemetry telemetry) {
-        leftFront = new Motor(aHardwareMap.get(DcMotor.class, DrivetrainConstants.fLMotorID), 0.01);
-        rightFront = new Motor(aHardwareMap.get(DcMotor.class, DrivetrainConstants.fRMotorID), 0.01);
-        leftRear = new Motor(aHardwareMap.get(DcMotor.class, DrivetrainConstants.bLMotorID), 0.01);
-        rightRear = new Motor(aHardwareMap.get(DcMotor.class, DrivetrainConstants.bRMotorID), 0.01);
+        leftFront = new Motor(aHardwareMap, DrivetrainConstants.fLMotorID, Motor.GoBILDA.RPM_312);
+        rightFront = new Motor(aHardwareMap, DrivetrainConstants.fRMotorID, Motor.GoBILDA.RPM_312);
+        leftRear = new Motor(aHardwareMap, DrivetrainConstants.bLMotorID, Motor.GoBILDA.RPM_312);
+        rightRear = new Motor(aHardwareMap, DrivetrainConstants.bRMotorID, Motor.GoBILDA.RPM_312);
 
         leftFront.setRunMode(Motor.RunMode.RawPower);
-        rightFront.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftRear.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightRear.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setRunMode(Motor.RunMode.RawPower);
+        leftRear.setRunMode(Motor.RunMode.RawPower);
+        rightRear.setRunMode(Motor.RunMode.RawPower);
 
-        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        rightFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setInverted(false);
+        rightFront.setInverted(false);
+        leftRear.setInverted(false);
+        rightRear.setInverted(true);
 
 
 
@@ -89,11 +87,11 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric) {
-        follower.setTeleOpMovementVectors(forward, -strafe, -rotation, !feildCentric);
+        follower.setTeleOpDrive(forward, -strafe, -rotation, !feildCentric);
     }
 
     public void setMovementVectors(double strafe, double forward, double rotation) {
-        follower.setTeleOpMovementVectors(forward, -strafe, -rotation, false);
+        follower.setTeleOpDrive(forward, -strafe, -rotation, false);
     }
 
     public void setPose(Pose pose) {
@@ -101,7 +99,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void enableTeleop() {
-        follower.startTeleopDrive();
+        follower.startTeleopDrive(true);
         follower.setStartingPose(startPose);
     }
 
