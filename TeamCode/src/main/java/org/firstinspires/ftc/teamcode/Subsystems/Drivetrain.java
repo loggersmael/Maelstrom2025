@@ -5,8 +5,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConst
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.localization.Localizer;
-import com.pedropathing.localization.Pose;
-import com.pedropathing.localization.PoseUpdater;
+import com.pedropathing.geometry.Pose;
 
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -20,7 +19,6 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import com.seattlesolvers.solverslib.geometry.Pose2d;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
-import com.seattlesolvers.solverslib.solversHardware.SolversMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -28,6 +26,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.GlobalConstants;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.GlobalConstants.OpModeType;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -37,7 +36,6 @@ public class Drivetrain extends SubsystemBase {
     private Motor rightFront;
     private Motor leftRear;
     private Motor rightRear;
-
 
     public Follower follower;
     private Pose reset;
@@ -67,19 +65,15 @@ public class Drivetrain extends SubsystemBase {
 
 
 
-        follower = new Follower(aHardwareMap);
-        poseUpdater = new PoseUpdater(aHardwareMap);
-
-        reset= new Pose(0,0,0);
+        follower = Constants.createFollower(aHardwareMap);
 
         this.telemetry = telemetry;
     }
 
     @Override
     public void periodic() {
+        follower.updatePose();
         follower.update();
-        reset.setX(follower.getPose().getX());
-        reset.setY(follower.getPose().getY());
         telemetry.addData("Drivetrain Pose X", follower.getPose().getX());
         telemetry.addData("Drivetrain Pose Y", follower.getPose().getY());
         telemetry.addData("Drivetrain Heading", follower.getPose().getHeading());
@@ -104,7 +98,7 @@ public class Drivetrain extends SubsystemBase {
 
     public void resetHeading()
     {
-        follower.setCurrentPoseWithOffset(new Pose(follower.getXOffset(), follower.getYOffset(), Math.toRadians(0)));
+        follower.setPose(new Pose(follower.getPose().getX(), follower.getPose().getY(), Math.toRadians(0)));
     }
 
     public void hold()
