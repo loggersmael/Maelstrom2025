@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.Utilities.Constants;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
-
+@Config
 public class DrivetrainConstants
 {
     public static final String fLMotorID = "frontLeft";

@@ -1,4 +1,23 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-public class Maelstrom {
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
+public class Maelstrom
+{
+    public enum Alliance{
+        RED,BLUE;
+    }
+    private Drivetrain dt;
+    private Intake intake;
+    private Shooter shooter;
+    private Spindexer spin;
+    private Turret turret;
+
+    public Maelstrom(HardwareMap hMap, Telemetry telemetry, Alliance color)
+    {
+        dt= new Drivetrain(hMap,telemetry);
+
+    }
 }
