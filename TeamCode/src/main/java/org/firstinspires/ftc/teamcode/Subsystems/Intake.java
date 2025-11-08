@@ -10,12 +10,14 @@ import org.firstinspires.ftc.teamcode.Utilities.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase
 {
-    private Motor intakeMotor;
+    public Motor intakeMotor;
 
     public Intake(HardwareMap aHardwareMap, Telemetry telemetry)
     {
         intakeMotor= new Motor(aHardwareMap, IntakeConstants.intakeID, Motor.GoBILDA.RPM_312);
-        intakeMotor.setRunMode(Motor.RunMode.VelocityControl);
+        intakeMotor.setRunMode(Motor.RunMode.RawPower);
     }
+
+
 
 }

@@ -12,7 +12,6 @@ public class Maelstrom
     private Drivetrain dt;
     private Intake intake;
     private Shooter shooter;
-    private Spindexer spin;
     private Turret turret;
 
     public Maelstrom(HardwareMap hMap, Telemetry telemetry, Alliance color)
