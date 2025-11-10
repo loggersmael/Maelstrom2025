@@ -58,10 +58,10 @@ public class Drivetrain extends SubsystemBase {
         leftRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         rightRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        leftFront.setInverted(false);
-        rightFront.setInverted(false);
+        leftFront.setInverted(true);
+        rightFront.setInverted(true);
         leftRear.setInverted(false);
-        rightRear.setInverted(true);
+        rightRear.setInverted(false);
 
 
 
@@ -80,6 +80,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric) {
+
         follower.setTeleOpDrive(forward, -strafe, -rotation, !feildCentric);
     }
 

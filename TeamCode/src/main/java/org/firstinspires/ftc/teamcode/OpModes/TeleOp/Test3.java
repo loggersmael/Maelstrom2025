@@ -14,8 +14,10 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 
-@TeleOp(name = "TestOP")
-public class TestOP extends OpMode
+@TeleOp(name = "Test3" +
+        "" +
+        "")
+public class Test3 extends OpMode
 {
     private Drivetrain dt;
     private ServoEx kicker;
@@ -30,16 +32,16 @@ public class TestOP extends OpMode
     @Override
     public void init()
     {
-       dt= new Drivetrain(hardwareMap, telemetry);
-       dt.follower.startTeleopDrive();
-       intake= hardwareMap.get(DcMotor.class,"intake");
-       turret= hardwareMap.get(DcMotor.class,"turret");
-       transfer= hardwareMap.get(DcMotor.class,"transfer");
-       shooter= hardwareMap.get(DcMotor.class,"shooter");
-       kicker= new ServoEx(hardwareMap,"kicker");
-       driver1= new GamepadEx(gamepad1);
-       driver2= new GamepadEx(gamepad2);
-       kicker.set(0);
+        dt= new Drivetrain(hardwareMap, telemetry);
+        dt.follower.startTeleopDrive();
+        intake= hardwareMap.get(DcMotor.class,"intake");
+        turret= hardwareMap.get(DcMotor.class,"turret");
+        transfer= hardwareMap.get(DcMotor.class,"transfer");
+        shooter= hardwareMap.get(DcMotor.class,"shooter");
+        kicker= new ServoEx(hardwareMap,"kicker");
+        driver1= new GamepadEx(gamepad1);
+        driver2= new GamepadEx(gamepad2);
+        kicker.set(0);
     }
 
     public void loop()
@@ -52,7 +54,7 @@ public class TestOP extends OpMode
             dt.resetHeading();
         }
 
-        if(driver2.getButton(GamepadKeys.Button.A))
+        if(gamepad2.a)
         {
             intake.setPower(1);
         }
@@ -60,7 +62,7 @@ public class TestOP extends OpMode
         {
             intake.setPower(0);
         }
-        if(driver2.getButton(GamepadKeys.Button.B))
+        if(gamepad2.b)
         {
             intake.setPower(-1);
         }
@@ -68,7 +70,7 @@ public class TestOP extends OpMode
         {
             intake.setPower(0);
         }
-        if(driver2.getButton(GamepadKeys.Button.X))
+        if(gamepad2.x)
         {
             turret.setPower(0.1);
         }
@@ -76,7 +78,7 @@ public class TestOP extends OpMode
         {
             intake.setPower(0);
         }
-        if(driver2.getButton(GamepadKeys.Button.Y))
+        if(gamepad2.y)
         {
             turret.setPower(-0.1);
         }
@@ -84,7 +86,7 @@ public class TestOP extends OpMode
         {
             intake.setPower(0);
         }
-        if(driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
+        if(gamepad2.right_bumper)
         {
             shooter.setPower(1);
         }
@@ -92,7 +94,7 @@ public class TestOP extends OpMode
         {
             shooter.setPower(0);
         }
-        if(driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
+        if(gamepad2.left_bumper)
         {
             shooter.setPower(-1);
         }
@@ -100,7 +102,7 @@ public class TestOP extends OpMode
         {
             shooter.setPower(0);
         }
-        if(driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
+        if(gamepad2.dpad_right)
         {
             transfer.setPower(1);
         }
@@ -108,7 +110,7 @@ public class TestOP extends OpMode
         {
             transfer.setPower(0);
         }
-        if(driver2.getButton(GamepadKeys.Button.DPAD_LEFT))
+        if(gamepad2.dpad_left)
         {
             transfer.setPower(-1);
         }
