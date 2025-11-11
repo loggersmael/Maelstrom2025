@@ -29,35 +29,47 @@ public class Turret extends SubsystemBase
     }
     private SystemState turretState=SystemState.IDLE;
     private Maelstrom.Alliance alliance;
-    private MotorEx turretMotor;
+    public MotorEx turretMotor;
     private MotorEx.Encoder turretEncoder;
     private PIDFController turretcontrol = new PIDFController(TurretConstants.kP, TurretConstants.kI, TurretConstants.kD, TurretConstants.kF);
     public Limelight3A cam;
-    private LLResult result;
     private List<LLResultTypes.FiducialResult> tagList;
     private double crosshairX=0;
     private boolean useTracking=true;
+    private double turretPowerCoef=0.3;
     private double turretPower=0;
+    private int unwindTarget= startingPos;
+    private boolean manualControl=false;
     public Turret(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color)
     {
         alliance=color;
         turretMotor= new MotorEx(aHardwareMap,"turret");
         cam= aHardwareMap.get(Limelight3A.class, "limelight");
         cam.pipelineSwitch(1);
-        result= cam.getLatestResult();
-        tagList=result.getFiducialResults();
+        tagList=cam.getLatestResult().getFiducialResults();
         turretMotor.setInverted(false);
-        turretMotor.setRunMode(Motor.RunMode.PositionControl);
+        turretMotor.setRunMode(Motor.RunMode.RawPower);
     }
 
     @Override
     public void periodic()
     {
-        result= cam.getLatestResult();
-        tagList=result.getFiducialResults();
-        unWind();
-        if(useTracking) {
-            spinToTarget();
+        if(!manualControl) {
+            tagList = cam.getLatestResult().getFiducialResults();
+
+            switch (turretState) {
+                case RESETTING:
+                    continueUnwind();
+                    break;
+                case FINDING_TARGET:
+                    checkForunWind();
+                    powerToTarget();
+                    break;
+                default:
+                    checkForunWind();
+                    break;
+            }
+            turretMotor.motorEx.setPower(turretPower * turretPowerCoef);
         }
     }
 
@@ -109,31 +121,57 @@ public class Turret extends SubsystemBase
         return targ.getTargetXPixels();
     }
 
-    public void spinToTarget()
+    public void powerToTarget()
     {
         double power= 0;
         if(getTargetX()!=-320923)
         {
             power= turretcontrol.calculate(getTargetX(),crosshairX);
         }
-        turretMotor.motorEx.setPower(power*turretPower);
+        turretPower=power;
     }
 
-    public void unWind()
+    public void powerToTick(double tar)
+    {
+        double power=0;
+        power= turretcontrol.calculate(turretEncoder.getPosition(),tar);
+    }
+    public void checkForunWind()
     {
         if (turretEncoder.getPosition()>maxLimit)
         {
-            useTracking=false;
-            turretMotor.setTargetPosition(startingPos);
+            turretMotor.stopMotor();
+            turretState=SystemState.RESETTING;
+            unwindTarget=startingPos;
         }
         else if(turretEncoder.getPosition()<minLimit)
         {
-            useTracking=false;
-            turretMotor.setTargetPosition(maxPos);
+            turretMotor.stopMotor();
+            turretState=SystemState.RESETTING;
+            unwindTarget=maxPos;
         }
-        else
+    }
+
+    public void continueUnwind()
+    {
+        double pos = turretEncoder.getPosition();
+        double error = Math.abs(pos - unwindTarget);
+        if(error<=10)
         {
-            useTracking=true;
+            turretMotor.stopMotor();
+            turretState= SystemState.FINDING_TARGET;
         }
+        else {
+            powerToTick(unwindTarget);
+        }
+    }
+
+    public void enableManual()
+    {
+        manualControl=true;
+    }
+    public void disableManual()
+    {
+        manualControl=false;
     }
 }
