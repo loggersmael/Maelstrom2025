@@ -10,14 +10,28 @@ import org.firstinspires.ftc.teamcode.Utilities.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase
 {
-    public Motor intakeMotor;
-
+    private Motor intakeMotor;
+    private Motor.Encoder intakeEncoder;
     public Intake(HardwareMap aHardwareMap, Telemetry telemetry)
     {
-        intakeMotor= new Motor(aHardwareMap, IntakeConstants.intakeID, Motor.GoBILDA.RPM_312);
-        intakeMotor.setRunMode(Motor.RunMode.RawPower);
+        intakeMotor= new Motor(aHardwareMap, IntakeConstants.intakeID, Motor.GoBILDA.RPM_435);
+        intakeMotor.setRunMode(Motor.RunMode.PositionControl);
+        intakeMotor.setInverted(false);
+        intakeMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
     }
 
+    public void spinIn()
+    {
+        intakeMotor.motor.setPower(1);
+    }
+    public void spinOut()
+    {
+        intakeMotor.motor.setPower(-1);
+    }
+    public void stop()
+    {
+        intakeMotor.motor.setPower(0);
+    }
 
 
 }

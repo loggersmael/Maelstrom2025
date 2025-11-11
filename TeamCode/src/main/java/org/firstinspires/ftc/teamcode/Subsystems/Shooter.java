@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
@@ -12,12 +13,35 @@ import org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants;
 
 public class Shooter extends SubsystemBase
 {
-    public MotorEx shooterMotor;
-    public ServoEx hoodServo;
+    private MotorEx shooterMotor;
+    private ServoEx hoodServo;
+    private Limelight3A cam;
+    private double currentVelocity;
+    private double targetVelocity;
 
     public Shooter(HardwareMap aHardwaremap, Telemetry telemetry)
     {
-        shooterMotor= new MotorEx(aHardwaremap, ShooterConstants.shooterMotorID);
+        shooterMotor= new MotorEx(aHardwaremap, ShooterConstants.shooterMotorID, Motor.GoBILDA.RPM_435);
+        shooterMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         hoodServo= new ServoEx(aHardwaremap, ShooterConstants.hoodServoID);
+        cam= aHardwaremap.get(Limelight3A.class,"limelight");
     }
+
+    public void shootClose()
+    {
+        shooterMotor.setVelocity(ShooterConstants.closeVelocity);
+    }
+
+    public void shootFar()
+    {
+        shooterMotor.setVelocity(ShooterConstants.farVelocity);
+    }
+
+    public void stopFlywheel()
+    {
+        shooterMotor.motorEx.setPower(0);
+    }
+
+
+
 }
