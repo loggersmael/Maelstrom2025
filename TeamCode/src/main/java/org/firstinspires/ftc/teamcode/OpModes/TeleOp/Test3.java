@@ -14,9 +14,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 
-@TeleOp(name = "Test3" +
-        "" +
-        "")
+@TeleOp(name = "Test3")
 public class Test3 extends OpMode
 {
     private Drivetrain dt;
