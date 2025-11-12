@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.kD;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.kI;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.kP;
+
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -25,6 +29,7 @@ public class Shooter extends SubsystemBase
         shooterMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         hoodServo= new ServoEx(aHardwaremap, ShooterConstants.hoodServoID);
         cam= aHardwaremap.get(Limelight3A.class,"limelight");
+        shooterMotor.setVeloCoefficients(kP,kI,kD);
     }
 
     public void shootClose()
