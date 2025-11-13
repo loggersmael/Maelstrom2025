@@ -8,6 +8,13 @@ public class ShooterConstants
     public static String shooterMotorID="shooter";
     public static String hoodServoID="hood";
 
+    public static double knownDistance=0;
+    public static double knownArea=0;
+    public static double llAngle=0;
+    public static double targetHeight=0;
+    public static double shooterHeight=0;
+    public static double transferEfficiency=0.8;
+    public static double wheelRadius=0;
     public static double closeVelocity=0;
     public static double farVelocity=0;
 

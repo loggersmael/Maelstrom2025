@@ -1,13 +1,7 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kP;
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.max;
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxLimit;
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxPos;
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.minLimit;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.startingPos;
 
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -17,17 +11,13 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Utilities.Constants.SimpleTurretConstants;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants;
 
 import java.util.List;
 
-public class Turret extends SubsystemBase
+public class SimpleTurret extends SubsystemBase
 {
-    public enum SystemState
-    {
-        IDLE,RESETTING,AT_TARGET,FINDING_TARGET;
-    }
-    private SystemState turretState=SystemState.IDLE;
     private Maelstrom.Alliance alliance;
     private MotorEx turretMotor;
     private MotorEx.Encoder turretEncoder;
@@ -40,7 +30,7 @@ public class Turret extends SubsystemBase
     private double turretPower=0;
     private int unwindTarget= startingPos;
     private boolean manualControl=false;
-    public Turret(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color)
+    public SimpleTurret(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color)
     {
         alliance=color;
         turretMotor= new MotorEx(aHardwareMap,"turret");
@@ -54,29 +44,16 @@ public class Turret extends SubsystemBase
     @Override
     public void periodic()
     {
-        if(!manualControl) {
-            tagList = cam.getLatestResult().getFiducialResults();
-
-            switch (turretState) {
-                case RESETTING:
-                    continueUnwind();
-                    break;
-                case FINDING_TARGET:
-                    checkForunWind();
-                    powerToTarget();
-                    break;
-                default:
-                    checkForunWind();
-                    break;
-            }
-            turretMotor.motorEx.setPower(turretPower * turretPowerCoef);
-        }
+        tagList=cam.getLatestResult().getFiducialResults();
+        checkLimitAndGo();
+        turretMotor.motorEx.setPower(turretPower * turretPowerCoef);
     }
 
     public void reset()
     {
         turretMotor.stopAndResetEncoder();
     }
+
     public LLResultTypes.FiducialResult getTag()
     {
         LLResultTypes.FiducialResult target= null;
@@ -121,56 +98,37 @@ public class Turret extends SubsystemBase
         return targ.getTargetXPixels();
     }
 
-    public void powerToTarget()
+    public double powerToTarget()
     {
         double power= 0;
         if(getTargetX()!=-320923)
         {
             power= turretcontrol.calculate(getTargetX(),crosshairX);
         }
-        turretPower=power;
+        else {
+            power=0;
+        }
+        return power;
     }
 
     public void powerToTick(double tar)
     {
         turretPower= turretcontrol.calculate(turretEncoder.getPosition(),tar);
     }
-    public void checkForunWind()
-    {
-        if (turretEncoder.getPosition()>maxLimit)
-        {
-            turretMotor.stopMotor();
-            turretState=SystemState.RESETTING;
-            unwindTarget=startingPos;
-        }
-        else if(turretEncoder.getPosition()<minLimit)
-        {
-            turretMotor.stopMotor();
-            turretState=SystemState.RESETTING;
-            unwindTarget=maxPos;
-        }
-    }
 
-    public void continueUnwind()
+    public void checkLimitAndGo()
     {
-        double pos = turretEncoder.getPosition();
-        double error = Math.abs(pos - unwindTarget);
-        if(error<=10)
+        if(turretEncoder.getPosition()> SimpleTurretConstants.maxLimit && powerToTarget()>0)
         {
-            turretMotor.stopMotor();
-            turretState= SystemState.FINDING_TARGET;
+            turretPower=0;
         }
-        else {
-            powerToTick(unwindTarget);
+        else if(turretEncoder.getPosition()<SimpleTurretConstants.minLimit && powerToTarget()<0)
+        {
+            turretPower=0;
         }
-    }
-
-    public void enableManual()
-    {
-        manualControl=true;
-    }
-    public void disableManual()
-    {
-        manualControl=false;
+        else
+        {
+            turretPower=powerToTarget();
+        }
     }
 }

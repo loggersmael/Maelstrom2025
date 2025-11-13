@@ -20,6 +20,11 @@ public class Intake extends SubsystemBase
         intakeMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
     }
 
+    @Override
+    public void periodic()
+    {
+
+    }
     public void spinIn()
     {
         intakeMotor.motor.setPower(1);

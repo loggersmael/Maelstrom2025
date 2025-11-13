@@ -15,14 +15,19 @@ public class Transfer extends SubsystemBase
         kicker=aHardwareMap.get(Servo.class,"kicker");
     }
 
+    @Override
+    public void periodic()
+    {
+
+    }
     public void down()
     {
-        kicker.setPosition(0);
+        kicker.setPosition(0.02);
     }
 
     public void up()
     {
-        kicker.setPosition(0.2);
+        kicker.setPosition(0.35);
     }
 
     public void halfWay()
