@@ -19,7 +19,9 @@ public class Shooter extends SubsystemBase
 {
     private MotorEx shooterMotor;
     private ServoEx hoodServo;
-    private Limelight3A cam;
+
+   private Limelight3A cam;
+
     private double currentVelocity;
     private double targetVelocity;
 

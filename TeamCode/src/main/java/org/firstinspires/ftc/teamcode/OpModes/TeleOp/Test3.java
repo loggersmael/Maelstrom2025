@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
+package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -18,7 +18,8 @@ import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 public class Test3 extends OpMode
 {
     private Drivetrain dt;
-    private ServoEx kicker;
+    private Servo kicker;
+    private Servo hood;
     private DcMotor intake;
     private DcMotor turret;
     private DcMotor transfer;
@@ -36,12 +37,16 @@ public class Test3 extends OpMode
         turret= hardwareMap.get(DcMotor.class,"turret");
         transfer= hardwareMap.get(DcMotor.class,"transfer");
         shooter= hardwareMap.get(DcMotor.class,"shooter");
-        kicker= new ServoEx(hardwareMap,"kicker");
+        kicker= hardwareMap.get(Servo.class,"kicker");
+        hood= hardwareMap.get(Servo.class,"hood");
         driver1= new GamepadEx(gamepad1);
         driver2= new GamepadEx(gamepad2);
-        kicker.set(0);
+        kicker.setPosition(0);
+        hood.setPosition(0);
+        shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
+    @Override
     public void loop()
     {
         dt.setMovementVectors(driver2.getLeftX(),driver2.getLeftY(), driver2.getRightX(),false);
@@ -56,11 +61,7 @@ public class Test3 extends OpMode
         {
             intake.setPower(1);
         }
-        else
-        {
-            intake.setPower(0);
-        }
-        if(gamepad2.b)
+        else if(gamepad2.b)
         {
             intake.setPower(-1);
         }
@@ -68,31 +69,25 @@ public class Test3 extends OpMode
         {
             intake.setPower(0);
         }
+
         if(gamepad2.x)
         {
-            turret.setPower(0.1);
+            turret.setPower(0.5);
+        }
+        else if(gamepad2.y)
+        {
+            turret.setPower(-0.5);
         }
         else
         {
-            intake.setPower(0);
+            turret.setPower(0);
         }
-        if(gamepad2.y)
-        {
-            turret.setPower(-0.1);
-        }
-        else
-        {
-            intake.setPower(0);
-        }
+
         if(gamepad2.right_bumper)
         {
             shooter.setPower(1);
         }
-        else
-        {
-            shooter.setPower(0);
-        }
-        if(gamepad2.left_bumper)
+        else if(gamepad2.left_bumper)
         {
             shooter.setPower(-1);
         }
@@ -100,6 +95,7 @@ public class Test3 extends OpMode
         {
             shooter.setPower(0);
         }
+
         if(gamepad2.dpad_right)
         {
             transfer.setPower(1);
@@ -116,13 +112,21 @@ public class Test3 extends OpMode
         {
             transfer.setPower(0);
         }
-        if(driver2.getButton(GamepadKeys.Button.DPAD_UP))
+        if(gamepad2.dpad_up)
         {
-            kicker.set(0.2);
+            kicker.setPosition(0.35);
         }
-        if(driver2.getButton(GamepadKeys.Button.DPAD_DOWN))
+        if(gamepad2.dpad_down)
         {
-            kicker.set(0);
+            kicker.setPosition(0.02);
+        }
+        if(gamepad2.touchpad)
+        {
+            hood.setPosition(1);
+        }
+        if(gamepad2.left_stick_button)
+        {
+            hood.setPosition(0.2);
         }
     }
 

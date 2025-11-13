@@ -24,6 +24,7 @@ public class Test2 extends OpMode
         else {
             intake.setPower(0);
         }
+
         if(gamepad1.b)
         {
             intake.setPower(1);
@@ -31,6 +32,7 @@ public class Test2 extends OpMode
         else {
             intake.setPower(0);
         }
+
         if(gamepad1.right_bumper)
         {
             shooter.setPower(1);
@@ -38,6 +40,7 @@ public class Test2 extends OpMode
         else {
             shooter.setPower(0);
         }
+
         if(gamepad1.left_bumper)
         {
             shooter.setPower(-1);
