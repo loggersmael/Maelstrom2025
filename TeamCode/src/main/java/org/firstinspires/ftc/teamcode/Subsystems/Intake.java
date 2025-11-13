@@ -12,8 +12,10 @@ public class Intake extends SubsystemBase
 {
     private Motor intakeMotor;
     private Motor.Encoder intakeEncoder;
+    private Telemetry telemetry;
     public Intake(HardwareMap aHardwareMap, Telemetry telemetry)
     {
+        this.telemetry=telemetry;
         intakeMotor= new Motor(aHardwareMap, IntakeConstants.intakeID, Motor.GoBILDA.RPM_435);
         intakeMotor.setRunMode(Motor.RunMode.PositionControl);
         intakeMotor.setInverted(false);

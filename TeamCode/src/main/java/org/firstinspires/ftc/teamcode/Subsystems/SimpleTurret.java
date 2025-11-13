@@ -20,6 +20,7 @@ public class SimpleTurret extends SubsystemBase
 {
     private Maelstrom.Alliance alliance;
     private MotorEx turretMotor;
+    private Telemetry telemetry;
     private MotorEx.Encoder turretEncoder;
     private PIDFController turretcontrol = new PIDFController(TurretConstants.kP, TurretConstants.kI, TurretConstants.kD, TurretConstants.kF);
     public Limelight3A cam;
@@ -33,6 +34,7 @@ public class SimpleTurret extends SubsystemBase
     public SimpleTurret(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color)
     {
         alliance=color;
+        this.telemetry=telemetry;
         turretMotor= new MotorEx(aHardwareMap,"turret");
         cam= aHardwareMap.get(Limelight3A.class, "limelight");
         cam.pipelineSwitch(1);
@@ -47,6 +49,7 @@ public class SimpleTurret extends SubsystemBase
         tagList=cam.getLatestResult().getFiducialResults();
         checkLimitAndGo();
         turretMotor.motorEx.setPower(turretPower * turretPowerCoef);
+        telemetry.addData("Current Encoder Pos: ",turretEncoder.getPosition());
     }
 
     public void reset()

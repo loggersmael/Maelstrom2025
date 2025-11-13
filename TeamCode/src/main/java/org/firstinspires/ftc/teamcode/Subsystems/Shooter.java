@@ -5,6 +5,8 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstant
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.kP;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.knownArea;
 
+import android.sax.StartElementListener;
+
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -27,13 +29,15 @@ public class Shooter extends SubsystemBase
 
    private Limelight3A cam;
    private Maelstrom.Alliance alliance;
-
+    private Telemetry telemetry;
     private double currentVelocity;
     private double targetVelocity;
+    private boolean flywheelOn;
     private List<LLResultTypes.FiducialResult> tagList;
 
     public Shooter(HardwareMap aHardwaremap, Telemetry telemetry, Maelstrom.Alliance color)
     {
+        this.telemetry=telemetry;
         shooterMotor= new MotorEx(aHardwaremap, ShooterConstants.shooterMotorID, Motor.GoBILDA.RPM_435);
         shooterMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         hoodServo= aHardwaremap.get(Servo.class,"hood");
@@ -44,16 +48,33 @@ public class Shooter extends SubsystemBase
         alliance=color;
     }
 
+    @Override
+    public void periodic()
+    {
+        if(flywheelOn)
+        {
+            shooterMotor.setVelocity(targetVelocity);
+        }
+        else{
+            shooterMotor.motorEx.setPower(0);
+        }
+        telemetry.addData("Current Velocity: ", shooterMotor.getVelocity());
+        telemetry.addData("Target Velocity: ", targetVelocity);
+    }
     public void shootClose()
     {
-        shooterMotor.setVelocity(ShooterConstants.closeVelocity);
+        targetVelocity=ShooterConstants.closeVelocity;
     }
 
     public void shootFar()
     {
-        shooterMotor.setVelocity(ShooterConstants.farVelocity);
+        targetVelocity=ShooterConstants.farVelocity;
     }
 
+    public void toggleFlywheel()
+    {
+        flywheelOn=!flywheelOn;
+    }
     public LLResultTypes.FiducialResult getTag()
     {
         LLResultTypes.FiducialResult target= null;
