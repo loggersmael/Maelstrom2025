@@ -61,7 +61,7 @@ public class Intake extends SubsystemBase
 
     public void kickerHalfway()
     {
-        kicker.setPosition(0.1);
+        kicker.setPosition(0.2);
     }
 
 }

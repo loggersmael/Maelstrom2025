@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -22,6 +23,8 @@ public class Maelstrom
     public GamepadEx driver1;
     public GamepadEx driver2;
     private Telemetry telemetry;
+    private int transferState=1;
+    private Timer tTimer;
 
     public Maelstrom(HardwareMap hMap, Telemetry telemetry, Alliance color, Gamepad d1, Gamepad d2)
     {
@@ -32,6 +35,7 @@ public class Maelstrom
         turret= new SimpleTurret(hMap,telemetry,color);
         driver1= new GamepadEx(d1);
         driver2= new GamepadEx(d2);
+        tTimer=new Timer();
     }
 
     public void periodic()
@@ -49,6 +53,11 @@ public class Maelstrom
         if(driver1.getButton(GamepadKeys.Button.TOUCHPAD))
         {
             dt.resetHeading();
+        }
+
+        if(driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
+        {
+            transferAndShoot();
         }
 
         if(driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
@@ -112,5 +121,64 @@ public class Maelstrom
                 shooter.stopFlywheel();
             }
         }
+    }
+
+    private void setTransferState(int x)
+    {
+        transferState=x;
+        tTimer.resetTimer();
+    }
+
+    private void transferAndShoot()
+    {
+        switch(transferState)
+        {
+            case 1:
+                intake.spinIn();
+                setTransferState(2);
+                break;
+            case 2:
+                if(tTimer.getElapsedTimeSeconds()>=0.2)
+                {
+                    intake.stop();
+                }
+                setTransferState(3);
+                break;
+            case 3:
+                if(tTimer.getElapsedTimeSeconds()>=0.05)
+                {
+                    intake.kickerUp();
+                }
+                setTransferState(4);
+                break;
+            case 4:
+                if(tTimer.getElapsedTimeSeconds()>=0.05)
+                {
+                    intake.kickerDown();
+                }
+                setTransferState(5);
+                break;
+            case 5:
+                if(tTimer.getElapsedTimeSeconds()>=0.1)
+                {
+                    intake.spinIn();
+                }
+                setTransferState(6);
+                break;
+            case 6:
+                if(tTimer.getElapsedTimeSeconds()>=0.1)
+                {
+                    intake.kickerUp();
+                }
+                setTransferState(7);
+                break;
+            case 7:
+                if(tTimer.getElapsedTimeSeconds()>=0.05)
+                {
+                    intake.kickerDown();
+                    intake.stop();
+                }
+        }
+
     }
 }
