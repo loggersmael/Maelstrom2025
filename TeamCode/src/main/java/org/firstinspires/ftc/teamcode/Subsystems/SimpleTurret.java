@@ -92,6 +92,12 @@ public class SimpleTurret extends SubsystemBase
         return target;
     }
 
+    public void reset()
+    {
+        turretMotor.setPower(0);
+
+    }
+
     public double getTargetX()
     {
         LLResultTypes.FiducialResult targ=getTag();
