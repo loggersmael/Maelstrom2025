@@ -38,10 +38,11 @@ public class TurretTest extends OpMode
         cam.periodic();
         Robot.periodic();
         turr.periodic();
-        if(cam.targetPresent())
-        {
-            turr.setLimelightData(cam.getTargetX(),cam.targetPresent());
-        }
+        
+        // Always update limelight data, even when no target is present
+        // This ensures hasTarget is updated correctly
+        turr.setLimelightData(cam.getTargetX(), cam.targetPresent());
+        
         if(gamepad1.right_bumper)
         {
             Robot.shooter.setFullPower();

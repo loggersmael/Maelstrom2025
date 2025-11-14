@@ -67,10 +67,20 @@ public class TrueTurret extends SubsystemBase {
         turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        cam=hMap.get(Limelight3A.class,"limelight");
-        tagList= cam.getLatestResult().getFiducialResults();
-        positionController = new PIDFController(0.1,0,0.01,0);
-        frictionController = new SimpleMotorFeedforward(0,0,0);
+        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        
+        cam = hMap.get(Limelight3A.class, "limelight");
+        
+        // CRITICAL: Start the Limelight before trying to get results
+        cam.start();
+        
+        tagList = cam.getLatestResult().getFiducialResults();
+        positionController = new PIDFController(0.1, 0, 0.01, 0);
+        frictionController = new SimpleMotorFeedforward(0, 0, 0);
+        
+        // Initialize hasTarget and tx
+        hasTarget = false;
+        tx = 0;
     }
 
     @Override
@@ -89,37 +99,44 @@ public class TrueTurret extends SubsystemBase {
 
         switch(wantedState) {
             case IDLE:
-                turretMotor.setPower(0);
-                systemState =  SystemState.IDLE;
+                return SystemState.IDLE;
             case HOME:
-                systemState = SystemState.HOME;
+                return SystemState.HOME;
             case FINDING_POSITION:
-                systemState = SystemState.FINDING_POSITION;
+                return SystemState.FINDING_POSITION;
             case RELOCALIZING:
-                systemState = SystemState.RELOCALIZING;
+                return SystemState.RELOCALIZING;
             case TARGET_POSITION:
-                systemState = SystemState.TARGET_POSITION;
+                return SystemState.TARGET_POSITION;
             case MANUAL:
-                systemState = SystemState.MANUAL;
+                return SystemState.MANUAL;
+            default:
+                return SystemState.IDLE;
         }
-
-        return systemState;
     }
 
     public void applyStates() {
         switch(systemState) {
             case IDLE:
+                turretMotor.setPower(0);
+                break;
             case HOME:
             case FINDING_POSITION:
             case RELOCALIZING:
                 relocalize();
+                break;
             case TARGET_POSITION:
                 if (hasTarget) {
                     aimWithVision();
                 } else {
+                    // Even without a target, allow manual movement or keep at zero
+                    // You might want to add a search pattern here
                     turretMotor.setPower(0);
                 }
+                break;
             case MANUAL:
+                // Manual control is handled by setManualPowerControl()
+                break;
         }
     }
 
@@ -131,6 +148,12 @@ public class TrueTurret extends SubsystemBase {
         targetAngle = Math.max(0, Math.min(360, targetAngle));
 
         double power = positionController.calculate(currentAngle, targetAngle);
+        
+        // Add minimum power threshold to ensure motor moves
+        if (Math.abs(power) < 0.05 && Math.abs(tx) > 0.5) {
+            power = Math.signum(tx) * 0.05; // Minimum 5% power if there's a significant error
+        }
+        
         turretMotor.setPower(power);
     }
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -21,19 +22,36 @@ public class Vision extends SubsystemBase
         alliance=color;
         this.telemetry=telemetry;
         cam= hMap.get(Limelight3A.class,"limelight");
-        tagList=cam.getLatestResult().getFiducialResults();
+        
+        // CRITICAL: Start the Limelight before trying to get results
+        cam.start();
+        
+        // Initialize tagList as empty - it will be populated in periodic()
+        tagList = new ArrayList<>();
     }
 
 
     @Override
     public void periodic()
     {
-        if(getTag()!=null) {
-            targetx=getTag().getTargetXDegrees();
-            tagList = cam.getLatestResult().getFiducialResults();
+        // Always update tagList from the latest result, but check if result is valid first
+        LLResult result = cam.getLatestResult();
+        if (result != null && result.isValid()) {
+            tagList = result.getFiducialResults();
+            
+            // Update targetx if we have a valid tag
+            LLResultTypes.FiducialResult tag = getTag();
+            if (tag != null) {
+                targetx = tag.getTargetXDegrees();
+            }
+        } else {
+            // If result is invalid, clear the tag list
+            tagList = new ArrayList<>();
         }
+        
         telemetry.addData("Target X: ", targetx);
         telemetry.addData("Target Present: ", targetPresent());
+        telemetry.addData("Fiducial Count: ", tagList != null ? tagList.size() : 0);
     }
     public LLResultTypes.FiducialResult getTag()
     {
