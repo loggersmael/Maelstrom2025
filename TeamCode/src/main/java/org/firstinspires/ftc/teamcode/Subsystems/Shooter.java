@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstant
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.kP;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.knownArea;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.midVelocity;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.velocityTolerance;
 
 import android.sax.StartElementListener;
 
@@ -30,6 +31,7 @@ public class Shooter extends SubsystemBase
 {
     private DcMotorEx shooterMotor;
     private Servo hoodServo;
+    private Servo light;
 
    private Limelight3A cam;
    private Maelstrom.Alliance alliance;
@@ -45,6 +47,7 @@ public class Shooter extends SubsystemBase
         shooterMotor= aHardwaremap.get(DcMotorEx.class,"shooter");
         hoodServo= aHardwaremap.get(Servo.class,"hood");
         hoodServo.setDirection(Servo.Direction.REVERSE);
+        light= aHardwaremap.get(Servo.class,"light");
         cam= aHardwaremap.get(Limelight3A.class,"limelight");
         tagList= cam.getLatestResult().getFiducialResults();
         shooterMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -62,7 +65,9 @@ public class Shooter extends SubsystemBase
         else{
             shooterMotor.setPower(0);
         }
-        telemetry.addData("Current Velocity: ", shooterMotor.getVelocity());
+        currentVelocity=shooterMotor.getVelocity();
+        setLight();
+        telemetry.addData("Current Velocity: ", currentVelocity);
         telemetry.addData("Target Velocity: ", targetVelocity);
     }
     public void shootClose()
@@ -147,4 +152,20 @@ public class Shooter extends SubsystemBase
         shooterMotor.setPower(1);
     }
 
+    public void setLight()
+    {
+        if(atSpeed())
+        {
+            light.setPosition(0.5);
+        }
+        else
+        {
+            light.setPosition(0.277);
+        }
+    }
+
+    public boolean atSpeed()
+    {
+        return Math.abs(currentVelocity-targetVelocity)<velocityTolerance;
+    }
 }

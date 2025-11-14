@@ -55,6 +55,8 @@ public class Maelstrom
             dt.resetHeading();
         }
 
+        turret.manualTurret(driver2.getLeftX());
+
         if(driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
             transferAndShoot();
@@ -121,6 +123,15 @@ public class Maelstrom
                 shooter.stopFlywheel();
             }
         }
+
+        if(driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
+        {
+            shooter.setHoodServo(0);
+        }
+        if(driver1.getButton(GamepadKeys.Button.DPAD_UP))
+        {
+            shooter.setHoodServo(0.5);
+        }
     }
 
     private void setTransferState(int x)
@@ -145,7 +156,7 @@ public class Maelstrom
                 setTransferState(3);
                 break;
             case 3:
-                if(tTimer.getElapsedTimeSeconds()>=0.05)
+                if(tTimer.getElapsedTimeSeconds()>=0.05 && shooter.atSpeed())
                 {
                     intake.kickerUp();
                 }
@@ -166,7 +177,7 @@ public class Maelstrom
                 setTransferState(6);
                 break;
             case 6:
-                if(tTimer.getElapsedTimeSeconds()>=0.1)
+                if(tTimer.getElapsedTimeSeconds()>=0.1 && shooter.atSpeed())
                 {
                     intake.kickerUp();
                 }

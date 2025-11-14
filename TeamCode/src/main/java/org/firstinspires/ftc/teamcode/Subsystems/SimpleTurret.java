@@ -50,9 +50,11 @@ public class SimpleTurret extends SubsystemBase
     @Override
     public void periodic()
     {
-        tagList=cam.getLatestResult().getFiducialResults();
-        checkLimitAndGo();
-        turretMotor.setPower(turretPower * turretPowerCoef);
+        if(!manualControl) {
+            tagList = cam.getLatestResult().getFiducialResults();
+            checkLimitAndGo();
+            turretMotor.setPower(turretPower * turretPowerCoef);
+        }
         telemetry.addData("Current Turret Pos: ",turretMotor.getCurrentPosition());
     }
 
@@ -131,6 +133,14 @@ public class SimpleTurret extends SubsystemBase
         else
         {
             turretPower=powerToTarget();
+        }
+    }
+
+    public void manualTurret(double power)
+    {
+        if(manualControl)
+        {
+            turretMotor.setPower(power);
         }
     }
 }
