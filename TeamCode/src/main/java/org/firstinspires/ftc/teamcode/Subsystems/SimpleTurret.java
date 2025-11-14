@@ -53,8 +53,8 @@ public class SimpleTurret extends SubsystemBase
         if(!manualControl) {
             tagList = cam.getLatestResult().getFiducialResults();
             checkLimitAndGo();
-            turretMotor.setPower(turretPower * turretPowerCoef);
         }
+        turretMotor.setPower(turretPower * turretPowerCoef);
         telemetry.addData("Current Turret Pos: ",turretMotor.getCurrentPosition());
     }
 
@@ -132,15 +132,28 @@ public class SimpleTurret extends SubsystemBase
         }
         else
         {
-            turretPower=powerToTarget();
+            if(powerToTarget()!=-320923) {
+                turretPower = powerToTarget();
+            }
         }
     }
-
+    public void turretWithManualLimits(double power)
+    {
+        if(turretMotor.getCurrentPosition()> SimpleTurretConstants.maxLimit && power>0)
+        {
+            turretPower=0;
+        }
+        else if(turretMotor.getCurrentPosition()<SimpleTurretConstants.minLimit && power<0)
+        {
+            turretPower=0;
+        }
+        else
+        {
+            turretPower=power;
+        }
+    }
     public void manualTurret(double power)
     {
-        if(manualControl)
-        {
-            turretMotor.setPower(power);
-        }
+        turretPower=power;
     }
 }

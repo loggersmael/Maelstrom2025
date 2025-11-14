@@ -55,7 +55,7 @@ public class Maelstrom
             dt.resetHeading();
         }
 
-        turret.manualTurret(driver2.getLeftX());
+        turret.turretWithManualLimits(driver2.getLeftX());
 
         if(driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
