@@ -20,6 +20,7 @@ public class Maelstrom
     public Intake intake;
     public Shooter shooter;
     public SimpleTurret turret;
+    public Vision cams;
     public GamepadEx driver1;
     public GamepadEx driver2;
     private Telemetry telemetry;
@@ -33,6 +34,7 @@ public class Maelstrom
         intake= new Intake(hMap,telemetry);
         shooter= new Shooter(hMap,telemetry,color);
         turret= new SimpleTurret(hMap,telemetry,color);
+        cams= new Vision(hMap,telemetry,color);
         driver1= new GamepadEx(d1);
         driver2= new GamepadEx(d2);
         tTimer=new Timer();
@@ -41,6 +43,7 @@ public class Maelstrom
     public void periodic()
     {
         dt.periodic();
+        //cams.periodic();
         intake.periodic();
         shooter.periodic();
         turret.periodic();
