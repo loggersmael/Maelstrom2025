@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstant
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.kI;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.kP;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.knownArea;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants.midVelocity;
 
 import android.sax.StartElementListener;
 
@@ -12,6 +13,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
@@ -26,7 +28,7 @@ import java.util.List;
 
 public class Shooter extends SubsystemBase
 {
-    private DcMotor shooterMotor;
+    private DcMotorEx shooterMotor;
     private Servo hoodServo;
 
    private Limelight3A cam;
@@ -34,18 +36,19 @@ public class Shooter extends SubsystemBase
     private Telemetry telemetry;
     private double currentVelocity;
     private double targetVelocity;
-    private boolean flywheelOn;
+    public boolean flywheelOn;
     private List<LLResultTypes.FiducialResult> tagList;
 
     public Shooter(HardwareMap aHardwaremap, Telemetry telemetry, Maelstrom.Alliance color)
     {
         this.telemetry=telemetry;
-        shooterMotor= aHardwaremap.get(DcMotor.class,"shooter");
+        shooterMotor= aHardwaremap.get(DcMotorEx.class,"shooter");
         hoodServo= aHardwaremap.get(Servo.class,"hood");
         hoodServo.setDirection(Servo.Direction.REVERSE);
         cam= aHardwaremap.get(Limelight3A.class,"limelight");
         tagList= cam.getLatestResult().getFiducialResults();
-        //shooterMotor.setVelocityPIDFCoefficients(kP,kI,kD,0);
+        shooterMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterMotor.setVelocityPIDFCoefficients(kP,kI,kD,0);
         alliance=color;
     }
 
@@ -54,12 +57,12 @@ public class Shooter extends SubsystemBase
     {
         if(flywheelOn)
         {
-            //shooterMotor.setVelocity(targetVelocity);
+            shooterMotor.setVelocity(targetVelocity);
         }
         else{
             shooterMotor.setPower(0);
         }
-        //telemetry.addData("Current Velocity: ", shooterMotor.getVelocity());
+        telemetry.addData("Current Velocity: ", shooterMotor.getVelocity());
         telemetry.addData("Target Velocity: ", targetVelocity);
     }
     public void shootClose()
@@ -71,7 +74,15 @@ public class Shooter extends SubsystemBase
     {
         targetVelocity=ShooterConstants.farVelocity;
     }
+    public void shootMid()
+    {
+        targetVelocity=midVelocity;
+    }
 
+    public void reverseWheel()
+    {
+        shooterMotor.setPower(-0.1);
+    }
     public void toggleFlywheel()
     {
         flywheelOn=!flywheelOn;
@@ -133,7 +144,7 @@ public class Shooter extends SubsystemBase
 
     public void setFullPower()
     {
-        shooterMotor.setPower(-1);
+        shooterMotor.setPower(1);
     }
 
 }

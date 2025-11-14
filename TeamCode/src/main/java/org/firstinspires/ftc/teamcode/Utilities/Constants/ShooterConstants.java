@@ -15,10 +15,11 @@ public class ShooterConstants
     public static double shooterHeight=0;
     public static double transferEfficiency=0.8;
     public static double wheelRadius=0;
-    public static double closeVelocity=0;
-    public static double farVelocity=0;
+    public static double closeVelocity=2000;
+    public static double farVelocity=2800;
+    public static double midVelocity=2400;
 
-    public static double kP=0;
+    public static double kP=0.01;
     public static double kI=0;
-    public static double kD=0;
+    public static double kD=0.0001;
 }

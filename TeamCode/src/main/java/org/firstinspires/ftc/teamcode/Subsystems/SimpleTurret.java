@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
@@ -21,7 +22,7 @@ import java.util.List;
 public class SimpleTurret extends SubsystemBase
 {
     private Maelstrom.Alliance alliance;
-    private DcMotor turretMotor;
+    private DcMotorEx turretMotor;
     private Telemetry telemetry;
     private PIDFController turretcontrol = new PIDFController(TurretConstants.kP, TurretConstants.kI, TurretConstants.kD, TurretConstants.kF);
     public Limelight3A cam;
@@ -37,7 +38,7 @@ public class SimpleTurret extends SubsystemBase
 
         alliance=color;
         this.telemetry=telemetry;
-        turretMotor= aHardwareMap.get(DcMotor.class, "turret");
+        turretMotor= aHardwareMap.get(DcMotorEx.class, "turret");
         cam= aHardwareMap.get(Limelight3A.class, "limelight");
         cam.pipelineSwitch(0);
         tagList=cam.getLatestResult().getFiducialResults();
