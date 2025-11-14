@@ -45,6 +45,7 @@ public class Maelstrom
         shooter.periodic();
         turret.periodic();
         telemetry.update();
+        transferAndShoot();
     }
 
     public void controlMap()
@@ -59,7 +60,11 @@ public class Maelstrom
 
         if(driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
-            transferAndShoot();
+            startTransfer();
+        }
+        if(driver1.getButton(GamepadKeys.Button.LEFT_BUMPER))
+        {
+            cancelTransfer();
         }
 
         if(driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
@@ -139,6 +144,14 @@ public class Maelstrom
         transferState=x;
         tTimer.resetTimer();
     }
+    private void startTransfer()
+    {
+        setTransferState(1);
+    }
+    private void cancelTransfer()
+    {
+        setTransferState(-1);
+    }
 
     private void transferAndShoot()
     {
@@ -152,43 +165,45 @@ public class Maelstrom
                 if(tTimer.getElapsedTimeSeconds()>=0.2)
                 {
                     intake.stop();
+                    setTransferState(3);
                 }
-                setTransferState(3);
                 break;
             case 3:
                 if(tTimer.getElapsedTimeSeconds()>=0.05 && shooter.atSpeed())
                 {
                     intake.kickerUp();
+                    setTransferState(4);
                 }
-                setTransferState(4);
                 break;
             case 4:
                 if(tTimer.getElapsedTimeSeconds()>=0.05)
                 {
                     intake.kickerDown();
+                    setTransferState(5);
                 }
-                setTransferState(5);
                 break;
             case 5:
                 if(tTimer.getElapsedTimeSeconds()>=0.1)
                 {
                     intake.spinIn();
+                    setTransferState(6);
                 }
-                setTransferState(6);
                 break;
             case 6:
                 if(tTimer.getElapsedTimeSeconds()>=0.1 && shooter.atSpeed())
                 {
                     intake.kickerUp();
+                    setTransferState(7);
                 }
-                setTransferState(7);
                 break;
             case 7:
                 if(tTimer.getElapsedTimeSeconds()>=0.05)
                 {
                     intake.kickerDown();
                     intake.stop();
+                    setTransferState(-1);
                 }
+                break;
         }
 
     }
