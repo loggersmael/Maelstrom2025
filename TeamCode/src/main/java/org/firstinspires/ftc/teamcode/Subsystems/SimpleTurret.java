@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants
 
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDFController;
@@ -19,9 +21,8 @@ import java.util.List;
 public class SimpleTurret extends SubsystemBase
 {
     private Maelstrom.Alliance alliance;
-    private MotorEx turretMotor;
+    private DcMotor turretMotor;
     private Telemetry telemetry;
-    private MotorEx.Encoder turretEncoder;
     private PIDFController turretcontrol = new PIDFController(TurretConstants.kP, TurretConstants.kI, TurretConstants.kD, TurretConstants.kF);
     public Limelight3A cam;
     private List<LLResultTypes.FiducialResult> tagList;
@@ -33,14 +34,16 @@ public class SimpleTurret extends SubsystemBase
     private boolean manualControl=false;
     public SimpleTurret(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color)
     {
+
         alliance=color;
         this.telemetry=telemetry;
-        turretMotor= new MotorEx(aHardwareMap,"turret");
+        turretMotor= aHardwareMap.get(DcMotor.class, "turret");
         cam= aHardwareMap.get(Limelight3A.class, "limelight");
-        cam.pipelineSwitch(1);
+        cam.pipelineSwitch(0);
         tagList=cam.getLatestResult().getFiducialResults();
-        turretMotor.setInverted(false);
-        turretMotor.setRunMode(Motor.RunMode.RawPower);
+        turretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("Current Turret Pos: ",turretMotor.getCurrentPosition());
     }
 
     @Override
@@ -48,13 +51,8 @@ public class SimpleTurret extends SubsystemBase
     {
         tagList=cam.getLatestResult().getFiducialResults();
         checkLimitAndGo();
-        turretMotor.motorEx.setPower(turretPower * turretPowerCoef);
-        telemetry.addData("Current Encoder Pos: ",turretEncoder.getPosition());
-    }
-
-    public void reset()
-    {
-        turretMotor.stopAndResetEncoder();
+        turretMotor.setPower(turretPower * turretPowerCoef);
+        telemetry.addData("Current Turret Pos: ",turretMotor.getCurrentPosition());
     }
 
     public LLResultTypes.FiducialResult getTag()
@@ -116,16 +114,16 @@ public class SimpleTurret extends SubsystemBase
 
     public void powerToTick(double tar)
     {
-        turretPower= turretcontrol.calculate(turretEncoder.getPosition(),tar);
+        turretPower= turretcontrol.calculate(turretMotor.getCurrentPosition(),tar);
     }
 
     public void checkLimitAndGo()
     {
-        if(turretEncoder.getPosition()> SimpleTurretConstants.maxLimit && powerToTarget()>0)
+        if(turretMotor.getCurrentPosition()> SimpleTurretConstants.maxLimit && powerToTarget()>0)
         {
             turretPower=0;
         }
-        else if(turretEncoder.getPosition()<SimpleTurretConstants.minLimit && powerToTarget()<0)
+        else if(turretMotor.getCurrentPosition()<SimpleTurretConstants.minLimit && powerToTarget()<0)
         {
             turretPower=0;
         }

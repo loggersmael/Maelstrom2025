@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -21,10 +22,12 @@ public class Maelstrom
     public Transfer kicker;
     public GamepadEx driver1;
     public GamepadEx driver2;
+    private Telemetry telemetry;
 
     public Maelstrom(HardwareMap hMap, Telemetry telemetry, Alliance color, Gamepad d1, Gamepad d2)
     {
         dt= new Drivetrain(hMap,telemetry);
+        this.telemetry=telemetry;
         kicker= new Transfer(hMap,telemetry);
         intake= new Intake(hMap,telemetry);
         shooter= new Shooter(hMap,telemetry,color);
@@ -40,6 +43,7 @@ public class Maelstrom
         intake.periodic();
         shooter.periodic();
         turret.periodic();
+        telemetry.update();
     }
 
     public void controlMap()

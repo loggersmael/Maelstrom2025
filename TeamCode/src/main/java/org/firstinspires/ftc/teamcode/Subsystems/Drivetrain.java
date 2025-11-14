@@ -32,10 +32,10 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public class Drivetrain extends SubsystemBase {
-    private Motor leftFront;
-    private Motor rightFront;
-    private Motor leftRear;
-    private Motor rightRear;
+   // private Motor leftFront;
+   // private Motor rightFront;
+   // private Motor leftRear;
+   // private Motor rightRear;
 
     public Follower follower;
     private Pose reset;
@@ -43,7 +43,7 @@ public class Drivetrain extends SubsystemBase {
     private Telemetry telemetry;
 
     public Drivetrain(HardwareMap aHardwareMap, Telemetry telemetry) {
-        leftFront = new Motor(aHardwareMap, DrivetrainConstants.fLMotorID, Motor.GoBILDA.RPM_312);
+      /*  leftFront = new Motor(aHardwareMap, DrivetrainConstants.fLMotorID, Motor.GoBILDA.RPM_312);
         rightFront = new Motor(aHardwareMap, DrivetrainConstants.fRMotorID, Motor.GoBILDA.RPM_312);
         leftRear = new Motor(aHardwareMap, DrivetrainConstants.bLMotorID, Motor.GoBILDA.RPM_312);
         rightRear = new Motor(aHardwareMap, DrivetrainConstants.bRMotorID, Motor.GoBILDA.RPM_312);
@@ -61,7 +61,7 @@ public class Drivetrain extends SubsystemBase {
         leftFront.setInverted(true);
         rightFront.setInverted(true);
         leftRear.setInverted(false);
-        rightRear.setInverted(false);
+        rightRear.setInverted(false); */
 
 
 

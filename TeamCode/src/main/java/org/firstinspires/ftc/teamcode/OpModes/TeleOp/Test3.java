@@ -72,11 +72,11 @@ public class Test3 extends OpMode
 
         if(gamepad2.x)
         {
-            turret.setPower(0.5);
+            turret.setPower(0.9);
         }
         else if(gamepad2.y)
         {
-            turret.setPower(-0.5);
+            turret.setPower(-0.9);
         }
         else
         {
@@ -128,6 +128,7 @@ public class Test3 extends OpMode
         {
             hood.setPosition(0.2);
         }
+
     }
 
 }
