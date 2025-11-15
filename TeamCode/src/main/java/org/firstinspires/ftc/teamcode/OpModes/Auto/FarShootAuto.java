@@ -1,17 +1,18 @@
-package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
-import static java.lang.Thread.sleep;
+package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
-@Autonomous(name="LeaveAuto")
-public class LeaveAuto extends OpMode
+import java.lang.reflect.MalformedParameterizedTypeException;
+
+@Autonomous(name="FarShootAuto")
+public class FarShootAuto extends LinearOpMode
 {
 
     private Maelstrom robot;
@@ -21,12 +22,11 @@ public class LeaveAuto extends OpMode
     private DcMotor backRight;
     private DcMotor backLeft;
 
-
     @Override
-    public void init()
+    public void runOpMode()
     {
-       // robot= new Maelstrom(hardwareMap, telemetry, Maelstrom.Alliance.BLUE, gamepad1, gamepad2);
-       time= new Timer();
+        robot= new Maelstrom(hardwareMap, telemetry, Maelstrom.Alliance.BLUE, gamepad1, gamepad2);
+        time= new Timer();
         //robot.dt.enableTeleop();
         frontLeft= hardwareMap.get(DcMotor.class,"frontLeft");
         frontRight= hardwareMap.get(DcMotor.class,"frontRight");
@@ -42,30 +42,13 @@ public class LeaveAuto extends OpMode
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    }
 
-    @Override
-    public void start()
-    {
-        time.resetTimer();
-        frontLeft.setPower(1);
-        frontRight.setPower(1);
-        backLeft.setPower(1);
-        backRight.setPower(1);
-        //robot.dt.setMovementVectors(0,1,0,false);
-    }
-
-    @Override
-    public void loop()
-    {
-        if(time.getElapsedTimeSeconds()>0.5)
+        waitForStart();
+        if(opModeIsActive())
         {
-            //robot.dt.setMovementVectors(0,0,0,false);
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-            backRight.setPower(0);
-            backLeft.setPower(0);
+            time.resetTimer();
+            robot.shooter.toggleFlywheel();
+
         }
     }
-
 }
