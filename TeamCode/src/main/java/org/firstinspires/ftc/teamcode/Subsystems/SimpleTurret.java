@@ -29,10 +29,10 @@ public class SimpleTurret extends SubsystemBase
     private List<LLResultTypes.FiducialResult> tagList;
     private double crosshairX=0;
     private boolean useTracking=true;
-    private double turretPowerCoef=0.3;
+    private double turretPowerCoef=1;
     private double turretPower=0;
     private int unwindTarget= startingPos;
-    private boolean manualControl=false;
+    public boolean manualControl=false;
     public SimpleTurret(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color)
     {
 
@@ -41,6 +41,7 @@ public class SimpleTurret extends SubsystemBase
         turretMotor= aHardwareMap.get(DcMotorEx.class, "turret");
         cam= aHardwareMap.get(Limelight3A.class, "limelight");
         cam.pipelineSwitch(0);
+        cam.start();
         tagList=cam.getLatestResult().getFiducialResults();
         turretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -56,6 +57,8 @@ public class SimpleTurret extends SubsystemBase
         }
         turretMotor.setPower(turretPower * turretPowerCoef);
         telemetry.addData("Current Turret Pos: ",turretMotor.getCurrentPosition());
+        telemetry.addData("Target: ", getTargetX());
+        telemetry.addData("power", turretPower);
     }
 
     public LLResultTypes.FiducialResult getTag()
@@ -105,7 +108,7 @@ public class SimpleTurret extends SubsystemBase
         {
             return -320923;
         }
-        return targ.getTargetXPixels();
+        return targ.getTargetXDegrees();
     }
 
     public double powerToTarget()

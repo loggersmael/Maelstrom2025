@@ -27,8 +27,9 @@ public class Intake extends SubsystemBase
         this.telemetry=telemetry;
         kicker= aHardwareMap.get(Servo.class,"kicker");
         intakeMotor= aHardwareMap.get(DcMotorEx.class,"intake");
-        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        kicker.setPosition(0);
     }
 
     @Override
@@ -56,12 +57,12 @@ public class Intake extends SubsystemBase
 
     public void kickerUp()
     {
-        kicker.setPosition(0.35);
+        kicker.setPosition(0.4);
     }
 
     public void kickerHalfway()
     {
-        kicker.setPosition(0.2);
+        kicker.setPosition(0.28);
     }
 
 }

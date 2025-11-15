@@ -25,6 +25,8 @@ public class Vision extends SubsystemBase
         
         // CRITICAL: Start the Limelight before trying to get results
         cam.start();
+
+        cam.setPollRateHz(25);
         
         // Initialize tagList as empty - it will be populated in periodic()
         tagList = new ArrayList<>();

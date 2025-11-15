@@ -14,6 +14,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class TrueTurret extends SubsystemBase {
         MANUAL
     }
 
-    private PIDFController positionController;
+    public PIDFController positionController;
     private SimpleMotorFeedforward frictionController;
 
     private WantedState wantedState = WantedState.IDLE;
@@ -64,18 +65,17 @@ public class TrueTurret extends SubsystemBase {
 
     private TrueTurret(HardwareMap hMap) {
         turretMotor = hMap.get(DcMotorEx.class, "turret");
-        turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        turretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         turretMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         
         cam = hMap.get(Limelight3A.class, "limelight");
         
-        // CRITICAL: Start the Limelight before trying to get results
         cam.start();
         
         tagList = cam.getLatestResult().getFiducialResults();
-        positionController = new PIDFController(0.1, 0, 0.01, 0);
+        positionController = new PIDFController(TurretConstants.kP, TurretConstants.kI, TurretConstants.kD, TurretConstants.kF);
         frictionController = new SimpleMotorFeedforward(0, 0, 0);
         
         // Initialize hasTarget and tx
@@ -142,12 +142,12 @@ public class TrueTurret extends SubsystemBase {
 
     private void aimWithVision() {
         double currentAngle = getAngle();
-        double targetAngle = currentAngle + tx;
+        double targetAngle = currentAngle - tx;
 
         // Clamp to safe range
         targetAngle = Math.max(0, Math.min(360, targetAngle));
 
-        double power = positionController.calculate(currentAngle, targetAngle);
+        double power = -positionController.calculate(currentAngle, targetAngle);
         
         // Add minimum power threshold to ensure motor moves
         if (Math.abs(power) < 0.05 && Math.abs(tx) > 0.5) {
@@ -188,7 +188,7 @@ public class TrueTurret extends SubsystemBase {
     public void forceReturnToZero() {
         wantedState = WantedState.RELOCALIZING;
     }
-    private double getAngle() {
-        return (turretMotor.getCurrentPosition() * (360.0 / 1024)) / 13;
+    public double getAngle() {
+        return (turretMotor.getCurrentPosition() * (360.0 / 1024)) / 3;
     }
 }
