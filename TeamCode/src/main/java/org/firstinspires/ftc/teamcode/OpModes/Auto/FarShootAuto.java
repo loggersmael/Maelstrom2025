@@ -47,8 +47,64 @@ public class FarShootAuto extends LinearOpMode
         if(opModeIsActive())
         {
             time.resetTimer();
-            robot.shooter.toggleFlywheel();
-
+            robot.shooter.shootFarAuto();
+            while(time.getElapsedTimeSeconds()<2)
+            {
+                robot.shooter.flywheelOn=true;
+                robot.shooter.periodic();
+            }
+            time.resetTimer();
+            while(time.getElapsedTimeSeconds()<2)
+            {
+                    robot.intake.spinIn();
+                robot.shooter.periodic();
+            }
+            time.resetTimer();
+            while(time.getElapsedTimeSeconds()<2)
+            {
+                robot.intake.stop();
+                robot.intake.kickerUp();
+                robot.shooter.periodic();
+            }
+            time.resetTimer();
+            while(time.getElapsedTimeSeconds()<0.5)
+            {
+                robot.intake.kickerDown();
+                robot.shooter.periodic();
+            }
+            time.resetTimer();
+            while(time.getElapsedTimeSeconds()<5)
+            {
+                robot.intake.spinIn();
+                robot.shooter.periodic();
+            }
+            time.resetTimer();
+            while(time.getElapsedTimeSeconds()<2)
+            {
+                robot.intake.kickerUp();
+                robot.shooter.periodic();
+            }
+            time.resetTimer();
+            while(time.getElapsedTimeSeconds()<0.5)
+            {
+                robot.intake.kickerDown();
+                robot.intake.stop();
+                robot.shooter.periodic();
+            }
+            time.resetTimer();
+            robot.shooter.flywheelOn=false;
+            time.resetTimer();
+            while(time.getElapsedTimeSeconds()<0.5)
+            {
+                frontLeft.setPower(1);
+                frontRight.setPower(1);
+                backLeft.setPower(1);
+                backRight.setPower(1);
+            }
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backRight.setPower(0);
+            backLeft.setPower(0);
         }
     }
 }

@@ -81,6 +81,11 @@ public class Shooter extends SubsystemBase {
         targetVelocity = ShooterConstants.farVelocity;
     }
 
+    public void shootFarAuto()
+    {
+        targetVelocity= 2000;
+    }
+
     public void reverseWheel() {
         shooterMotor.setPower(-0.1);
         flywheelOn = false;
