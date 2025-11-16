@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.hardware.limelightvision.LLFieldMap;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -11,6 +13,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 import org.firstinspires.ftc.teamcode.Subsystems.SimpleTurret;
 import org.firstinspires.ftc.teamcode.Subsystems.TrueTurret;
 import org.firstinspires.ftc.teamcode.Subsystems.Vision;
+import org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants;
 
 import java.util.List;
 
@@ -24,11 +27,16 @@ public class TurretTest extends OpMode
     private LLResultTypes.FiducialResult target;
     private List<LLResultTypes.FiducialResult> tagList;
     private Maelstrom.Alliance alliance= Maelstrom.Alliance.BLUE;
+
+    static TelemetryPacket telemetryPacket;
+    static FtcDashboard dashboard;
     @Override
     public void init()
     {
         Robot= new Maelstrom(hardwareMap, telemetry, Maelstrom.Alliance.BLUE, gamepad1, gamepad2);
         cam= new Vision(hardwareMap, telemetry, Maelstrom.Alliance.BLUE);
+        dashboard=FtcDashboard.getInstance();
+        telemetryPacket= new TelemetryPacket();
         turr= TrueTurret.getInstance(hardwareMap);
         turr.startTracking();
     }
@@ -38,10 +46,16 @@ public class TurretTest extends OpMode
         cam.periodic();
         Robot.periodic();
         turr.periodic();
-        if(cam.targetPresent())
-        {
-            turr.setLimelightData(cam.getTargetX(),cam.targetPresent());
-        }
+        telemetry.addData("Angle", turr.getAngle());
+        telemetry.addData("tx", cam.getTargetX());
+        telemetry.addData("Power", turr.positionController.calculate(turr.getAngle(), turr.getAngle() - cam.getTargetX()));
+        turr.positionController.setPIDF(TurretConstants.kP,TurretConstants.kI,TurretConstants.kD,TurretConstants.kF);
+        telemetryPacket.put("Tx: ", cam.getTargetX());
+        dashboard.sendTelemetryPacket(telemetryPacket);
+        // Always update limelight data, even when no target is present
+        // This ensures hasTarget is updated correctly
+        turr.setLimelightData(cam.getTargetX(), cam.targetPresent());
+        
         if(gamepad1.right_bumper)
         {
             Robot.shooter.setFullPower();

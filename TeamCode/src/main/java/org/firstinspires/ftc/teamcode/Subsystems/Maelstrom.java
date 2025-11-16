@@ -38,12 +38,13 @@ public class Maelstrom
         driver1= new GamepadEx(d1);
         driver2= new GamepadEx(d2);
         tTimer=new Timer();
+        turret.manualControl=true;
     }
 
     public void periodic()
     {
         dt.periodic();
-        //cams.periodic();
+        cams.periodic();
         intake.periodic();
         shooter.periodic();
         turret.periodic();
@@ -59,7 +60,7 @@ public class Maelstrom
             dt.resetHeading();
         }
 
-        turret.turretWithManualLimits(driver2.getLeftX());
+        turret.turretWithManualLimits(-driver2.getLeftX());
 
         if(driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
@@ -97,7 +98,7 @@ public class Maelstrom
         {
             intake.spinIn();
         }
-        else
+        else if(transferState!=-1)
         {
             intake.stop();
         }
@@ -106,7 +107,7 @@ public class Maelstrom
         {
             intake.kickerUp();
         }
-        else
+        else if (!driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
         {
             intake.kickerDown();
         }
@@ -115,7 +116,7 @@ public class Maelstrom
         {
             intake.kickerHalfway();
         }
-        else
+        else if (!driver2.getButton(GamepadKeys.Button.DPAD_UP))
         {
             intake.kickerDown();
         }

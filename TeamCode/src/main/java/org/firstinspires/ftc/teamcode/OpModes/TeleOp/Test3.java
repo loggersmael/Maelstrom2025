@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -23,7 +24,7 @@ public class Test3 extends OpMode
     private DcMotor intake;
     private DcMotor turret;
     private DcMotor transfer;
-    private DcMotor shooter;
+    private DcMotorEx shooter;
 
     private GamepadEx driver1;
     private GamepadEx driver2;
@@ -36,7 +37,9 @@ public class Test3 extends OpMode
         intake= hardwareMap.get(DcMotor.class,"intake");
         turret= hardwareMap.get(DcMotor.class,"turret");
         transfer= hardwareMap.get(DcMotor.class,"transfer");
-        shooter= hardwareMap.get(DcMotor.class,"shooter");
+        shooter= hardwareMap.get(DcMotorEx.class,"shooter");
+
+        shooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         kicker= hardwareMap.get(Servo.class,"kicker");
         hood= hardwareMap.get(Servo.class,"hood");
         driver1= new GamepadEx(gamepad1);
@@ -49,6 +52,7 @@ public class Test3 extends OpMode
     @Override
     public void loop()
     {
+        telemetry.addData("Velocity: ", shooter.getVelocity());
         dt.setMovementVectors(driver2.getLeftX(),driver2.getLeftY(), driver2.getRightX(),false);
         dt.periodic();
 
