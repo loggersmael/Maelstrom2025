@@ -66,7 +66,6 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Flywheel On", flywheelOn);
         telemetry.addData("Current Velocity", currentVelocity);
         telemetry.addData("Target Velocity", targetVelocity);
-        telemetry.update();
     }
 
     public void shootClose() {

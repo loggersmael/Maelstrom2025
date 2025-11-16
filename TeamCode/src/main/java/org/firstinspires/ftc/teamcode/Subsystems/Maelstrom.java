@@ -48,7 +48,6 @@ public class Maelstrom
         intake.periodic();
         shooter.periodic();
         turret.periodic();
-        telemetry.update();
         transferAndShoot();
     }
 
