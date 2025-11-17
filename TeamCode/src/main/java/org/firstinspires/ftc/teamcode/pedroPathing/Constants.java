@@ -16,7 +16,7 @@ public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants();
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(-5)
+            .forwardPodY(-6.929)
             .strafePodX(0.5)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
