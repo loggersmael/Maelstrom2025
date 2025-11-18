@@ -48,7 +48,6 @@ public class Maelstrom
         intake.periodic();
         shooter.periodic();
         turret.periodic();
-        telemetry.update();
         transferAndShoot();
     }
 
@@ -73,7 +72,11 @@ public class Maelstrom
 
         if(driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
-            shooter.toggleFlywheel();
+            shooter.flywheelOn=true;
+        }
+        if(driver2.getButton(GamepadKeys.Button.LEFT_BUMPER))
+        {
+            shooter.flywheelOn=false;
         }
 
         if(driver2.getButton(GamepadKeys.Button.Y))
@@ -171,6 +174,7 @@ public class Maelstrom
                     intake.stop();
                     setTransferState(3);
                 }
+                tTimer.resetTimer();
                 break;
             case 3:
                 if(tTimer.getElapsedTimeSeconds()>=0.05 && shooter.atSpeed())
@@ -178,6 +182,7 @@ public class Maelstrom
                     intake.kickerUp();
                     setTransferState(4);
                 }
+                tTimer.resetTimer();
                 break;
             case 4:
                 if(tTimer.getElapsedTimeSeconds()>=0.05)
@@ -185,6 +190,7 @@ public class Maelstrom
                     intake.kickerDown();
                     setTransferState(5);
                 }
+                tTimer.resetTimer();
                 break;
             case 5:
                 if(tTimer.getElapsedTimeSeconds()>=0.1)
@@ -192,6 +198,7 @@ public class Maelstrom
                     intake.spinIn();
                     setTransferState(6);
                 }
+                tTimer.resetTimer();
                 break;
             case 6:
                 if(tTimer.getElapsedTimeSeconds()>=0.1 && shooter.atSpeed())
@@ -199,6 +206,7 @@ public class Maelstrom
                     intake.kickerUp();
                     setTransferState(7);
                 }
+                tTimer.resetTimer();
                 break;
             case 7:
                 if(tTimer.getElapsedTimeSeconds()>=0.05)
@@ -207,6 +215,7 @@ public class Maelstrom
                     intake.stop();
                     setTransferState(-1);
                 }
+                tTimer.resetTimer();
                 break;
         }
 
