@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
@@ -30,6 +31,7 @@ public class DemoAuto extends CommandOpMode
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
                         new FollowPathCommand(robot.dt.follower, chain.Path1),
+                        new WaitCommand(250),
                         new FollowPathCommand(robot.dt.follower, chain.Path2)
                 ));
     }
