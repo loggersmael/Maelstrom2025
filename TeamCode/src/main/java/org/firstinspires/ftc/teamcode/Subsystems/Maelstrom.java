@@ -6,12 +6,13 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.tel
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class Maelstrom
+public class Maelstrom extends Robot
 {
     public enum Alliance{
         RED,BLUE;
@@ -38,6 +39,7 @@ public class Maelstrom
         driver1= new GamepadEx(d1);
         driver2= new GamepadEx(d2);
         tTimer=new Timer();
+        register(dt,intake,shooter,turret,cams);
         turret.manualControl=true;
     }
 
