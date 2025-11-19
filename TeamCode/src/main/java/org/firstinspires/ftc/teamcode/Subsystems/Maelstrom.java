@@ -54,6 +54,13 @@ public class Maelstrom extends Robot
         transferAndShoot();
     }
 
+    @Override
+    public void reset()
+    {
+        intake.stop();
+        shooter.flywheelOn=false;
+    }
+
     public void controlMap()
     {
         dt.setMovementVectors(driver1.getLeftX(), driver1.getLeftY(), driver1.getRightX(),true);
