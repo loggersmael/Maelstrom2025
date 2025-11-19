@@ -25,7 +25,6 @@ public class DemoAuto extends CommandOpMode
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         robot.dt.follower.setStartingPose(new Pose(36,108,Math.toRadians(270)));
         chain= new DemoPaths(robot.dt.follower);
-        register(robot.dt);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),

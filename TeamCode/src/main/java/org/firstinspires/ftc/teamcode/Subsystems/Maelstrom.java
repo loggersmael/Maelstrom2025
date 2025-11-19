@@ -39,6 +39,7 @@ public class Maelstrom extends Robot
         driver1= new GamepadEx(d1);
         driver2= new GamepadEx(d2);
         tTimer=new Timer();
+        this.telemetry=telemetry;
         register(dt,intake,shooter,turret,cams);
         turret.manualControl=true;
     }
