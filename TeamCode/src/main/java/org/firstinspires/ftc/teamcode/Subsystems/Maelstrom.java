@@ -33,6 +33,7 @@ public class Maelstrom extends Robot
         dt= new Drivetrain(hMap,telemetry);
         this.telemetry=telemetry;
         intake= new Intake(hMap,telemetry);
+        intake.stop();
         shooter= new Shooter(hMap,telemetry,color);
         turret= new SimpleTurret(hMap,telemetry,color);
         cams= new Vision(hMap,telemetry,color);
@@ -51,7 +52,7 @@ public class Maelstrom extends Robot
         intake.periodic();
         shooter.periodic();
         turret.periodic();
-        transferAndShoot();
+        //transferAndShoot();
     }
 
     @Override

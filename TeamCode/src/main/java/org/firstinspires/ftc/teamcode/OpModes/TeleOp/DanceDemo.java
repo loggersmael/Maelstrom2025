@@ -29,7 +29,7 @@ public class DanceDemo extends LinearOpMode
             if(gamepad1.a)
             {
                 if(!robot.dt.follower.isBusy()) {
-                    robot.dt.follower.setPose(new Pose(36,108,Math.toRadians(270)));
+                    //robot.dt.follower.setPose(new Pose(36,108,Math.toRadians(270)));
                     robot.dt.follower.followPath(paths.Path1, true);
                 }
             }
@@ -38,7 +38,7 @@ public class DanceDemo extends LinearOpMode
             {
                 if(!robot.dt.follower.isBusy())
                 {
-                    robot.dt.follower.setPose(new Pose(38,33,Math.toRadians(270)));
+                    //robot.dt.follower.setPose(new Pose(38,33,Math.toRadians(270)));
                     robot.dt.follower.followPath(paths.Path2,true);
                 }
             }
