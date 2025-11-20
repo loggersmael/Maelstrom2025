@@ -19,6 +19,7 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Turret extends SubsystemBase
@@ -50,7 +51,11 @@ public class Turret extends SubsystemBase
         cam= aHardwareMap.get(Limelight3A.class, "limelight");
         cam.pipelineSwitch(0);
         cam.start();
-        tagList=cam.getLatestResult().getFiducialResults();
+        
+        // Initialize tagList as empty - it will be populated in periodic()
+        // Don't try to get results immediately as camera may not be ready
+        tagList = new ArrayList<>();
+        
         turretMotor.setInverted(false);
         turretMotor.setRunMode(Motor.RunMode.RawPower);
     }
@@ -59,7 +64,14 @@ public class Turret extends SubsystemBase
     public void periodic()
     {
         if(!manualControl) {
-            tagList = cam.getLatestResult().getFiducialResults();
+            // Always check if result is valid before accessing it
+            LLResult result = cam.getLatestResult();
+            if (result != null && result.isValid()) {
+                tagList = result.getFiducialResults();
+            } else {
+                // If result is invalid, clear the tag list
+                tagList = new ArrayList<>();
+            }
 
             switch (turretState) {
                 case RESETTING:
@@ -76,7 +88,7 @@ public class Turret extends SubsystemBase
             turretMotor.motorEx.setPower(turretPower * turretPowerCoef);
         }
         telemetry.addData("Current Encoder Pos: ",turretEncoder.getPosition());
-        telemetry.addData("Found target: ", tagList);
+        telemetry.addData("Found target: ", getTag() != null);
     }
 
     public void reset()
@@ -92,7 +104,7 @@ public class Turret extends SubsystemBase
             {
                 for(LLResultTypes.FiducialResult tar:tagList)
                 {
-                    if(tar.getFiducialId() == 20)
+                    if(tar!=null && tar.getFiducialId() == 20)
                     {
                         target=tar;
                         break;
@@ -106,7 +118,7 @@ public class Turret extends SubsystemBase
             {
                 for(LLResultTypes.FiducialResult tar:tagList)
                 {
-                    if(tar.getFiducialId() == 24)
+                    if(tar!=null && tar.getFiducialId() == 24)
                     {
                         target=tar;
                         break;
@@ -130,7 +142,14 @@ public class Turret extends SubsystemBase
     public void powerToTarget()
     {
         double power= 0;
-        power= turretcontrol.calculate(getTargetX(),crosshairX);
+        // Only calculate power if we have a valid target
+        LLResultTypes.FiducialResult targ = getTag();
+        if (targ != null) {
+            power = turretcontrol.calculate(getTargetX(), crosshairX);
+        } else {
+            // No target found, set power to 0 to prevent shuddering
+            power = 0;
+        }
         turretPower=power;
     }
 
