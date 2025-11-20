@@ -10,7 +10,7 @@ public class TurretConstants
     public static int startingPos=0;
     public static int maxPos=0;
     public static int minLimit=0;
-    public static int maxLimit=0;
+    public static int maxLimit=2800;
 
     public static double kP= 0.05;
     public static double kI= 0;

@@ -97,7 +97,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void enableTeleop() {
-        follower.setStartingPose(startPose);
+        //follower.setStartingPose(startPose);
         follower.startTeleopDrive(true);
     }
 

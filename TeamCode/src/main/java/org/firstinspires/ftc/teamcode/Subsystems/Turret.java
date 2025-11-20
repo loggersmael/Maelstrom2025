@@ -37,7 +37,7 @@ public class Turret extends SubsystemBase
     private List<LLResultTypes.FiducialResult> tagList;
     private double crosshairX=0;
     private boolean useTracking=true;
-    private double turretPowerCoef=0.3;
+    private double turretPowerCoef=1;
     private double turretPower=0;
     private int unwindTarget= startingPos;
     private boolean manualControl=false;
@@ -46,8 +46,10 @@ public class Turret extends SubsystemBase
         alliance=color;
         this.telemetry=telemetry;
         turretMotor= new MotorEx(aHardwareMap,"turret");
+        turretEncoder= turretMotor.encoder;
         cam= aHardwareMap.get(Limelight3A.class, "limelight");
-        cam.pipelineSwitch(1);
+        cam.pipelineSwitch(0);
+        cam.start();
         tagList=cam.getLatestResult().getFiducialResults();
         turretMotor.setInverted(false);
         turretMotor.setRunMode(Motor.RunMode.RawPower);
@@ -74,6 +76,7 @@ public class Turret extends SubsystemBase
             turretMotor.motorEx.setPower(turretPower * turretPowerCoef);
         }
         telemetry.addData("Current Encoder Pos: ",turretEncoder.getPosition());
+        telemetry.addData("Found target: ", tagList);
     }
 
     public void reset()
@@ -89,7 +92,7 @@ public class Turret extends SubsystemBase
             {
                 for(LLResultTypes.FiducialResult tar:tagList)
                 {
-                    if(tar!=null && tar.getFiducialId() == 20)
+                    if(tar.getFiducialId() == 20)
                     {
                         target=tar;
                         break;
@@ -103,7 +106,7 @@ public class Turret extends SubsystemBase
             {
                 for(LLResultTypes.FiducialResult tar:tagList)
                 {
-                    if(tar!=null && tar.getFiducialId() == 24)
+                    if(tar.getFiducialId() == 24)
                     {
                         target=tar;
                         break;
@@ -119,7 +122,7 @@ public class Turret extends SubsystemBase
         LLResultTypes.FiducialResult targ=getTag();
         if (targ==null)
         {
-            return -320923;
+            return 0;
         }
         return targ.getTargetXPixels();
     }
@@ -127,10 +130,7 @@ public class Turret extends SubsystemBase
     public void powerToTarget()
     {
         double power= 0;
-        if(getTargetX()!=-320923)
-        {
-            power= turretcontrol.calculate(getTargetX(),crosshairX);
-        }
+        power= turretcontrol.calculate(getTargetX(),crosshairX);
         turretPower=power;
     }
 
