@@ -1,20 +1,14 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kP;
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.max;
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxLimit;
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxPos;
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.minLimit;
-import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.startingPos;
-
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDFController;
-import com.seattlesolvers.solverslib.hardware.motors.Motor;
-import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants;
@@ -22,177 +16,130 @@ import org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Turret extends SubsystemBase
-{
-    public enum SystemState
-    {
-        IDLE,RESETTING,AT_TARGET,FINDING_TARGET;
-    }
-    private SystemState turretState=SystemState.IDLE;
+public class Turret extends SubsystemBase {
+    private DcMotorEx turretMotor;
+    private Limelight3A cam;
+    private PIDFController pidfController;
     private Maelstrom.Alliance alliance;
     private Telemetry telemetry;
-    private MotorEx turretMotor;
-    private MotorEx.Encoder turretEncoder;
-    private PIDFController turretcontrol = new PIDFController(TurretConstants.kP, TurretConstants.kI, TurretConstants.kD, TurretConstants.kF);
-    public Limelight3A cam;
     private List<LLResultTypes.FiducialResult> tagList;
-    private double crosshairX=0;
-    private boolean useTracking=true;
-    private double turretPowerCoef=1;
-    private double turretPower=0;
-    private int unwindTarget= startingPos;
-    private boolean manualControl=false;
-    public Turret(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color)
-    {
-        alliance=color;
-        this.telemetry=telemetry;
-        turretMotor= new MotorEx(aHardwareMap,"turret");
-        turretEncoder= turretMotor.encoder;
-        cam= aHardwareMap.get(Limelight3A.class, "limelight");
-        cam.pipelineSwitch(0);
+
+    public Turret(HardwareMap hardwareMap, Telemetry telemetry, Maelstrom.Alliance alliance) {
+        this.telemetry = telemetry;
+        this.alliance = alliance;
+
+        // Initialize motor
+        turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
+        turretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Initialize Limelight camera
+        cam = hardwareMap.get(Limelight3A.class, "limelight");
         cam.start();
-        
-        // Initialize tagList as empty - it will be populated in periodic()
-        // Don't try to get results immediately as camera may not be ready
+        cam.setPollRateHz(25);
+
+        // Initialize tagList as empty - will be populated in periodic()
         tagList = new ArrayList<>();
-        
-        turretMotor.setInverted(false);
-        turretMotor.setRunMode(Motor.RunMode.RawPower);
+
+        // Initialize PIDF controller with constants from TurretConstants
+        pidfController = new PIDFController(TurretConstants.kP, TurretConstants.kI, TurretConstants.kD, TurretConstants.kF);
     }
 
     @Override
-    public void periodic()
-    {
-        if(!manualControl) {
-            // Always check if result is valid before accessing it
-            LLResult result = cam.getLatestResult();
-            if (result != null && result.isValid()) {
-                tagList = result.getFiducialResults();
-            } else {
-                // If result is invalid, clear the tag list
-                tagList = new ArrayList<>();
-            }
-
-            switch (turretState) {
-                case RESETTING:
-                    continueUnwind();
-                    break;
-                case FINDING_TARGET:
-                    checkForunWind();
-                    powerToTarget();
-                    break;
-                default:
-                    checkForunWind();
-                    break;
-            }
-            turretMotor.motorEx.setPower(turretPower * turretPowerCoef);
+    public void periodic() {
+        // Update camera results with proper validation
+        LLResult result = cam.getLatestResult();
+        if (result != null && result.isValid()) {
+            tagList = result.getFiducialResults();
+        } else {
+            tagList = new ArrayList<>();
         }
-        telemetry.addData("Current Encoder Pos: ",turretEncoder.getPosition());
-        telemetry.addData("Found target: ", getTag() != null);
+
+        // Track target if available, otherwise set power to 0
+        if (hasTarget()) {
+            trackTarget();
+        } else {
+            turretMotor.setPower(0);
+        }
+
+        // Telemetry
+        telemetry.addData("Turret Angle: ", getCurrentAngle());
+        telemetry.addData("Target X Degrees: ", getTargetXDegrees());
+        telemetry.addData("Has Target: ", hasTarget());
     }
 
-    public void reset()
-    {
-        turretMotor.stopAndResetEncoder();
-    }
-    public LLResultTypes.FiducialResult getTag()
-    {
-        LLResultTypes.FiducialResult target= null;
-        if(alliance.equals(Maelstrom.Alliance.BLUE))
-        {
-            if (tagList!=null)
-            {
-                for(LLResultTypes.FiducialResult tar:tagList)
-                {
-                    if(tar!=null && tar.getFiducialId() == 20)
-                    {
-                        target=tar;
-                        break;
-                    }
-                }
+    /**
+     * Get the target April tag based on alliance
+     * @return FiducialResult for the target tag, or null if not found
+     */
+    public LLResultTypes.FiducialResult getTag() {
+        LLResultTypes.FiducialResult target = null;
+        
+        if (tagList == null) {
+            return null;
+        }
+
+        int targetId = (alliance.equals(Maelstrom.Alliance.BLUE)) ? 20 : 24;
+
+        for (LLResultTypes.FiducialResult tag : tagList) {
+            if (tag != null && tag.getFiducialId() == targetId) {
+                target = tag;
+                break;
             }
         }
-        else if(alliance.equals(Maelstrom.Alliance.RED))
-        {
-            if(tagList!=null)
-            {
-                for(LLResultTypes.FiducialResult tar:tagList)
-                {
-                    if(tar!=null && tar.getFiducialId() == 24)
-                    {
-                        target=tar;
-                        break;
-                    }
-                }
-            }
-        }
+
         return target;
     }
 
-    public double getTargetX()
-    {
-        LLResultTypes.FiducialResult targ=getTag();
-        if (targ==null)
-        {
+    /**
+     * Get the current turret angle in degrees
+     * Formula: (encoderPosition * 360.0 / 1024) / 3
+     * @return Current angle in degrees
+     */
+    public double getCurrentAngle() {
+        return (turretMotor.getCurrentPosition() * 360.0 / 1024.0) / 3.0;
+    }
+
+    /**
+     * Get the target X offset in degrees from Limelight
+     * @return Target X degrees (0 = centered), or 0 if no target
+     */
+    public double getTargetXDegrees() {
+        LLResultTypes.FiducialResult tag = getTag();
+        if (tag == null) {
             return 0;
         }
-        return targ.getTargetXPixels();
+        return tag.getTargetXDegrees();
     }
 
-    public void powerToTarget()
-    {
-        double power= 0;
-        // Only calculate power if we have a valid target
-        LLResultTypes.FiducialResult targ = getTag();
-        if (targ != null) {
-            power = turretcontrol.calculate(getTargetX(), crosshairX);
-        } else {
-            // No target found, set power to 0 to prevent shuddering
-            power = 0;
-        }
-        turretPower=power;
+    /**
+     * Check if a valid target is detected
+     * @return true if target exists, false otherwise
+     */
+    public boolean hasTarget() {
+        return getTag() != null;
     }
 
-    public void powerToTick(double tar)
-    {
-        turretPower= turretcontrol.calculate(turretEncoder.getPosition(),tar);
-    }
-    public void checkForunWind()
-    {
-        if (turretEncoder.getPosition()>maxLimit)
-        {
-            turretMotor.stopMotor();
-            turretState=SystemState.RESETTING;
-            unwindTarget=startingPos;
-        }
-        else if(turretEncoder.getPosition()<minLimit)
-        {
-            turretMotor.stopMotor();
-            turretState=SystemState.RESETTING;
-            unwindTarget=maxPos;
-        }
-    }
+    /**
+     * Track the target using PIDF control
+     * Calculates motor power to center the target (track to 0 degrees offset)
+     */
+    private void trackTarget() {
+        double targetXDegrees = getTargetXDegrees();
+        double currentAngle = getCurrentAngle();
+        
+        // Calculate target angle: current angle minus the offset to center the target
+        // If target is at +5 degrees, we need to rotate -5 degrees to center it
+        double targetAngle = currentAngle - targetXDegrees;
 
-    public void continueUnwind()
-    {
-        double pos = turretEncoder.getPosition();
-        double error = Math.abs(pos - unwindTarget);
-        if(error<=10)
-        {
-            turretMotor.stopMotor();
-            turretState= SystemState.FINDING_TARGET;
-        }
-        else {
-            powerToTick(unwindTarget);
-        }
-    }
+        // Calculate PIDF output
+        double power = pidfController.calculate(currentAngle, targetAngle);
 
-    public void enableManual()
-    {
-        manualControl=true;
-    }
-    public void disableManual()
-    {
-        manualControl=false;
+        // Clamp power to motor limits
+        power = Math.max(-1.0, Math.min(1.0, power));
+
+        // Apply power to motor
+        turretMotor.setPower(power);
     }
 }
