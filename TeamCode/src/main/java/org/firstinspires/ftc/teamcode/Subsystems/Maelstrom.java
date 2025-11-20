@@ -25,7 +25,7 @@ public class Maelstrom extends Robot
     public GamepadEx driver1;
     public GamepadEx driver2;
     private Telemetry telemetry;
-    private int transferState=1;
+    private int transferState=-1;
     private Timer tTimer;
 
     public Maelstrom(HardwareMap hMap, Telemetry telemetry, Alliance color, Gamepad d1, Gamepad d2)
@@ -72,6 +72,7 @@ public class Maelstrom extends Robot
 
         turret.turretWithManualLimits(-driver2.getLeftX());
 
+        /*
         if(driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
             startTransfer();
@@ -80,6 +81,7 @@ public class Maelstrom extends Robot
         {
             cancelTransfer();
         }
+         */
 
         if(driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
@@ -112,7 +114,7 @@ public class Maelstrom extends Robot
         {
             intake.spinIn();
         }
-        else if(transferState!=-1)
+        else if(transferState==-1)
         {
             intake.stop();
         }
