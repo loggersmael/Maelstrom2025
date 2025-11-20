@@ -62,7 +62,8 @@ public class Turret extends SubsystemBase {
         }
 
         // Track target if available, otherwise set power to 0
-        if (hasTarget()) {
+        // Use result.getTx() for primary target (works with any tag, not just alliance-specific)
+        if (result != null && result.isValid() && result.getFiducialResults() != null && !result.getFiducialResults().isEmpty()) {
             trackTarget();
         } else {
             turretMotor.setPower(0);
@@ -70,10 +71,30 @@ public class Turret extends SubsystemBase {
 
         // Telemetry
         telemetry.addData("Turret Angle: ", getCurrentAngle());
-        telemetry.addData("Target X Degrees: ", getTargetXDegrees());
+        telemetry.addData("Target X Degrees (tx): ", getTargetXDegrees());
         telemetry.addData("Has Target: ", hasTarget());
         telemetry.addData("Result Valid: ", result != null && result.isValid());
         telemetry.addData("Fiducial Count: ", tagList != null ? tagList.size() : 0);
+        
+        // Show primary target tx value directly from result
+        if (result != null && result.isValid()) {
+            telemetry.addData("Result tx: ", result.getTx());
+        }
+        
+        // Debug: Show all detected tag IDs
+        if (tagList != null && !tagList.isEmpty()) {
+            StringBuilder tagIds = new StringBuilder();
+            for (LLResultTypes.FiducialResult tag : tagList) {
+                if (tag != null) {
+                    if (tagIds.length() > 0) tagIds.append(", ");
+                    tagIds.append(tag.getFiducialId());
+                }
+            }
+            telemetry.addData("Detected Tag IDs: ", tagIds.toString());
+        } else {
+            telemetry.addData("Detected Tag IDs: ", "none");
+        }
+        
         if (result != null) {
             telemetry.addData("Pipeline Index: ", cam.getStatus().getPipelineIndex());
         }
@@ -86,7 +107,7 @@ public class Turret extends SubsystemBase {
     public LLResultTypes.FiducialResult getTag() {
         LLResultTypes.FiducialResult target = null;
         
-        if (tagList == null) {
+        if (tagList == null || alliance == null) {
             return null;
         }
 
