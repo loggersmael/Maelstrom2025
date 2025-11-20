@@ -21,14 +21,12 @@ public class Turret extends SubsystemBase {
 
     public enum SystemState {
         IDLE,
-        RELOCALIZING,
         TARGET_POSITION,
         MANUAL
     }
 
     public enum WantedState {
         IDLE,
-        RELOCALIZING,
         TARGET_POSITION,
         MANUAL
     }
@@ -106,18 +104,9 @@ public class Turret extends SubsystemBase {
      * Handles state transitions based on wanted state
      */
     private SystemState handleTransition() {
-        double angle = getAngle();
-
-        // Check if angle exceeds 360 degrees and needs relocalizing
-        if (angle > 360 && systemState != SystemState.RELOCALIZING) {
-            return SystemState.RELOCALIZING;
-        }
-
         switch(wantedState) {
             case IDLE:
                 return SystemState.IDLE;
-            case RELOCALIZING:
-                return SystemState.RELOCALIZING;
             case TARGET_POSITION:
                 return SystemState.TARGET_POSITION;
             case MANUAL:
@@ -134,9 +123,6 @@ public class Turret extends SubsystemBase {
         switch(systemState) {
             case IDLE:
                 turretMotor.setPower(0);
-                break;
-            case RELOCALIZING:
-                relocalize();
                 break;
             case TARGET_POSITION:
                 if (hasTarget) {
@@ -155,6 +141,19 @@ public class Turret extends SubsystemBase {
      * Aims turret at target using vision data
      */
     private void aimWithVision() {
+        int currentPosition = getEncoderPosition();
+        
+        // Simple limit checks - stop if at limits
+        if (currentPosition >= TurretConstants.maxLimit) {
+            turretMotor.setPower(0);
+            return;
+        }
+        
+        if (currentPosition <= TurretConstants.minLimit) {
+            turretMotor.setPower(0);
+            return;
+        }
+        
         double currentAngle = getAngle();
         double targetAngle = currentAngle - tx;
 
@@ -169,8 +168,11 @@ public class Turret extends SubsystemBase {
             power = Math.signum(tx) * 0.05; // Minimum 5% power if there's a significant error
         }
         
-        // Apply unwinding logic if needed
-        power = applyUnwindingLogic(power, currentAngle);
+        // Check if power would exceed limits
+        double targetPosition = targetAngle * COUNTS_PER_DEGREE;
+        if (targetPosition > TurretConstants.maxLimit || targetPosition < TurretConstants.minLimit) {
+            power = 0; // Stop if would exceed limits
+        }
         
         // Clamp power to motor limits
         power = Math.max(-1.0, Math.min(1.0, power));
@@ -178,63 +180,6 @@ public class Turret extends SubsystemBase {
         turretMotor.setPower(power);
     }
 
-    /**
-     * Relocalizes turret to zero position
-     */
-    private void relocalize() {
-        double currentAngle = getAngle();
-        double target = 0;
-
-        double power = pidfController.calculate(currentAngle, target);
-        power = Math.max(-1.0, Math.min(1.0, power));
-        turretMotor.setPower(power);
-
-        // When close enough, stop and go to target position
-        if (Math.abs(currentAngle - 0) < 2.0) {  // 2 degree tolerance
-            turretMotor.setPower(0);
-            wantedState = WantedState.TARGET_POSITION; // automatically resume tracking
-        }
-    }
-
-    /**
-     * Applies unwinding logic to prevent full rotations
-     */
-    private double applyUnwindingLogic(double power, double currentAngle) {
-        int currentPosition = getEncoderPosition();
-        
-        // Check if we're at limits and need to unwind
-        if (currentPosition >= TurretConstants.maxLimit) {
-            // At max limit, unwind to starting position
-            double unwindTarget = TurretConstants.startingPos / COUNTS_PER_DEGREE;
-            double unwindPower = pidfController.calculate(currentAngle, unwindTarget);
-            return Math.max(-1.0, Math.min(1.0, unwindPower));
-        }
-        
-        if (currentPosition <= TurretConstants.minLimit) {
-            // At min limit, unwind to max position
-            double unwindTarget = TurretConstants.maxPos / COUNTS_PER_DEGREE;
-            double unwindPower = pidfController.calculate(currentAngle, unwindTarget);
-            return Math.max(-1.0, Math.min(1.0, unwindPower));
-        }
-        
-        // Check if tracking would exceed limits
-        double targetAngle = currentAngle - tx;
-        double targetPosition = targetAngle * COUNTS_PER_DEGREE;
-        
-        if (targetPosition > TurretConstants.maxLimit) {
-            // Would exceed max limit, unwind to starting position
-            double unwindTarget = TurretConstants.startingPos / COUNTS_PER_DEGREE;
-            double unwindPower = pidfController.calculate(currentAngle, unwindTarget);
-            return Math.max(-1.0, Math.min(1.0, unwindPower));
-        } else if (targetPosition < TurretConstants.minLimit) {
-            // Would exceed min limit, unwind to max position
-            double unwindTarget = TurretConstants.maxPos / COUNTS_PER_DEGREE;
-            double unwindPower = pidfController.calculate(currentAngle, unwindTarget);
-            return Math.max(-1.0, Math.min(1.0, unwindPower));
-        }
-        
-        return power;
-    }
 
     /**
      * Sets manual power control for the turret
@@ -259,12 +204,6 @@ public class Turret extends SubsystemBase {
         wantedState = WantedState.IDLE;
     }
 
-    /**
-     * Forces turret to return to zero position
-     */
-    public void forceReturnToZero() {
-        wantedState = WantedState.RELOCALIZING;
-    }
 
     /**
      * Gets the current turret angle in degrees
