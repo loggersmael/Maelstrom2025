@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.VisionConstants.cameraPitch;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.VisionConstants.goalHeight;
+
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -8,6 +11,7 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import java.util.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Utilities.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase
 {
@@ -16,6 +20,7 @@ public class Vision extends SubsystemBase
     private Maelstrom.Alliance alliance;
     private Telemetry telemetry;
     private double targetx;
+    private double distance;
 
     public Vision(HardwareMap hMap, Telemetry telemetry, Maelstrom.Alliance color)
     {
@@ -54,6 +59,7 @@ public class Vision extends SubsystemBase
         telemetry.addData("Target X: ", targetx);
         telemetry.addData("Target Present: ", targetPresent());
         telemetry.addData("Fiducial Count: ", tagList != null ? tagList.size() : 0);
+        telemetry.addData("Distance: ",calcDistance());
     }
     public LLResultTypes.FiducialResult getTag()
     {
@@ -100,5 +106,23 @@ public class Vision extends SubsystemBase
     public boolean targetPresent()
     {
         return getTag()!=null;
+    }
+
+    public double getTargetYDegrees()
+    {
+        if(getTag()!=null)
+        {
+            return getTag().getTargetYDegrees();
+        }
+        return 0;
+    }
+    public double calcDistance()
+    {
+        if(getTag()!=null)
+        {
+            distance=goalHeight/(Math.tan(cameraPitch+getTargetYDegrees()));
+            return distance;
+        }
+        return 0;
     }
 }
