@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -13,16 +12,38 @@ import com.seattlesolvers.solverslib.controller.PIDFController;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Turret extends SubsystemBase {
     private DcMotorEx turretMotor;
     private Limelight3A cam;
     private PIDFController pidfController;
     private Maelstrom.Alliance alliance;
     private Telemetry telemetry;
-    private List<LLResultTypes.FiducialResult> tagList;
+
+    public enum SystemState {
+        IDLE,
+        RELOCALIZING,
+        TARGET_POSITION,
+        MANUAL
+    }
+
+    public enum WantedState {
+        IDLE,
+        RELOCALIZING,
+        TARGET_POSITION,
+        MANUAL
+    }
+
+    private WantedState wantedState = WantedState.IDLE;
+    private SystemState systemState = SystemState.IDLE;
+
+    // Limelight data (read internally from camera)
+    private double tx = 0;
+    private boolean hasTarget = false;
+
+    // Constants for encoder calculations
+    // 1024 ticks per revolution, 1:3 gear ratio
+    // COUNTS_PER_DEGREE = (1024 * 3) / 360 = 3072 / 360 = 8.533...
+    private static final double COUNTS_PER_DEGREE = (1024.0 * 3.0) / 360.0;
 
     public Turret(HardwareMap hardwareMap, Telemetry telemetry, Maelstrom.Alliance alliance) {
         this.telemetry = telemetry;
@@ -44,237 +65,250 @@ public class Turret extends SubsystemBase {
         cam.start();
         cam.setPollRateHz(25);
 
-        // Initialize tagList as empty - will be populated in periodic()
-        tagList = new ArrayList<>();
-
         // Initialize PIDF controller with constants from TurretConstants
         pidfController = new PIDFController(TurretConstants.kP, TurretConstants.kI, TurretConstants.kD, TurretConstants.kF);
     }
 
     @Override
     public void periodic() {
-        // Update camera results with proper validation
-        LLResult result = cam.getLatestResult();
-        if (result != null && result.isValid()) {
-            tagList = result.getFiducialResults();
-        } else {
-            tagList = new ArrayList<>();
-        }
+        // Read Limelight data internally
+        updateLimelightData();
 
-        // Track target if available, otherwise set power to 0
-        // Use result.getTx() for primary target (works with any tag, not just alliance-specific)
-        if (result != null && result.isValid() && result.getFiducialResults() != null && !result.getFiducialResults().isEmpty()) {
-            trackTarget();
-        } else {
-            turretMotor.setPower(0);
-        }
+        systemState = handleTransition();
+        applyStates();
 
         // Telemetry
+        telemetry.addData("Turret State: ", systemState);
         telemetry.addData("Turret Angle: ", getCurrentAngle());
-        telemetry.addData("Target X Degrees (tx): ", getTargetXDegrees());
-        telemetry.addData("Has Target: ", hasTarget());
-        telemetry.addData("Result Valid: ", result != null && result.isValid());
-        telemetry.addData("Fiducial Count: ", tagList != null ? tagList.size() : 0);
-        
-        // Show primary target tx value directly from result
+        telemetry.addData("tx: ", tx);
+        telemetry.addData("Has Target: ", hasTarget);
+        telemetry.addData("Encoder Position: ", getEncoderPosition());
+    }
+
+    /**
+     * Updates Limelight data internally from camera
+     */
+    private void updateLimelightData() {
+        LLResult result = cam.getLatestResult();
         if (result != null && result.isValid()) {
-            telemetry.addData("Result tx: ", result.getTx());
-        }
-        
-        // Debug: Show all detected tag IDs
-        if (tagList != null && !tagList.isEmpty()) {
-            StringBuilder tagIds = new StringBuilder();
-            for (LLResultTypes.FiducialResult tag : tagList) {
-                if (tag != null) {
-                    if (tagIds.length() > 0) tagIds.append(", ");
-                    tagIds.append(tag.getFiducialId());
-                }
-            }
-            telemetry.addData("Detected Tag IDs: ", tagIds.toString());
+            // Get tx value (horizontal offset in degrees)
+            tx = result.getTx();
+            
+            // Check if any fiducials are detected
+            hasTarget = result.getFiducialResults() != null && !result.getFiducialResults().isEmpty();
         } else {
-            telemetry.addData("Detected Tag IDs: ", "none");
-        }
-        
-        if (result != null) {
-            telemetry.addData("Pipeline Index: ", cam.getStatus().getPipelineIndex());
+            tx = 0;
+            hasTarget = false;
         }
     }
 
     /**
-     * Get the target April tag based on alliance
-     * @return FiducialResult for the target tag, or null if not found
+     * Handles state transitions based on wanted state
      */
-    public LLResultTypes.FiducialResult getTag() {
-        LLResultTypes.FiducialResult target = null;
-        
-        if (tagList == null || alliance == null) {
-            return null;
+    private SystemState handleTransition() {
+        double angle = getAngle();
+
+        // Check if angle exceeds 360 degrees and needs relocalizing
+        if (angle > 360 && systemState != SystemState.RELOCALIZING) {
+            return SystemState.RELOCALIZING;
         }
 
-        int targetId = (alliance.equals(Maelstrom.Alliance.BLUE)) ? 20 : 24;
+        switch(wantedState) {
+            case IDLE:
+                return SystemState.IDLE;
+            case RELOCALIZING:
+                return SystemState.RELOCALIZING;
+            case TARGET_POSITION:
+                return SystemState.TARGET_POSITION;
+            case MANUAL:
+                return SystemState.MANUAL;
+            default:
+                return SystemState.IDLE;
+        }
+    }
 
-        for (LLResultTypes.FiducialResult tag : tagList) {
-            if (tag != null && tag.getFiducialId() == targetId) {
-                target = tag;
+    /**
+     * Applies the current system state
+     */
+    private void applyStates() {
+        switch(systemState) {
+            case IDLE:
+                turretMotor.setPower(0);
                 break;
-            }
+            case RELOCALIZING:
+                relocalize();
+                break;
+            case TARGET_POSITION:
+                if (hasTarget) {
+                    aimWithVision();
+                } else {
+                    turretMotor.setPower(0);
+                }
+                break;
+            case MANUAL:
+                // Manual control is handled by setManualPowerControl()
+                break;
         }
-
-        return target;
     }
 
     /**
-     * Get the current turret angle in degrees
-     * Formula: (encoderPosition * 360.0 / 1024) / 3
-     * @return Current angle in degrees
+     * Aims turret at target using vision data
      */
-    public double getCurrentAngle() {
-        return (turretMotor.getCurrentPosition() * 360.0 / 1024.0) / 3.0;
-    }
+    private void aimWithVision() {
+        double currentAngle = getAngle();
+        double targetAngle = currentAngle - tx;
 
-    /**
-     * Get the target X offset in degrees from Limelight
-     * @return Target X degrees (0 = centered), or 0 if no target
-     */
-    public double getTargetXDegrees() {
-        LLResultTypes.FiducialResult tag = getTag();
-        if (tag == null) {
-            return 0;
+        // Clamp to safe range
+        targetAngle = Math.max(0, Math.min(360, targetAngle));
+
+        // Calculate PIDF output (negate for correct direction)
+        double power = -pidfController.calculate(currentAngle, targetAngle);
+        
+        // Add minimum power threshold to ensure motor moves
+        if (Math.abs(power) < 0.05 && Math.abs(tx) > 0.5) {
+            power = Math.signum(tx) * 0.05; // Minimum 5% power if there's a significant error
         }
-        return tag.getTargetXDegrees();
+        
+        // Apply unwinding logic if needed
+        power = applyUnwindingLogic(power, currentAngle);
+        
+        // Clamp power to motor limits
+        power = Math.max(-1.0, Math.min(1.0, power));
+
+        turretMotor.setPower(power);
     }
 
     /**
-     * Check if a valid target is detected
-     * @return true if target exists, false otherwise
+     * Relocalizes turret to zero position
      */
-    public boolean hasTarget() {
-        return getTag() != null;
+    private void relocalize() {
+        double currentAngle = getAngle();
+        double target = 0;
+
+        double power = pidfController.calculate(currentAngle, target);
+        power = Math.max(-1.0, Math.min(1.0, power));
+        turretMotor.setPower(power);
+
+        // When close enough, stop and go to target position
+        if (Math.abs(currentAngle - 0) < 2.0) {  // 2 degree tolerance
+            turretMotor.setPower(0);
+            wantedState = WantedState.TARGET_POSITION; // automatically resume tracking
+        }
     }
 
     /**
-     * Get the current encoder position
-     * @return Current encoder position in ticks
+     * Applies unwinding logic to prevent full rotations
      */
-    private int getCurrentPosition() {
+    private double applyUnwindingLogic(double power, double currentAngle) {
+        int currentPosition = getEncoderPosition();
+        
+        // Check if we're at limits and need to unwind
+        if (currentPosition >= TurretConstants.maxLimit) {
+            // At max limit, unwind to starting position
+            double unwindTarget = TurretConstants.startingPos / COUNTS_PER_DEGREE;
+            double unwindPower = pidfController.calculate(currentAngle, unwindTarget);
+            return Math.max(-1.0, Math.min(1.0, unwindPower));
+        }
+        
+        if (currentPosition <= TurretConstants.minLimit) {
+            // At min limit, unwind to max position
+            double unwindTarget = TurretConstants.maxPos / COUNTS_PER_DEGREE;
+            double unwindPower = pidfController.calculate(currentAngle, unwindTarget);
+            return Math.max(-1.0, Math.min(1.0, unwindPower));
+        }
+        
+        // Check if tracking would exceed limits
+        double targetAngle = currentAngle - tx;
+        double targetPosition = targetAngle * COUNTS_PER_DEGREE;
+        
+        if (targetPosition > TurretConstants.maxLimit) {
+            // Would exceed max limit, unwind to starting position
+            double unwindTarget = TurretConstants.startingPos / COUNTS_PER_DEGREE;
+            double unwindPower = pidfController.calculate(currentAngle, unwindTarget);
+            return Math.max(-1.0, Math.min(1.0, unwindPower));
+        } else if (targetPosition < TurretConstants.minLimit) {
+            // Would exceed min limit, unwind to max position
+            double unwindTarget = TurretConstants.maxPos / COUNTS_PER_DEGREE;
+            double unwindPower = pidfController.calculate(currentAngle, unwindTarget);
+            return Math.max(-1.0, Math.min(1.0, unwindPower));
+        }
+        
+        return power;
+    }
+
+    /**
+     * Sets manual power control for the turret
+     */
+    public void setManualPowerControl(double power) {
+        wantedState = WantedState.MANUAL;
+        turretMotor.setPower(power);
+    }
+
+
+    /**
+     * Starts tracking targets
+     */
+    public void startTracking() {
+        wantedState = WantedState.TARGET_POSITION;
+    }
+
+    /**
+     * Stops tracking and goes to idle
+     */
+    public void stopTracking() {
+        wantedState = WantedState.IDLE;
+    }
+
+    /**
+     * Forces turret to return to zero position
+     */
+    public void forceReturnToZero() {
+        wantedState = WantedState.RELOCALIZING;
+    }
+
+    /**
+     * Gets the current turret angle in degrees
+     * Uses encoder counts and accounts for gear ratio
+     */
+    private double getAngle() {
+        int encoderCounts = turretMotor.getCurrentPosition();
+        // Convert encoder counts to degrees
+        // encoderCounts / COUNTS_PER_DEGREE gives us degrees
+        return encoderCounts / COUNTS_PER_DEGREE;
+    }
+
+    /**
+     * Gets the current encoder position
+     */
+    public int getEncoderPosition() {
         return turretMotor.getCurrentPosition();
     }
 
     /**
-     * Check if turret is at or beyond the maximum limit
-     * @return true if at/beyond max limit
+     * Gets the current angle in degrees
      */
-    private boolean isAtMaxLimit() {
-        return getCurrentPosition() >= TurretConstants.maxLimit;
+    public double getCurrentAngle() {
+        return getAngle();
     }
 
     /**
-     * Check if turret is at or beyond the minimum limit
-     * @return true if at/beyond min limit
+     * Gets the current system state
      */
-    private boolean isAtMinLimit() {
-        return getCurrentPosition() <= TurretConstants.minLimit;
+    public SystemState getSystemState() {
+        return systemState;
     }
 
     /**
-     * Normalize angle to range [0, 360)
-     * @param angle Angle in degrees
-     * @return Normalized angle
+     * Gets the current tx value (horizontal offset from Limelight)
      */
-    private double normalizeAngle(double angle) {
-        while (angle < 0) angle += 360;
-        while (angle >= 360) angle -= 360;
-        return angle;
+    public double getTx() {
+        return tx;
     }
 
     /**
-     * Calculate the shortest angular distance between two angles
-     * @param from Starting angle in degrees
-     * @param to Target angle in degrees
-     * @return Shortest angular distance in degrees (positive = clockwise, negative = counterclockwise)
+     * Gets whether a target is currently detected
      */
-    private double shortestAngularDistance(double from, double to) {
-        double diff = to - from;
-        if (diff > 180) {
-            diff -= 360;
-        } else if (diff < -180) {
-            diff += 360;
-        }
-        return diff;
-    }
-
-    /**
-     * Track the target using PIDF control with unwinding logic
-     * Prevents full rotations by flipping to opposite direction when needed
-     */
-    private void trackTarget() {
-        double targetXDegrees = getTargetXDegrees();
-        double currentAngle = getCurrentAngle();
-        int currentPosition = getCurrentPosition();
-        
-        // Check if we're at limits and need to unwind
-        if (isAtMaxLimit()) {
-            // At max limit, unwind to starting position
-            double unwindTarget = (TurretConstants.startingPos * 360.0 / 1024.0) / 3.0;
-            double power = pidfController.calculate(currentAngle, unwindTarget);
-            power = Math.max(-1.0, Math.min(1.0, power));
-            turretMotor.setPower(power);
-            return;
-        }
-        
-        if (isAtMinLimit()) {
-            // At min limit, unwind to max position
-            double unwindTarget = (TurretConstants.maxPos * 360.0 / 1024.0) / 3.0;
-            double power = pidfController.calculate(currentAngle, unwindTarget);
-            power = Math.max(-1.0, Math.min(1.0, power));
-            turretMotor.setPower(power);
-            return;
-        }
-        
-        // Calculate target angle: current angle minus the offset to center the target
-        // If target is at +5 degrees, we need to rotate -5 degrees to center it
-        double targetAngle = currentAngle - targetXDegrees;
-        targetAngle = normalizeAngle(targetAngle);
-        
-        // Calculate the shortest angular distance (returns value in [-180, 180])
-        double angularDistance = shortestAngularDistance(currentAngle, targetAngle);
-        
-        // Calculate what the new encoder position would be after rotation
-        double newAngle = normalizeAngle(currentAngle + angularDistance);
-        double newPosition = (newAngle * 3.0 * 1024.0) / 360.0;
-        
-        // Check if tracking would exceed limits
-        boolean wouldExceedMax = newPosition > TurretConstants.maxLimit;
-        boolean wouldExceedMin = newPosition < TurretConstants.minLimit;
-        
-        // Check if rotation would require more than 90 degrees (threshold for unwinding)
-        // If so, unwind to opposite limit instead of completing a large rotation
-        boolean requiresLargeRotation = Math.abs(angularDistance) > 90;
-        
-        if (wouldExceedMax) {
-            // Would exceed max limit, unwind to starting position (opposite limit)
-            targetAngle = (TurretConstants.startingPos * 360.0 / 1024.0) / 3.0;
-        } else if (wouldExceedMin) {
-            // Would exceed min limit, unwind to max position (opposite limit)
-            targetAngle = (TurretConstants.maxPos * 360.0 / 1024.0) / 3.0;
-        } else if (requiresLargeRotation) {
-            // Requires large rotation (>90 degrees), unwind to opposite limit to prevent full rotation
-            if (angularDistance > 0) {
-                // Large clockwise rotation needed, unwind to starting position
-                targetAngle = (TurretConstants.startingPos * 360.0 / 1024.0) / 3.0;
-            } else {
-                // Large counterclockwise rotation needed, unwind to max position
-                targetAngle = (TurretConstants.maxPos * 360.0 / 1024.0) / 3.0;
-            }
-        }
-
-        // Calculate PIDF output
-        double power = pidfController.calculate(currentAngle, targetAngle);
-
-        // Clamp power to motor limits
-        power = Math.max(-1.0, Math.min(1.0, power));
-
-        // Apply power to motor
-        turretMotor.setPower(power);
+    public boolean hasTarget() {
+        return hasTarget;
     }
 }
