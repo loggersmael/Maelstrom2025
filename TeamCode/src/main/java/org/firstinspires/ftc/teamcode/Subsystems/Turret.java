@@ -59,6 +59,7 @@ public class Turret extends SubsystemBase
     public void periodic()
     {
         if(!manualControl) {
+            
             tagList = cam.getLatestResult().getFiducialResults();
 
             switch (turretState) {
