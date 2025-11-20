@@ -36,6 +36,11 @@ public class Turret extends SubsystemBase {
 
         // Initialize Limelight camera
         cam = hardwareMap.get(Limelight3A.class, "limelight");
+        
+        // CRITICAL: Set pipeline before starting (pipeline 0 is typically AprilTag detection)
+        cam.pipelineSwitch(0);
+        
+        // Start polling for data - must be called after pipelineSwitch
         cam.start();
         cam.setPollRateHz(25);
 
@@ -67,6 +72,11 @@ public class Turret extends SubsystemBase {
         telemetry.addData("Turret Angle: ", getCurrentAngle());
         telemetry.addData("Target X Degrees: ", getTargetXDegrees());
         telemetry.addData("Has Target: ", hasTarget());
+        telemetry.addData("Result Valid: ", result != null && result.isValid());
+        telemetry.addData("Fiducial Count: ", tagList != null ? tagList.size() : 0);
+        if (result != null) {
+            telemetry.addData("Pipeline Index: ", cam.getStatus().getPipelineIndex());
+        }
     }
 
     /**
