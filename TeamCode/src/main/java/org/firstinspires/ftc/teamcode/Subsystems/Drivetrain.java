@@ -38,7 +38,7 @@ public class Drivetrain extends SubsystemBase {
    // private Motor rightRear;
 
     public Follower follower;
-    private Pose reset;
+    private Pose startPose;
 
     private Telemetry telemetry;
 
@@ -91,10 +91,14 @@ public class Drivetrain extends SubsystemBase {
     public void setPose(Pose pose) {
         follower.setPose(pose);
     }
+    public void setStartingPose(Pose pose)
+    {
+        startPose=pose;
+    }
 
     public void enableTeleop() {
-        follower.startTeleopDrive(true);
         follower.setStartingPose(startPose);
+        follower.startTeleopDrive(true);
     }
 
     public void resetHeading()
