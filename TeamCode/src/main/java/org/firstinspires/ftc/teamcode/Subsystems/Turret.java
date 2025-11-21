@@ -119,5 +119,10 @@ public class Turret extends SubsystemBase
     {
         setAngle=b;
     }
+
+    public void stopAndReset()
+    {
+        turretMotor.stopAndResetEncoder();
+    }
     
 }
