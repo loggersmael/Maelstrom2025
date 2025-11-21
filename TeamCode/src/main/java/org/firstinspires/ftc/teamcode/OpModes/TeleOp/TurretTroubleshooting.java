@@ -25,6 +25,7 @@ public class TurretTroubleshooting extends OpMode
     {
         cam.periodic();
         turret.periodic();
+        turret.getTargetAngle(cam.getTargetX(),cam.targetPresent());
         telemetry.update();
     }
 }

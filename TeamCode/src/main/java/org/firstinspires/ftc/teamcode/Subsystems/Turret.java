@@ -76,7 +76,7 @@ public class Turret extends SubsystemBase
     {
         manualAngle=angle;
     }
-    
+
     public void aimWithVision()
     {
 
