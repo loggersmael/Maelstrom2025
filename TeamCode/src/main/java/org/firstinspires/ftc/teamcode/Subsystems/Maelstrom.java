@@ -35,14 +35,14 @@ public class Maelstrom extends Robot
         intake= new Intake(hMap,telemetry);
         intake.stop();
         shooter= new Shooter(hMap,telemetry,color);
-        turret= new Turret(hMap,telemetry,color);
+        turret= new Turret(hMap,telemetry);
         cams= new Vision(hMap,telemetry,color);
         driver1= new GamepadEx(d1);
         driver2= new GamepadEx(d2);
         tTimer=new Timer();
         this.telemetry=telemetry;
         register(dt,intake,shooter,turret,cams);
-        turret.disableManual();
+
     }
 
     public void periodic()
@@ -85,7 +85,7 @@ public class Maelstrom extends Robot
 
         if(driver1.getButton(GamepadKeys.Button.LEFT_BUMPER))
         {
-            turret.reset();
+
         }
 
         if(driver2.getButton(GamepadKeys.Button.RIGHT_BUMPER))
