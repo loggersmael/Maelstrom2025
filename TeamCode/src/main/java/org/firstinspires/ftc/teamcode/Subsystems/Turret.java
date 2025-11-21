@@ -107,4 +107,15 @@ public class Turret extends SubsystemBase
     {
         manualPower=p;
     }
+
+    public void setManualControl(boolean b)
+    {
+        manualControl=b;
+    }
+
+    public void setPointMode(boolean b)
+    {
+        setAngle=b;
+    }
+    
 }
