@@ -35,6 +35,9 @@ public class Turret extends SubsystemBase
 
     private double currentAngle;
     private double targetAngle=0;
+    private boolean setAngle=false;
+    private double manualAngle=0;
+    private boolean manualControl=false;
 
     public Turret(HardwareMap hMap, Telemetry telemetry)
     {
@@ -52,7 +55,12 @@ public class Turret extends SubsystemBase
         telemetry.addData("Target Angle: ", targetAngle);
         telemetry.addData("Turret Encoder: ", encoder.getPosition());
         telemetry.addData("Inverse Turret Encoder: ", getInversePosition());
-        turretMotor.set(turretController.calculate(getAngle(),targetAngle));
+        if(!setAngle) {
+            turretMotor.set(turretController.calculate(getAngle(), targetAngle));
+        }
+        else {
+            turretMotor.set(turretController.calculate(getAngle(), manualAngle));
+        }
     }
 
     public void getTargetAngle(double tx,boolean hasTarget)
@@ -64,6 +72,11 @@ public class Turret extends SubsystemBase
         }
     }
 
+    public void setManualAngle(double angle)
+    {
+        manualAngle=angle;
+    }
+    
     public void aimWithVision()
     {
 
