@@ -58,6 +58,7 @@ public class Turret extends SubsystemBase
         telemetry.addData("Target Angle: ", targetAngle);
         telemetry.addData("Turret Encoder: ", encoder.getPosition());
         telemetry.addData("Inverse Turret Encoder: ", getInversePosition());
+        telemetry.addData("Manual Power: ",manualPower);
         if(!manualControl)
         {
             if(!setAngle)
