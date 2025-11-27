@@ -6,7 +6,7 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-public class SixBallBluePaths
+public class SixBallRedPaths
 {
     public PathChain line1;
     public PathChain Path2;
@@ -14,49 +14,49 @@ public class SixBallBluePaths
     public PathChain Path4;
     public PathChain line5;
 
-    public SixBallBluePaths(Follower follower) {
+    public SixBallRedPaths(Follower follower) {
         line1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(25.500, 129.000), new Pose(58.300, 85.000))
+                        new BezierLine(new Pose(25.500, 129.000).mirror(), new Pose(58.300, 85.000).mirror())
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(180))
+                .setLinearHeadingInterpolation(Math.toRadians(53), Math.toRadians(0))
                 .build();
 
         Path2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(58.300, 85.000), new Pose(40.800, 84.200))
+                        new BezierLine(new Pose(58.300, 85.000).mirror(), new Pose(40.800, 84.200).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(40.800, 84.200), new Pose(18.000, 84.000))
+                        new BezierLine(new Pose(40.800, 84.200).mirror(), new Pose(18.000, 84.000).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(18.000, 84.000), new Pose(58.300, 85.000))
+                        new BezierLine(new Pose(18.000, 84.000).mirror(), new Pose(58.300, 85.000).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         line5 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(58.300, 85.000),
-                                new Pose(54.000, 76.100),
-                                new Pose(19.800, 72.600)
+                                new Pose(58.300, 85.000).mirror(),
+                                new Pose(54.000, 76.100).mirror(),
+                                new Pose(19.800, 72.600).mirror()
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
     }
 }

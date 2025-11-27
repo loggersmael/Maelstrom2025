@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import static org.firstinspires.ftc.teamcode.Subsystems.Turret.TurretState.MANUALPOWER;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kD;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kF;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kI;
@@ -27,6 +28,10 @@ import java.util.List;
 
 public class Turret extends SubsystemBase
 {
+    public enum TurretState{
+        MANUALPOWER,MANUALANGLE,TRACKING;
+    }
+    public TurretState state;
     private MotorEx turretMotor;
     private Motor.Encoder encoder;
     private PIDFController turretController = new PIDFController(kP,kI,kD,kF);
@@ -35,10 +40,10 @@ public class Turret extends SubsystemBase
 
     private double currentAngle;
     private double targetAngle=0;
-    public boolean setAngle;
     private double manualAngle=0;
-    public boolean manualControl;
     public double manualPower;
+
+    public double offsetAngle;
 
     public Turret(HardwareMap hMap, Telemetry telemetry)
     {
@@ -48,8 +53,8 @@ public class Turret extends SubsystemBase
         turretMotor.motorEx.setDirection(DcMotorSimple.Direction.REVERSE);
         turretMotor.setRunMode(Motor.RunMode.RawPower);
         turretMotor.stopAndResetEncoder();
-        manualControl=false;
-        setAngle=false;
+        offsetAngle=0;
+        state=TurretState.TRACKING;
     }
 
     @Override
@@ -61,20 +66,18 @@ public class Turret extends SubsystemBase
         telemetry.addData("Turret Encoder: ", encoder.getPosition());
         telemetry.addData("Inverse Turret Encoder: ", getInversePosition());
         telemetry.addData("Manual Power: ",manualPower);
-        if(!manualControl)
+
+        switch(state)
         {
-            if(!setAngle)
-            {
-            turretMotor.set(turretController.calculate(getAngle(), targetAngle));
-            }
-            else
-            {
-            turretMotor.set(turretController.calculate(getAngle(), manualAngle));
-            }
-        }
-        else
-        {
-            turretMotor.set(manualPower);
+            case TRACKING:
+                turretMotor.set(turretController.calculate(getAngle(), targetAngle));
+                break;
+            case MANUALANGLE:
+                turretMotor.set(turretController.calculate(getAngle(), manualAngle));
+                break;
+            case MANUALPOWER:
+                turretMotor.set(manualPower);
+                break;
         }
     }
 
@@ -110,19 +113,24 @@ public class Turret extends SubsystemBase
         manualPower=p;
     }
 
-    public void setManualControl(boolean b)
+    public void setManualControl()
     {
-        manualControl=b;
+        state= MANUALPOWER;
     }
 
-    public void setPointMode(boolean b)
+    public void setPointMode()
     {
-        setAngle=b;
+        state=TurretState.MANUALANGLE;
     }
 
     public void stopAndReset()
     {
         turretMotor.stopAndResetEncoder();
+    }
+
+    public void setOffsetAngle(double angle)
+    {
+        offsetAngle=angle;
     }
     
 }

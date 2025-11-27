@@ -38,7 +38,7 @@ public class Drivetrain extends SubsystemBase {
    // private Motor rightRear;
 
     public Follower follower;
-    private Pose startPose;
+    public static Pose startPose;
 
     private Telemetry telemetry;
 
