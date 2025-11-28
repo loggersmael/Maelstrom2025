@@ -17,4 +17,6 @@ public class TurretConstants
     public static double kD= 0.0026;
     public static double kF= 0;
     public static double max=0;
+
+    public static double angleTolerance=0;
 }

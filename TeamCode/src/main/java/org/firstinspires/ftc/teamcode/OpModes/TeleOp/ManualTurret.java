@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
+package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,7 +16,7 @@ public class ManualTurret extends OpMode
     public void init()
     {
         turret= new Turret(hardwareMap,telemetry);
-        turret.manualControl=true;
+        turret.setManualControl();
     }
 
     public void loop()

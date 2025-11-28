@@ -8,16 +8,17 @@ import com.pedropathing.paths.PathChain;
 
 public class NineBallBluePaths
 {
-    public PathChain line1;
+    public PathChain Path1;
     public PathChain Path2;
     public PathChain Path3;
     public PathChain Path4;
-    public PathChain line5;
+    public PathChain Path5;
     public PathChain Path6;
-    public PathChain line7;
+    public PathChain Path7;
+    public PathChain Path8;
 
     public NineBallBluePaths(Follower follower) {
-        line1 = follower
+        Path1 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(new Pose(25.500, 129.000), new Pose(58.300, 85.000))
@@ -49,7 +50,7 @@ public class NineBallBluePaths
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
-        line5 = follower
+        Path5 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
@@ -69,13 +70,24 @@ public class NineBallBluePaths
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
-        line7 = follower
+        Path7 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
                                 new Pose(18.547, 59.665),
                                 new Pose(52.841, 64.914),
-                                new Pose(58.440, 85.210)
+                                new Pose(58.3, 85)
+                        )
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
+        Path8 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(58.300, 85.000),
+                                new Pose(54.000, 76.100),
+                                new Pose(19.800, 72.600)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))

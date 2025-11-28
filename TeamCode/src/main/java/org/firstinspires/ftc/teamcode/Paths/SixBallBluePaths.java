@@ -8,14 +8,14 @@ import com.pedropathing.paths.PathChain;
 
 public class SixBallBluePaths
 {
-    public PathChain line1;
+    public PathChain Path1;
     public PathChain Path2;
     public PathChain Path3;
     public PathChain Path4;
-    public PathChain line5;
+    public PathChain Path5;
 
     public SixBallBluePaths(Follower follower) {
-        line1 = follower
+        Path1 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(new Pose(25.500, 129.000), new Pose(58.300, 85.000))
@@ -47,7 +47,7 @@ public class SixBallBluePaths
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
-        line5 = follower
+        Path5 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(

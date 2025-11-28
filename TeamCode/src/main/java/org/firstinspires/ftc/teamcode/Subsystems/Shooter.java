@@ -99,6 +99,11 @@ public class Shooter extends SubsystemBase {
         flywheelOn = false;
     }
 
+    public void enableFlywheel()
+    {
+        flywheelOn=true;
+    }
+
     public void setHoodServo(double angle) {
         hoodServo.setPosition(angle);
     }

@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import static org.firstinspires.ftc.teamcode.Subsystems.Turret.TurretState.MANUALPOWER;
+import static org.firstinspires.ftc.teamcode.Subsystems.Turret.TurretState.TRACKING;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.angleTolerance;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kD;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kF;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kI;
@@ -29,7 +31,7 @@ import java.util.List;
 public class Turret extends SubsystemBase
 {
     public enum TurretState{
-        MANUALPOWER,MANUALANGLE,TRACKING;
+        MANUALPOWER,MANUALANGLE,TRACKING,IDLE;
     }
     public TurretState state;
     private MotorEx turretMotor;
@@ -54,7 +56,7 @@ public class Turret extends SubsystemBase
         turretMotor.setRunMode(Motor.RunMode.RawPower);
         turretMotor.stopAndResetEncoder();
         offsetAngle=0;
-        state=TurretState.TRACKING;
+        state=TurretState.IDLE;
     }
 
     @Override
@@ -70,14 +72,30 @@ public class Turret extends SubsystemBase
         switch(state)
         {
             case TRACKING:
-                turretMotor.set(turretController.calculate(getAngle(), targetAngle));
+                if(Math.abs(getAngle()-targetAngle)>angleTolerance)
+                {
+                    turretMotor.set(turretController.calculate(getAngle(), targetAngle));
+                }
+                else
+                {
+                    turretMotor.set(0);
+                }
                 break;
             case MANUALANGLE:
-                turretMotor.set(turretController.calculate(getAngle(), manualAngle));
+                if(Math.abs(getAngle()-manualAngle)>angleTolerance)
+                {
+                    turretMotor.set(turretController.calculate(getAngle(), manualAngle));
+                }
+                else
+                {
+                    turretMotor.set(0);
+                }
                 break;
             case MANUALPOWER:
                 turretMotor.set(manualPower);
                 break;
+            case IDLE:
+                turretMotor.set(0);
         }
     }
 
@@ -117,6 +135,12 @@ public class Turret extends SubsystemBase
     {
         state= MANUALPOWER;
     }
+
+    public void startTracking()
+    {
+        state= TRACKING;
+    }
+
 
     public void setPointMode()
     {
