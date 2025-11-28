@@ -36,7 +36,7 @@ public class SixBallCloseBlue extends CommandOpMode
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
                                 new InstantCommand(() -> robot.turret.setManualAngle(40)),
-                                new FollowPathCommand(follower,paths.Path1,true)
+                                new FollowPathCommand(follower,paths.Path1)
                         ),
                         new WaitCommand(1000),
                         new Shoot(robot),
@@ -45,12 +45,12 @@ public class SixBallCloseBlue extends CommandOpMode
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPathCommand(follower,paths.Path3,0.5),
                         new InstantCommand(() -> robot.intake.stop()),
-                        new FollowPathCommand(follower,paths.Path4,true),
+                        new FollowPathCommand(follower,paths.Path4),
                         new WaitCommand(1000),
                         new Shoot(robot),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         new InstantCommand(() -> robot.turret.setManualAngle(0)),
-                        new FollowPathCommand(follower,paths.Path5,true),
+                        new FollowPathCommand(follower,paths.Path5),
                         new InstantCommand(() -> robot.reset())
                 )
         );

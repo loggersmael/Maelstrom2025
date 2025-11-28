@@ -37,7 +37,7 @@ public class NineBallCloseBlue extends CommandOpMode
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
                                 new InstantCommand(() -> robot.turret.setManualAngle(40)),
-                                new FollowPathCommand(follower,paths.Path1,true)
+                                new FollowPathCommand(follower,paths.Path1)
                         ),
                         new WaitCommand(1000),
                         new Shoot(robot),
@@ -46,22 +46,22 @@ public class NineBallCloseBlue extends CommandOpMode
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPathCommand(follower,paths.Path3,0.5),
                         new InstantCommand(() -> robot.intake.stop()),
-                        new FollowPathCommand(follower,paths.Path4,true),
+                        new FollowPathCommand(follower,paths.Path4),
                         new WaitCommand(1000),
                         new Shoot(robot),
                         new WaitCommand(1000),
-                        new FollowPathCommand(follower,paths.Path5,true),
+                        new FollowPathCommand(follower,paths.Path5),
                         new WaitCommand(1000),
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPathCommand(follower,paths.Path6,0.5),
                         new InstantCommand(() -> robot.intake.stop()),
-                        new FollowPathCommand(follower,paths.Path7,true),
+                        new FollowPathCommand(follower,paths.Path7),
                         new WaitCommand(1000),
                         new Shoot(robot),
                         new WaitCommand(1000),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         new InstantCommand(() -> robot.turret.setManualAngle(0)),
-                        new FollowPathCommand(follower,paths.Path8,true),
+                        new FollowPathCommand(follower,paths.Path8),
                         new InstantCommand(() -> robot.reset())
                 )
         );
