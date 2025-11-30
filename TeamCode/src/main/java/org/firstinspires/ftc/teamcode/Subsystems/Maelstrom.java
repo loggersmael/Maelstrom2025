@@ -60,6 +60,7 @@ public class Maelstrom extends Robot
     {
         intake.stop();
         shooter.flywheelOn=false;
+        Drivetrain.startPose=dt.follower.getPose();
     }
 
     public void controlMap()
