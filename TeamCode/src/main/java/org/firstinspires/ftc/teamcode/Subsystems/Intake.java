@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase
         intakeMotor= aHardwareMap.get(DcMotorEx.class,"intake");
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        kicker.setPosition(0);
+        kicker.setPosition(0.15);
     }
 
     @Override
@@ -52,17 +52,17 @@ public class Intake extends SubsystemBase
 
     public void kickerDown()
     {
-        kicker.setPosition(0.02);
+        kicker.setPosition(0.15);
     }
 
     public void kickerUp()
     {
-        kicker.setPosition(0.4);
+        kicker.setPosition(0.45);
     }
 
     public void kickerHalfway()
     {
-        kicker.setPosition(0.28);
+        kicker.setPosition(0.15);
     }
 
 }
