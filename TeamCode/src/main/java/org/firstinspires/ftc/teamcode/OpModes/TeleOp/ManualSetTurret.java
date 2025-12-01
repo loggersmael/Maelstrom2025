@@ -14,7 +14,7 @@ public class ManualSetTurret extends OpMode
     public void init()
     {
         turret= new Turret(hardwareMap,telemetry);
-        turret.setAngle=true;
+        turret.setPointMode();
     }
 
     public void loop()
