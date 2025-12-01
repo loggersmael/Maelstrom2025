@@ -26,7 +26,7 @@ public class NineBallCloseBlue extends CommandOpMode
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         follower=robot.dt.follower;
-        follower.setStartingPose(new Pose(56,9,Math.toRadians(90)));
+        follower.setStartingPose(new Pose(25.5,129,Math.toRadians(143)));
         robot.shooter.shootMid();
         paths= new NineBallBluePaths(follower);
 
