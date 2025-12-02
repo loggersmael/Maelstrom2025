@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,6 +12,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.util.Timing;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase
@@ -20,6 +22,8 @@ public class Intake extends SubsystemBase
     }
     private DcMotorEx intakeMotor;
     private Servo kicker;
+    private RevColorSensorV3 sensor1;
+    private RevColorSensorV3 sensor2;
     private Motor.Encoder intakeEncoder;
     private Telemetry telemetry;
     public Intake(HardwareMap aHardwareMap, Telemetry telemetry)
@@ -27,6 +31,8 @@ public class Intake extends SubsystemBase
         this.telemetry=telemetry;
         kicker= aHardwareMap.get(Servo.class,"kicker");
         intakeMotor= aHardwareMap.get(DcMotorEx.class,"intake");
+        sensor1= aHardwareMap.get(RevColorSensorV3.class,"sensor1");
+        sensor2= aHardwareMap.get(RevColorSensorV3.class,"sensor2");
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         kicker.setPosition(0.15);
@@ -52,6 +58,11 @@ public class Intake extends SubsystemBase
     public void stop()
     {
         intakeMotor.setPower(0);
+    }
+
+    public boolean ballReady()
+    {
+        return sensor1.getDistance(DistanceUnit.INCH)<0.2 || sensor2.getDistance(DistanceUnit.INCH)<0.2;
     }
 
     public void kickerDown()
