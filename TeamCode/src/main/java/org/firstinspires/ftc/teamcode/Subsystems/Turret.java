@@ -45,7 +45,7 @@ public class Turret extends SubsystemBase
     private double manualAngle=0;
     public double manualPower;
 
-    public double offsetAngle;
+    public static double offsetAngle=0;
 
     public Turret(HardwareMap hMap, Telemetry telemetry)
     {
@@ -55,7 +55,6 @@ public class Turret extends SubsystemBase
         turretMotor.motorEx.setDirection(DcMotorSimple.Direction.REVERSE);
         turretMotor.setRunMode(Motor.RunMode.RawPower);
         turretMotor.stopAndResetEncoder();
-        offsetAngle=0;
         state=TurretState.IDLE;
     }
 

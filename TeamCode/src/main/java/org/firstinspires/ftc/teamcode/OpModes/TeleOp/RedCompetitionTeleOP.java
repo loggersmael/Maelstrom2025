@@ -33,6 +33,13 @@ public class RedCompetitionTeleOP extends OpMode
         Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
         Robot.dt.enableTeleop();
     }
+
+    @Override
+    public void start()
+    {
+        Robot.turret.startTracking();
+    }
+
     @Override
     public void loop()
     {
@@ -46,7 +53,7 @@ public class RedCompetitionTeleOP extends OpMode
         telemetryPacket.put("Target: ", Robot.shooter.targetVelocity);
         dashboard.sendTelemetryPacket(telemetryPacket);
 
-        telemetryManager.update(telemetry);
+        //telemetryManager.update(telemetry);
         Robot.controlMap();
         telemetry.update();
         Robot.periodic();

@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
 import org.firstinspires.ftc.teamcode.Commands.Shoot;
+import org.firstinspires.ftc.teamcode.Commands.ShootWithKicker;
 import org.firstinspires.ftc.teamcode.Paths.NineBallBluePaths;
 import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
@@ -40,7 +41,7 @@ public class NineBallCloseBlue extends CommandOpMode
                                 new FollowPathCommand(follower,paths.Path1)
                         ),
                         new WaitCommand(1000),
-                        new Shoot(robot),
+                        new ShootWithKicker(robot),
                         new FollowPathCommand(follower,paths.Path2),
                         new WaitCommand(1000),
                         new InstantCommand(() -> robot.intake.spinIn()),
@@ -48,7 +49,7 @@ public class NineBallCloseBlue extends CommandOpMode
                         new InstantCommand(() -> robot.intake.stop()),
                         new FollowPathCommand(follower,paths.Path4),
                         new WaitCommand(1000),
-                        new Shoot(robot),
+                        new ShootWithKicker(robot),
                         new WaitCommand(1000),
                         new FollowPathCommand(follower,paths.Path5),
                         new WaitCommand(1000),
@@ -57,7 +58,7 @@ public class NineBallCloseBlue extends CommandOpMode
                         new InstantCommand(() -> robot.intake.stop()),
                         new FollowPathCommand(follower,paths.Path7),
                         new WaitCommand(1000),
-                        new Shoot(robot),
+                        new ShootWithKicker(robot),
                         new WaitCommand(1000),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         new InstantCommand(() -> robot.turret.setManualAngle(0)),

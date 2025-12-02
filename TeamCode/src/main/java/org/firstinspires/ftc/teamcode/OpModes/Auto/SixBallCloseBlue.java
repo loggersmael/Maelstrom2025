@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
 import org.firstinspires.ftc.teamcode.Commands.Shoot;
+import org.firstinspires.ftc.teamcode.Commands.ShootWithKicker;
 import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
@@ -39,7 +40,7 @@ public class SixBallCloseBlue extends CommandOpMode
                                 new FollowPathCommand(follower,paths.Path1)
                         ),
                         new WaitCommand(1000),
-                        new Shoot(robot),
+                        new ShootWithKicker(robot),
                         new FollowPathCommand(follower,paths.Path2),
                         new WaitCommand(1000),
                         new InstantCommand(() -> robot.intake.spinIn()),
@@ -47,7 +48,7 @@ public class SixBallCloseBlue extends CommandOpMode
                         new InstantCommand(() -> robot.intake.stop()),
                         new FollowPathCommand(follower,paths.Path4),
                         new WaitCommand(1000),
-                        new Shoot(robot),
+                        new ShootWithKicker(robot),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         new InstantCommand(() -> robot.turret.setManualAngle(0)),
                         new FollowPathCommand(follower,paths.Path5),

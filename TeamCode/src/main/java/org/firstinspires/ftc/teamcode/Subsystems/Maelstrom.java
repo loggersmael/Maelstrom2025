@@ -52,6 +52,7 @@ public class Maelstrom extends Robot
         intake.periodic();
         shooter.periodic();
         turret.periodic();
+        turret.getTargetAngle(cams.getTargetX(),cams.targetPresent());
         //transferAndShoot();
     }
 
