@@ -14,6 +14,7 @@ public class ShootWithKicker extends CommandBase
     public ShootWithKicker(Maelstrom bot)
     {
         this.robot=bot;
+        addRequirements(robot.intake);
     }
 
     @Override
