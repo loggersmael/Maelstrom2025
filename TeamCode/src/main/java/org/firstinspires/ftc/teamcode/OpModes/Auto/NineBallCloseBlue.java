@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
@@ -12,10 +13,12 @@ import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
 import org.firstinspires.ftc.teamcode.Commands.Shoot;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithKicker;
+import org.firstinspires.ftc.teamcode.Commands.ShootWithSensor;
 import org.firstinspires.ftc.teamcode.Paths.NineBallBluePaths;
 import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
+@Autonomous(name="NineBallCloseBlue")
 public class NineBallCloseBlue extends CommandOpMode
 {
     private Maelstrom robot;
@@ -41,7 +44,7 @@ public class NineBallCloseBlue extends CommandOpMode
                                 new FollowPathCommand(follower,paths.Path1)
                         ),
                         new WaitCommand(1000),
-                        new ShootWithKicker(robot),
+                        new ShootWithSensor(robot),
                         new FollowPathCommand(follower,paths.Path2),
                         new WaitCommand(1000),
                         new InstantCommand(() -> robot.intake.spinIn()),
@@ -49,7 +52,7 @@ public class NineBallCloseBlue extends CommandOpMode
                         new InstantCommand(() -> robot.intake.stop()),
                         new FollowPathCommand(follower,paths.Path4),
                         new WaitCommand(1000),
-                        new ShootWithKicker(robot),
+                        new ShootWithSensor(robot),
                         new WaitCommand(1000),
                         new FollowPathCommand(follower,paths.Path5),
                         new WaitCommand(1000),
@@ -58,7 +61,7 @@ public class NineBallCloseBlue extends CommandOpMode
                         new InstantCommand(() -> robot.intake.stop()),
                         new FollowPathCommand(follower,paths.Path7),
                         new WaitCommand(1000),
-                        new ShootWithKicker(robot),
+                        new ShootWithSensor(robot),
                         new WaitCommand(1000),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         new InstantCommand(() -> robot.turret.setManualAngle(0)),

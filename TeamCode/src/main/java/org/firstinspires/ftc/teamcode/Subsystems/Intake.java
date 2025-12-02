@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
@@ -24,6 +25,8 @@ public class Intake extends SubsystemBase
     private Servo kicker;
     private RevColorSensorV3 sensor1;
     private RevColorSensorV3 sensor2;
+    private NormalizedRGBA colors1;
+    private NormalizedRGBA colors2;
     private Motor.Encoder intakeEncoder;
     private Telemetry telemetry;
     public Intake(HardwareMap aHardwareMap, Telemetry telemetry)
@@ -33,6 +36,8 @@ public class Intake extends SubsystemBase
         intakeMotor= aHardwareMap.get(DcMotorEx.class,"intake");
         sensor1= aHardwareMap.get(RevColorSensorV3.class,"sensor1");
         sensor2= aHardwareMap.get(RevColorSensorV3.class,"sensor2");
+        colors1=sensor1.getNormalizedColors();
+        colors2=sensor2.getNormalizedColors();
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         kicker.setPosition(0.15);
@@ -41,7 +46,13 @@ public class Intake extends SubsystemBase
     @Override
     public void periodic()
     {
+        colors1=sensor1.getNormalizedColors();
+        colors2=sensor2.getNormalizedColors();
 
+        telemetry.addData("Sensor 1 distance: ", sensor1.getDistance(DistanceUnit.INCH));
+        telemetry.addData("Sensor 2 Distance: ", sensor2.getDistance(DistanceUnit.INCH));
+        telemetry.addData("Sensor 1 Color: ",colors1.red + " " + colors1.green + " " + colors1.blue );
+        telemetry.addData("Sensor 2 Color: ",colors2.red + " " + colors2.green + " " + colors2.blue );
     }
     public void spinIn()
     {
@@ -62,7 +73,7 @@ public class Intake extends SubsystemBase
 
     public boolean ballReady()
     {
-        return sensor1.getDistance(DistanceUnit.INCH)<0.2 || sensor2.getDistance(DistanceUnit.INCH)<0.2;
+        return sensor2.getDistance(DistanceUnit.INCH)<5;
     }
 
     public void kickerDown()

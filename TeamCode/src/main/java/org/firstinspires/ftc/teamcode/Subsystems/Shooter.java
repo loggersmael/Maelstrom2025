@@ -26,14 +26,14 @@ public class Shooter extends SubsystemBase {
     private Servo hoodServo;
     private Servo light;
     private Vision cam;
-    private InterpLUT table;
+    //private InterpLUT table;
     private Maelstrom.Alliance alliance;
     private Telemetry telemetry;
     public double currentVelocity;
     public double targetVelocity;
-    public double autoVelocity;
+    //public double autoVelocity;
     public boolean flywheelOn;
-    private double distance;
+    //private double distance;
     public PIDFController velocityController= new PIDFController(kP,kI,kD,ShooterConstants.kF);
 
     public Shooter(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color) {
@@ -50,13 +50,16 @@ public class Shooter extends SubsystemBase {
 
         light = aHardwareMap.get(Servo.class, "light");
         cam = new Vision(aHardwareMap,telemetry,color);
-        distance=0;
-        autoVelocity=0;
+        //distance=0;
+        //autoVelocity=0;
+        /*
         table= new InterpLUT();
         table.add(0,closeVelocity);
-        table.add(0,midVelocity);
-        table.add(0,farVelocity);
+        table.add(2,midVelocity);
+        table.add(3,farVelocity);
         table.createLUT();
+        */
+
 
         flywheelOn = false;
         targetVelocity = ShooterConstants.closeVelocity; // start with some default
@@ -82,7 +85,7 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Flywheel On", flywheelOn);
         telemetry.addData("Current Velocity", currentVelocity);
         telemetry.addData("Target Velocity", targetVelocity);
-        telemetry.addData("Auto Velocity",autoVelocity);
+        //telemetry.addData("Auto Velocity",autoVelocity);
     }
 
     public void shootClose() {
@@ -108,7 +111,7 @@ public class Shooter extends SubsystemBase {
 
     public void shootAutoVelocity()
     {
-        targetVelocity=autoVelocity;
+        //targetVelocity=autoVelocity;
     }
 
     public void reverseWheel() {
@@ -152,11 +155,11 @@ public class Shooter extends SubsystemBase {
 
     public void updateDistance()
     {
-        distance= cam.calcDistance();
+        //distance= cam.calcDistance();
     }
     public void updateAutoVelocity()
     {
-        autoVelocity=table.get(distance);
+        //autoVelocity=table.get(distance);
     }
     public void hoodUp()
     {
