@@ -65,6 +65,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         updateDistance();
+        updateAutoVelocity();
 
         // Update shooter velocity
         if (flywheelOn) {
@@ -81,6 +82,7 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Flywheel On", flywheelOn);
         telemetry.addData("Current Velocity", currentVelocity);
         telemetry.addData("Target Velocity", targetVelocity);
+        telemetry.addData("Auto Velocity",autoVelocity);
     }
 
     public void shootClose() {
@@ -98,6 +100,10 @@ public class Shooter extends SubsystemBase {
     public void shootFarAuto()
     {
         targetVelocity= 2000;
+    }
+    public void setTargetVelocity(double v)
+    {
+        targetVelocity=v;
     }
 
     public void shootAutoVelocity()
