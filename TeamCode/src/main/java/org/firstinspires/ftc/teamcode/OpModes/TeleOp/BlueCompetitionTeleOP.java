@@ -13,12 +13,20 @@ public class BlueCompetitionTeleOP extends OpMode
     @Override
     public void init()
     {
-        Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
+        Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         Robot.dt.enableTeleop();
     }
+
+    @Override
+    public void start()
+    {
+        Robot.turret.startTracking();
+    }
+
     @Override
     public void loop()
     {
+        Robot.periodic();
         Robot.controlMap();
     }
 }
