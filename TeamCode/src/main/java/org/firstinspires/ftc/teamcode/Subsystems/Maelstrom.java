@@ -113,35 +113,37 @@ public class Maelstrom extends Robot
             shooter.shootMid();
         }
 
-        if(driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>0.5 && transferState==-1)
-        {
-            intake.spinOut();
-        }
-        else if(driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>0.5 && transferState==-1)
-        {
-            intake.spinIn();
-        }
-        else if(transferState==-1)
-        {
-            intake.stop();
-        }
+        if(transferState==-1) {
+            if (driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
+            {
+                intake.spinOut();
+            }
+            else if (driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5)
+            {
+                intake.spinIn();
+            }
+            else
+            {
+                intake.stop();
+            }
 
-        if(driver2.getButton(GamepadKeys.Button.DPAD_UP) && transferState==-1)
-        {
-            intake.kickerUp();
-        }
-        else if (!driver2.getButton(GamepadKeys.Button.DPAD_RIGHT) && transferState==-1)
-        {
-            intake.kickerDown();
-        }
+            if (driver2.getButton(GamepadKeys.Button.DPAD_UP))
+            {
+                intake.kickerUp();
+            }
+            else if (!driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
+            {
+                intake.kickerDown();
+            }
 
-        if(driver2.getButton(GamepadKeys.Button.DPAD_RIGHT) && transferState==-1)
-        {
-            intake.kickerHalfway();
-        }
-        else if (!driver2.getButton(GamepadKeys.Button.DPAD_UP) && transferState==-1)
-        {
-            intake.kickerDown();
+            if (driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
+            {
+                intake.kickerHalfway();
+            } 
+            else if (!driver2.getButton(GamepadKeys.Button.DPAD_UP))
+            {
+                intake.kickerDown();
+            }
         }
 
         if(!shooter.flywheelOn)
