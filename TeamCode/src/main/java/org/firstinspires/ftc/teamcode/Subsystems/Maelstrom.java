@@ -53,7 +53,7 @@ public class Maelstrom extends Robot
         shooter.periodic();
         turret.periodic();
         turret.getTargetAngle(cams.getTargetX(),cams.targetPresent());
-        //transferAndShoot();
+        transferAndShoot();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Maelstrom extends Robot
 
         //turret.turretWithManualLimits(-driver2.getLeftX());
 
-        /*
+
         if(driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
             startTransfer();
@@ -83,7 +83,7 @@ public class Maelstrom extends Robot
         {
             cancelTransfer();
         }
-         */
+
 
         if(driver1.getButton(GamepadKeys.Button.LEFT_BUMPER))
         {
@@ -113,11 +113,11 @@ public class Maelstrom extends Robot
             shooter.shootMid();
         }
 
-        if(driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>0.5)
+        if(driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>0.5 && transferState==-1)
         {
             intake.spinOut();
         }
-        else if(driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>0.5)
+        else if(driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>0.5 && transferState==-1)
         {
             intake.spinIn();
         }
@@ -126,20 +126,20 @@ public class Maelstrom extends Robot
             intake.stop();
         }
 
-        if(driver2.getButton(GamepadKeys.Button.DPAD_UP))
+        if(driver2.getButton(GamepadKeys.Button.DPAD_UP) && transferState==-1)
         {
             intake.kickerUp();
         }
-        else if (!driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
+        else if (!driver2.getButton(GamepadKeys.Button.DPAD_RIGHT) && transferState==-1)
         {
             intake.kickerDown();
         }
 
-        if(driver2.getButton(GamepadKeys.Button.DPAD_RIGHT))
+        if(driver2.getButton(GamepadKeys.Button.DPAD_RIGHT) && transferState==-1)
         {
             intake.kickerHalfway();
         }
-        else if (!driver2.getButton(GamepadKeys.Button.DPAD_UP))
+        else if (!driver2.getButton(GamepadKeys.Button.DPAD_UP) && transferState==-1)
         {
             intake.kickerDown();
         }
@@ -166,18 +166,18 @@ public class Maelstrom extends Robot
         }
     }
 
-    private void setTransferState(int x)
+    private void setState(int x)
     {
         transferState=x;
         tTimer.resetTimer();
     }
     private void startTransfer()
     {
-        setTransferState(1);
+        setState(1);
     }
     private void cancelTransfer()
     {
-        setTransferState(-1);
+        setState(-1);
     }
 
     private void transferAndShoot()
@@ -185,59 +185,81 @@ public class Maelstrom extends Robot
         switch(transferState)
         {
             case 1:
-                intake.spinIn();
-                setTransferState(2);
+                intake.slowSpinOut();
+                setState(2);
                 break;
             case 2:
-                if(tTimer.getElapsedTimeSeconds()>=0.2)
+                if(tTimer.getElapsedTimeSeconds()>0.2)
                 {
                     intake.stop();
-                    setTransferState(3);
+                    setState(3);
                 }
-                tTimer.resetTimer();
                 break;
             case 3:
-                if(tTimer.getElapsedTimeSeconds()>=0.05 && shooter.atSpeed())
+                if(tTimer.getElapsedTimeSeconds()>0.1)
                 {
                     intake.kickerUp();
-                    setTransferState(4);
+                    setState(4);
                 }
-                tTimer.resetTimer();
                 break;
             case 4:
-                if(tTimer.getElapsedTimeSeconds()>=0.05)
+                if(tTimer.getElapsedTimeSeconds()>0.5)
                 {
                     intake.kickerDown();
-                    setTransferState(5);
+                    setState(5);
                 }
-                tTimer.resetTimer();
                 break;
             case 5:
-                if(tTimer.getElapsedTimeSeconds()>=0.1)
+                if(tTimer.getElapsedTimeSeconds()>0.5)
                 {
                     intake.spinIn();
-                    setTransferState(6);
+                    setState(6);
                 }
-                tTimer.resetTimer();
                 break;
             case 6:
-                if(tTimer.getElapsedTimeSeconds()>=0.1 && shooter.atSpeed())
+                if(tTimer.getElapsedTimeSeconds()>1 || intake.ballReady())
                 {
-                    intake.kickerUp();
-                    setTransferState(7);
+                    intake.stop();
+                    setState(7);
                 }
-                tTimer.resetTimer();
                 break;
             case 7:
-                if(tTimer.getElapsedTimeSeconds()>=0.05)
+                if(tTimer.getElapsedTimeSeconds()>0.5 && shooter.atSpeed())
+                {
+                    intake.kickerUp();
+                    setState(8);
+                }
+                break;
+            case 8:
+                if(tTimer.getElapsedTimeSeconds()>0.5)
+                {
+                    intake.kickerDown();
+                    setState(9);
+                }
+                break;
+            case 9:
+                if(tTimer.getElapsedTimeSeconds()>0.5)
+                {
+                    intake.spinIn();
+                    setState(10);
+                }
+                break;
+            case 10:
+                if((tTimer.getElapsedTimeSeconds()>2 || intake.ballReady()) && shooter.atSpeed())
+                {
+                    intake.kickerUp();
+                    setState(11);
+                }
+                break;
+            case 11:
+                if(tTimer.getElapsedTimeSeconds()>0.5)
                 {
                     intake.kickerDown();
                     intake.stop();
-                    setTransferState(-1);
+                    setState(-1);
                 }
-                tTimer.resetTimer();
                 break;
-        }
 
+        }
     }
 }

@@ -40,7 +40,7 @@ public class ShootWithSensor extends CommandBase
                 }
                 break;
             case 3:
-                if(tTimer.getElapsedTimeSeconds()>0.5)
+                if(tTimer.getElapsedTimeSeconds()>0.1)
                 {
                     robot.intake.kickerUp();
                     setState(4);
