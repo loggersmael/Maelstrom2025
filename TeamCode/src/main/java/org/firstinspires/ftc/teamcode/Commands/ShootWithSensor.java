@@ -33,7 +33,7 @@ public class ShootWithSensor extends CommandBase
                 setState(2);
                 break;
             case 2:
-                if(tTimer.getElapsedTimeSeconds()>0.2)
+                if(tTimer.getElapsedTimeSeconds()>0.1)
                 {
                     robot.intake.stop();
                     setState(3);

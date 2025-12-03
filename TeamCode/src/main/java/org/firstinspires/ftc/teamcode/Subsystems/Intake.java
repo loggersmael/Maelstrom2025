@@ -56,9 +56,7 @@ public class Intake extends SubsystemBase
     }
     public void spinIn()
     {
-        if(kicker.getPosition()==0.15) {
             intakeMotor.setPower(1);
-        }
     }
     public void slowSpinOut()
     {

@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -11,6 +12,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
+import org.firstinspires.ftc.teamcode.Commands.FollowPath;
 import org.firstinspires.ftc.teamcode.Commands.Shoot;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithKicker;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithSensor;
@@ -29,7 +31,8 @@ public class SixBallCloseBlue extends CommandOpMode
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         follower=robot.dt.follower;
-        follower.setStartingPose(new Pose(25.5,129,Math.toRadians(143)));
+        follower.setStartingPose(new Pose(25.5,129 ,Math.toRadians(143)));
+        follower.setMaxPower(0.9);
         robot.shooter.shootMid();
         paths= new SixBallBluePaths(follower);
 
@@ -58,5 +61,12 @@ public class SixBallCloseBlue extends CommandOpMode
                         new InstantCommand(() -> robot.reset())
                 )
         );
+    }
+
+    @Override
+    public void run()
+    {
+        CommandScheduler.getInstance().run();
+        telemetry.update();
     }
 }
