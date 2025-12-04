@@ -61,7 +61,6 @@ public class Turret extends SubsystemBase
     @Override
     public void periodic()
     {
-        turretController.setPIDF(kP,kI,kD,kF);
         telemetry.addData("Current Angle: ",getAngle());
         telemetry.addData("Target Angle: ", targetAngle);
         telemetry.addData("Turret Encoder: ", encoder.getPosition());
@@ -73,6 +72,7 @@ public class Turret extends SubsystemBase
             case TRACKING:
                 if(Math.abs(getAngle()-targetAngle)>angleTolerance)
                 {
+                    turretController.setPIDF(kP,kI,kD,kF*Math.signum(targetAngle-getAngle()));
                     turretMotor.set(turretController.calculate(getAngle(), targetAngle));
                 }
                 else
@@ -83,6 +83,7 @@ public class Turret extends SubsystemBase
             case MANUALANGLE:
                 if(Math.abs(getAngle()-manualAngle)>angleTolerance)
                 {
+                    turretController.setPIDF(kP,kI,kD,kF*Math.signum(manualAngle-getAngle()));
                     turretMotor.set(turretController.calculate(getAngle(), manualAngle));
                 }
                 else
