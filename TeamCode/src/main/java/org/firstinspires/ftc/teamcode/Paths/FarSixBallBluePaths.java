@@ -9,36 +9,40 @@ import com.pedropathing.paths.PathChain;
 public class FarSixBallBluePaths
 {
     public PathChain Path1;
-    public PathChain line2;
+    public PathChain Path2;
     public PathChain Path3;
     public PathChain Path4;
-    public PathChain Path5;
 
     public FarSixBallBluePaths(Follower follower) {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(56.000, 9.000), new Pose(56.165, 15.747))
+                        new BezierLine(new Pose(56.000, 9.000), new Pose(56.000, 16.000))
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(90))
+                .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
-        line2 = follower
+        Path2 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(56.165, 15.747),
-                                new Pose(55.815, 37.269),
-                                new Pose(40.768, 36.044)
+                                new Pose(56.000, 16.000),
+                                new Pose(57.173, 42.465),
+                                new Pose(39.855, 35.110),
+                                new Pose(7.800, 35.822)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(40.768, 36.044), new Pose(23.096, 36.219))
+                        new BezierCurve(
+                                new Pose(7.800, 35.822),
+                                new Pose(49.582, 31.077),
+                                new Pose(56.000, 16.000)
+                        )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
@@ -46,18 +50,9 @@ public class FarSixBallBluePaths
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(23.096, 36.219), new Pose(56.000, 9.000))
+                        new BezierLine(new Pose(56.000, 16.000), new Pose(39.000, 13.000))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(90))
-                .setReversed()
-                .build();
-
-        Path5 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(56.000, 9.000), new Pose(37.269, 12.948))
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
+                .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
     }
 }

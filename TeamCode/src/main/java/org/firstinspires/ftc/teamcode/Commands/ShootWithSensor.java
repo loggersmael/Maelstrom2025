@@ -54,48 +54,53 @@ public class ShootWithSensor extends CommandBase
                 }
                 break;
             case 5:
-                if(tTimer.getElapsedTimeSeconds()>0.5)
+                if(tTimer.getElapsedTimeSeconds()>0.2)
                 {
                     robot.intake.spinIn();
                     setState(6);
                 }
                 break;
             case 6:
-                if(tTimer.getElapsedTimeSeconds()>1 || (tTimer.getElapsedTimeSeconds()>0.25 && robot.intake.ballReady()))
+                if(tTimer.getElapsedTimeSeconds()>1 || robot.intake.ballReady())
                 {
-                    robot.intake.stop();
                     setState(7);
                 }
-                break;
             case 7:
-                if(tTimer.getElapsedTimeSeconds()>0.5 /*&& robot.shooter.atSpeed()*/)
+                if(tTimer.getElapsedTimeSeconds()>0.3)
                 {
-                    robot.intake.kickerUp();
+                    robot.intake.stop();
                     setState(8);
                 }
                 break;
             case 8:
-                if(tTimer.getElapsedTimeSeconds()>0.5)
+                if(tTimer.getElapsedTimeSeconds()>0.5 /*&& robot.shooter.atSpeed()*/)
                 {
-                    robot.intake.kickerDown();
+                    robot.intake.kickerUp();
                     setState(9);
                 }
                 break;
             case 9:
                 if(tTimer.getElapsedTimeSeconds()>0.5)
                 {
-                    robot.intake.spinIn();
+                    robot.intake.kickerDown();
                     setState(10);
                 }
                 break;
             case 10:
-                if((tTimer.getElapsedTimeSeconds()>2 || robot.intake.ballReady()) /*&& robot.shooter.atSpeed()*/)
+                if(tTimer.getElapsedTimeSeconds()>0.3)
                 {
-                    robot.intake.kickerUp();
+                    robot.intake.spinIn();
                     setState(11);
                 }
                 break;
             case 11:
+                if((tTimer.getElapsedTimeSeconds()>2 || robot.intake.ballReady()) /*&& robot.shooter.atSpeed()*/)
+                {
+                    robot.intake.kickerUp();
+                    setState(12);
+                }
+                break;
+            case 12:
                 if(tTimer.getElapsedTimeSeconds()>0.5)
                 {
                     robot.intake.kickerDown();
