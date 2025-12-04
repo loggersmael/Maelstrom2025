@@ -19,8 +19,8 @@ public class Constants {
             .mass(11.606)
             .forwardZeroPowerAcceleration(-35.7065)
             .lateralZeroPowerAcceleration(-56)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.3, 0, 0.01, 0))
-            .useSecondaryTranslationalPIDF(true)
+            .translationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.02, 0))
+            .useSecondaryTranslationalPIDF(false)
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.3,0,0.04,0.015))
             .headingPIDFCoefficients(new PIDFCoefficients(2.55, 0, 0.1, 0.01))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.018,0,0.0017,0.6,0.01))
@@ -36,7 +36,8 @@ public class Constants {
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 2, 2);
+
+    public static PathConstraints pathConstraints = new PathConstraints(0.95, 50, 0.7, 1);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)

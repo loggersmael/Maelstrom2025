@@ -73,7 +73,7 @@ public class Intake extends SubsystemBase
 
     public boolean ballReady()
     {
-        return sensor2.getDistance(DistanceUnit.INCH)<5;
+        return sensor2.getDistance(DistanceUnit.INCH)<4;
     }
 
     public void kickerDown()
@@ -83,7 +83,7 @@ public class Intake extends SubsystemBase
 
     public void kickerUp()
     {
-        kicker.setPosition(0.47);
+        kicker.setPosition(0.5);
     }
 
     public void kickerHalfway()

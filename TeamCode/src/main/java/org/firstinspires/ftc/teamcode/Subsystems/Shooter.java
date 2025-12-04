@@ -163,7 +163,7 @@ public class Shooter extends SubsystemBase {
     }
     public void hoodUp()
     {
-        hoodServo.setPosition(0.5);
+        hoodServo.setPosition(0.2);
     }
 
 }

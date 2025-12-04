@@ -6,15 +6,14 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-public class SixBallBluePaths
+public class SixBallBluePaths2
 {
     public PathChain Path1;
     public PathChain Path2;
     public PathChain Path3;
     public PathChain Path4;
-    public PathChain Path5;
 
-    public SixBallBluePaths(Follower follower) {
+    public SixBallBluePaths2(Follower follower) {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
@@ -26,7 +25,7 @@ public class SixBallBluePaths
         Path2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(58.300, 85.000), new Pose(40.800, 84.200))
+                        new BezierLine(new Pose(58.300, 85.000), new Pose(18.000, 84.000))
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
@@ -34,7 +33,7 @@ public class SixBallBluePaths
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(40.800, 84.200), new Pose(17.000, 84.000))
+                        new BezierLine(new Pose(18.000, 84.000), new Pose(58.300, 85.000))
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
@@ -42,18 +41,10 @@ public class SixBallBluePaths
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(17.000, 84.000), new Pose(58.300, 85.000))
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
-                .build();
-
-        Path5 = follower
-                .pathBuilder()
-                .addPath(
                         new BezierCurve(
                                 new Pose(58.300, 85.000),
                                 new Pose(54.000, 76.100),
-                                new Pose(23, 72.600)
+                                new Pose(35.800, 72.600)
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(180))

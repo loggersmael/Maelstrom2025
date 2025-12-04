@@ -33,7 +33,7 @@ public class ShootWithSensor extends CommandBase
                 setState(2);
                 break;
             case 2:
-                if(tTimer.getElapsedTimeSeconds()>0.1)
+                if(tTimer.getElapsedTimeSeconds()>0.2)
                 {
                     robot.intake.stop();
                     setState(3);
@@ -61,7 +61,7 @@ public class ShootWithSensor extends CommandBase
                 }
                 break;
             case 6:
-                if(tTimer.getElapsedTimeSeconds()>1 || robot.intake.ballReady())
+                if(tTimer.getElapsedTimeSeconds()>1 || (tTimer.getElapsedTimeSeconds()>0.25 && robot.intake.ballReady()))
                 {
                     robot.intake.stop();
                     setState(7);
@@ -89,7 +89,7 @@ public class ShootWithSensor extends CommandBase
                 }
                 break;
             case 10:
-                if(tTimer.getElapsedTimeSeconds()>2 /*&& robot.shooter.atSpeed()*/ || robot.intake.ballReady())
+                if((tTimer.getElapsedTimeSeconds()>2 || robot.intake.ballReady()) /*&& robot.shooter.atSpeed()*/)
                 {
                     robot.intake.kickerUp();
                     setState(11);

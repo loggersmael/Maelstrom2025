@@ -17,14 +17,15 @@ import org.firstinspires.ftc.teamcode.Commands.Shoot;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithKicker;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithSensor;
 import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths;
+import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths2;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
-@Autonomous(name="SixBallCloseBlue")
-public class SixBallCloseBlue extends CommandOpMode
+@Autonomous(name="SixBallCloseBlueV2")
+public class SixBallCloseBlueV2 extends CommandOpMode
 {
     private Maelstrom robot;
     private Follower follower;
-    private SixBallBluePaths paths;
+    private SixBallBluePaths2 paths;
 
     @Override
     public void initialize()
@@ -34,7 +35,7 @@ public class SixBallCloseBlue extends CommandOpMode
         follower.setStartingPose(new Pose(25.5,129 ,Math.toRadians(143)));
         follower.setMaxPower(1);
         robot.shooter.shootMid();
-        paths= new SixBallBluePaths(follower);
+        paths= new SixBallBluePaths2(follower);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
@@ -48,17 +49,16 @@ public class SixBallCloseBlue extends CommandOpMode
                         ),
                         new WaitCommand(1000),
                         new ShootWithSensor(robot),
-                        new FollowPathCommand(follower,paths.Path2,true),
-                        new WaitCommand(500),
                         new InstantCommand(() -> robot.intake.spinIn()),
-                        new FollowPathCommand(follower,paths.Path3,true,0.25),
+                        new FollowPathCommand(follower,paths.Path2,true,1),
+                        new WaitCommand(500),
                         new InstantCommand(() -> robot.intake.stop()),
-                        new FollowPathCommand(follower,paths.Path4,true),
+                        new FollowPathCommand(follower,paths.Path3,true),
                         new WaitCommand(1000),
                         new ShootWithSensor(robot),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         new InstantCommand(() -> robot.turret.setManualAngle(0)),
-                        new FollowPathCommand(follower,paths.Path5,true),
+                        new FollowPathCommand(follower,paths.Path4,true),
                         new InstantCommand(() -> robot.reset())
                 )
         );
