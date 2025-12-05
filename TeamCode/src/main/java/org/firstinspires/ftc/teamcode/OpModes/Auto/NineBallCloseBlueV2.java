@@ -11,6 +11,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
+import org.firstinspires.ftc.teamcode.Commands.FinalShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.FollowPath;
 import org.firstinspires.ftc.teamcode.Commands.Shoot;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithKicker;
@@ -49,21 +50,21 @@ public class NineBallCloseBlueV2 extends CommandOpMode
                                         new FollowPathCommand(follower,paths.Path1,true)
                                 ),
                                 new WaitCommand(50),
-                                new ShootWithSensor(robot),
+                                new FinalShootCommand(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPathCommand(follower,paths.Path2,true,1),
                                 new WaitCommand(500),
                                 new InstantCommand(() -> robot.intake.stop()),
                                 new FollowPathCommand(follower,paths.Path3,true),
                                 new WaitCommand(50),
-                                new ShootWithSensor(robot),
+                                new FinalShootCommand(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPath(robot,paths.Path4,true,0.8).withTimeout(2500),
                                 new WaitCommand(500),
                                 new InstantCommand(() -> robot.intake.idle()),
                                 new FollowPathCommand(follower,paths.Path5),
                                 new InstantCommand(() -> robot.intake.stop()),
-                                new ShootWithSensor(robot),
+                                new FinalShootCommand(robot),
                                 new FollowPathCommand(follower,paths.Path6),
                                 new InstantCommand(() -> robot.shooter.stopFlywheel()),
                                 new InstantCommand(() -> robot.turret.setManualAngle(0)),

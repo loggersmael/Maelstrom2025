@@ -21,7 +21,7 @@ public class FinalShootCommand extends SequentialCommandGroup
         shooter=bot.shooter;
         addCommands(
                 new InstantCommand(intake::slowSpinOut),
-                new WaitCommand(200),
+                new WaitCommand(350),
                 new InstantCommand(intake::stop),
                 new WaitCommand(100),
                 new InstantCommand(intake::kickerUp),
@@ -33,15 +33,16 @@ public class FinalShootCommand extends SequentialCommandGroup
                 new WaitCommand(350),
                 new InstantCommand(intake::stop),
                 new InstantCommand(intake::spinOut),
-                new WaitCommand(200),
+                new WaitCommand(100),
                 new InstantCommand(intake::stop),
-                new WaitUntilCommand(shooter::atSpeed).alongWith(new WaitCommand(500)),
+                new WaitUntilCommand(shooter::atSpeed).raceWith(new WaitCommand(200)),
                 new InstantCommand(intake::kickerUp),
                 new WaitCommand(500),
                 new InstantCommand(intake::kickerDown),
                 new WaitCommand(300),
                 new InstantCommand(intake::spinIn),
-                new WaitUntilCommand(intake::ballReady).raceWith(new WaitCommand(2000)).alongWith(new WaitUntilCommand(shooter::atSpeed)),
+                new WaitUntilCommand(intake::ballReady).raceWith(new WaitCommand(2000))/*.alongWith(new WaitUntilCommand(shooter::atSpeed))*/,
+                new InstantCommand(intake::kickerUp),
                 new WaitCommand(500),
                 new InstantCommand(intake::kickerDown),
                 new InstantCommand(intake::stop)

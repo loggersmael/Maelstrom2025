@@ -41,6 +41,7 @@ public class Intake extends SubsystemBase
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         kicker.setPosition(0.15);
+        stop();
     }
 
     @Override
