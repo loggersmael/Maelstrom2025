@@ -6,14 +6,16 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-public class SixBallRedPaths
+public class NineBallRedPaths
 {
     public PathChain Path1;
     public PathChain Path2;
     public PathChain Path3;
     public PathChain Path4;
+    public PathChain Path5;
+    public PathChain Path6;
 
-    public SixBallRedPaths(Follower follower) {
+    public NineBallRedPaths(Follower follower) {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
@@ -43,9 +45,30 @@ public class SixBallRedPaths
                 .addPath(
                         new BezierCurve(
                                 new Pose(58.300, 85.000).mirror(),
-                                new Pose(54.000, 76.100).mirror(),
-                                new Pose(35.800, 72.600).mirror()
+                                new Pose(55.700, 57.400).mirror(),
+                                new Pose(43.200, 55.000).mirror(),
+                                new Pose(5, 54.000).mirror()
                         )
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .build();
+
+        Path5 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(5, 54.000).mirror(),
+                                new Pose(53.400, 56.500).mirror(),
+                                new Pose(58.400, 85.200).mirror()
+                        )
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .build();
+
+        Path6 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(58.400, 85.200).mirror(), new Pose(38.000, 85.000).mirror())
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();

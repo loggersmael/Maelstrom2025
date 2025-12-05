@@ -6,26 +6,31 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-public class SixBallRedPaths
+public class FarSixBallRedPaths
 {
     public PathChain Path1;
     public PathChain Path2;
     public PathChain Path3;
     public PathChain Path4;
 
-    public SixBallRedPaths(Follower follower) {
+    public FarSixBallRedPaths(Follower follower) {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(25.500, 129.000).mirror(), new Pose(58.300, 85.000).mirror())
+                        new BezierLine(new Pose(56.000, 9.000).mirror(), new Pose(56.000, 16.000).mirror())
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(37), Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         Path2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(58.300, 85.000).mirror(), new Pose(18.000, 84.000).mirror())
+                        new BezierCurve(
+                                new Pose(56.000, 16.000).mirror(),
+                                new Pose(57.173, 42.465).mirror(),
+                                new Pose(39.855, 35.110).mirror(),
+                                new Pose(7.800, 35.822).mirror()
+                        )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
@@ -33,7 +38,11 @@ public class SixBallRedPaths
         Path3 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(18.000, 84.000).mirror(), new Pose(58.300, 85.000).mirror())
+                        new BezierCurve(
+                                new Pose(7.800, 35.822).mirror(),
+                                new Pose(49.582, 31.077).mirror(),
+                                new Pose(56.000, 16.000).mirror()
+                        )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
@@ -41,11 +50,7 @@ public class SixBallRedPaths
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierCurve(
-                                new Pose(58.300, 85.000).mirror(),
-                                new Pose(54.000, 76.100).mirror(),
-                                new Pose(35.800, 72.600).mirror()
-                        )
+                        new BezierLine(new Pose(56.000, 16.000).mirror(), new Pose(39.000, 13.000).mirror())
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
