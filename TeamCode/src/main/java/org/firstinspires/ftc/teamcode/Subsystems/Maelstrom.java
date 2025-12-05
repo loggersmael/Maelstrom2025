@@ -212,7 +212,7 @@ public class Maelstrom extends Robot
                 }
                 break;
             case 5:
-                if(tTimer.getElapsedTimeSeconds()>0.5)
+                if(tTimer.getElapsedTimeSeconds()>0.2)
                 {
                     intake.spinIn();
                     setState(6);
@@ -221,39 +221,52 @@ public class Maelstrom extends Robot
             case 6:
                 if(tTimer.getElapsedTimeSeconds()>1 || intake.ballReady())
                 {
-                    intake.stop();
                     setState(7);
                 }
-                break;
             case 7:
-                if(tTimer.getElapsedTimeSeconds()>0.5 && shooter.atSpeed())
+                if(tTimer.getElapsedTimeSeconds()>0.35)
                 {
-                    intake.kickerUp();
+                    intake.stop();
+                    intake.spinOut();
                     setState(8);
                 }
                 break;
             case 8:
-                if(tTimer.getElapsedTimeSeconds()>0.5)
+                if(tTimer.getElapsedTimeSeconds()>0.2)
                 {
-                    intake.kickerDown();
+                    intake.stop();
                     setState(9);
                 }
                 break;
             case 9:
-                if(tTimer.getElapsedTimeSeconds()>0.5)
+                if(tTimer.getElapsedTimeSeconds()>0.5 && shooter.atSpeed())
                 {
-                    intake.spinIn();
+                    intake.kickerUp();
                     setState(10);
                 }
                 break;
             case 10:
-                if((tTimer.getElapsedTimeSeconds()>2 || intake.ballReady()) && shooter.atSpeed())
+                if(tTimer.getElapsedTimeSeconds()>0.5)
                 {
-                    intake.kickerUp();
+                    intake.kickerDown();
                     setState(11);
                 }
                 break;
             case 11:
+                if(tTimer.getElapsedTimeSeconds()>0.3)
+                {
+                    intake.spinIn();
+                    setState(12);
+                }
+                break;
+            case 12:
+                if((tTimer.getElapsedTimeSeconds()>2 || intake.ballReady()) && shooter.atSpeed())
+                {
+                    intake.kickerUp();
+                    setState(13);
+                }
+                break;
+            case 13:
                 if(tTimer.getElapsedTimeSeconds()>0.5)
                 {
                     intake.kickerDown();
