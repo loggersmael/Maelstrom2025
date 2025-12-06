@@ -21,7 +21,7 @@ public class FinalShootCommand extends SequentialCommandGroup
         shooter=bot.shooter;
         addCommands(
                 new InstantCommand(intake::slowSpinOut),
-                new WaitCommand(350),
+                new WaitCommand(200),
                 new InstantCommand(intake::stop),
                 new WaitCommand(100),
                 new InstantCommand(intake::kickerUp),

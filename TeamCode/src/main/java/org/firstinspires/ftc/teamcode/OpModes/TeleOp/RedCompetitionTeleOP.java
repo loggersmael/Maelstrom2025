@@ -32,7 +32,7 @@ public class RedCompetitionTeleOP extends OpMode
         telemetryPacket= new TelemetryPacket();
         Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
         Robot.dt.enableTeleop();
-        Robot.turret.setOffsetAngle(40);
+        Robot.turret.setOffsetAngle(35);
     }
 
     @Override

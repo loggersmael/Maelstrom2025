@@ -46,6 +46,7 @@ public class SixBallFarRed extends CommandOpMode
                                 new InstantCommand(() -> robot.turret.setManualAngle(24)),
                                 new FollowPathCommand(follower,paths.Path1,true)
                         ),
+                        new WaitCommand(500),
                         new FinalShootCommand(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPath(robot,paths.Path2,true,1).withTimeout(2500),

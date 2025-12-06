@@ -38,13 +38,14 @@ public class SixBallFarBlue extends CommandOpMode
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.shooter.setHood(0.8)),
+                        new InstantCommand(() -> robot.shooter.setHood(0.7)),
                         new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                         new InstantCommand(() -> robot.turret.setPointMode()),
-                                        new InstantCommand(() -> robot.turret.setManualAngle(76)),
+                                        new InstantCommand(() -> robot.turret.setManualAngle(72)),
                                         new FollowPathCommand(follower,paths.Path1,true)
                         ),
+                        new WaitCommand(500),
                         new FinalShootCommand(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPath(robot,paths.Path2,true,1).withTimeout(2500),
