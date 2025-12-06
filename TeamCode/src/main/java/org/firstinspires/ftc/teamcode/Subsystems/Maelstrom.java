@@ -239,7 +239,7 @@ public class Maelstrom extends Robot
                 }
                 break;
             case 9:
-                if(tTimer.getElapsedTimeSeconds()>0.5 && shooter.atSpeed())
+                if(tTimer.getElapsedTimeSeconds()>0.5 /*&& shooter.atSpeed()*/)
                 {
                     intake.kickerUp();
                     setState(10);
@@ -260,7 +260,7 @@ public class Maelstrom extends Robot
                 }
                 break;
             case 12:
-                if((tTimer.getElapsedTimeSeconds()>2 || intake.ballReady()) && shooter.atSpeed())
+                if((tTimer.getElapsedTimeSeconds()>2 || intake.ballReady()) /*&& shooter.atSpeed()*/)
                 {
                     intake.kickerUp();
                     setState(13);
