@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -17,6 +20,7 @@ public class Maelstrom extends Robot
     public enum Alliance{
         RED,BLUE;
     }
+    public Alliance color;
     public Drivetrain dt;
     public Intake intake;
     public Shooter shooter;
@@ -27,6 +31,11 @@ public class Maelstrom extends Robot
     private Telemetry telemetry;
     private int transferState=-1;
     private Timer tTimer;
+    private PathChain redPark;
+    private PathChain bluePark;
+    private static Pose blueZone= new Pose(105.3,33,Math.toRadians(0));
+    private static Pose redZone= blueZone.mirror();
+
 
     public Maelstrom(HardwareMap hMap, Telemetry telemetry, Alliance color, Gamepad d1, Gamepad d2)
     {
@@ -276,5 +285,26 @@ public class Maelstrom extends Robot
                 break;
 
         }
+    }
+
+    private void park()
+    {
+        if(color.equals(Alliance.BLUE))
+        {
+            bluePark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),blueZone)).setConstantHeadingInterpolation(0).build();
+            if(!dt.follower.isBusy())
+            {
+                dt.follower.followPath(bluePark,true);
+            }
+        }
+        else if(color.equals(Alliance.RED))
+        {
+            redPark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),redZone)).setConstantHeadingInterpolation(0).build();
+            if(!dt.follower.isBusy())
+            {
+                dt.follower.followPath(redPark,true);
+            }
+        }
+
     }
 }
