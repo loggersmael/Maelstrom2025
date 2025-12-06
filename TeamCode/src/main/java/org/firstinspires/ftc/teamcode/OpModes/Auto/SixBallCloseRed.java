@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -13,59 +14,63 @@ import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
 import org.firstinspires.ftc.teamcode.Commands.FinalShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.FollowPath;
+import org.firstinspires.ftc.teamcode.Commands.Shoot;
+import org.firstinspires.ftc.teamcode.Commands.ShootWithKicker;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithSensor;
-import org.firstinspires.ftc.teamcode.Paths.FarNineBallBluePaths;
-import org.firstinspires.ftc.teamcode.Paths.FarSixBallBluePaths;
-import org.firstinspires.ftc.teamcode.Paths.NineBallBluePaths2;
+import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths;
+import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths2;
+import org.firstinspires.ftc.teamcode.Paths.SixBallRedPaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
-@Autonomous(name="NineBallFarBlue")
-public class NineBallFarBlue extends CommandOpMode
+@Autonomous(name="SixBallCloseRed")
+public class SixBallCloseRed extends CommandOpMode
 {
-
     private Maelstrom robot;
     private Follower follower;
-    private FarNineBallBluePaths paths;
+    private SixBallRedPaths paths;
 
     @Override
     public void initialize()
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         follower=robot.dt.follower;
-        follower.setStartingPose(new Pose(56,9,Math.toRadians(180)));
-        robot.shooter.setTargetVelocity(2000);
-        paths= new FarNineBallBluePaths(follower);
+        follower.setStartingPose(new Pose(25.5,129 ,Math.toRadians(143)).mirror());
+        follower.setMaxPower(1);
+        robot.shooter.shootMid();
+        paths= new SixBallRedPaths(follower);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.shooter.setHood(0.7)),
+                        new InstantCommand(() -> robot.shooter.hoodUp()),
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(76)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(0)),
                                 new FollowPathCommand(follower,paths.Path1,true)
                         ),
+                        new WaitCommand(50),
+                        new FinalShootCommand(robot),
+                        new InstantCommand(() -> robot.intake.spinIn()),
+                        new FollowPathCommand(follower,paths.Path2,true,1),
                         new WaitCommand(500),
-                        new FinalShootCommand(robot),
-                        new InstantCommand(() -> robot.intake.spinIn()),
-                        new FollowPath(robot,paths.Path2,true,1).withTimeout(2500),
-                        new WaitCommand(750),
-                        new InstantCommand(() -> robot.intake.idle()),
-                        new FollowPathCommand(follower,paths.Path3),
                         new InstantCommand(() -> robot.intake.stop()),
+                        new FollowPathCommand(follower,paths.Path3,true),
+                        new WaitCommand(50),
                         new FinalShootCommand(robot),
-                        new InstantCommand(() -> robot.intake.spinIn()),
-                        new FollowPath(robot,paths.Path4,false,1).withTimeout(3000),
-                        new WaitCommand(750),
-                        new InstantCommand(() -> robot.intake.idle()),
-                        new FollowPathCommand(follower,paths.Path5),
-                        new FinalShootCommand(robot),
-                        new FollowPathCommand(follower,paths.Path6),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
-                        new InstantCommand(() -> robot.turret.setManualAngle(0)),
+                        new InstantCommand(() -> robot.turret.setManualAngle(45)),
+                        new FollowPathCommand(follower,paths.Path4,true),
+                        new InstantCommand(robot.turret::stopAndReset),
                         new InstantCommand(() -> robot.reset())
                 )
         );
+    }
+
+    @Override
+    public void run()
+    {
+        CommandScheduler.getInstance().run();
+        telemetry.update();
     }
 }

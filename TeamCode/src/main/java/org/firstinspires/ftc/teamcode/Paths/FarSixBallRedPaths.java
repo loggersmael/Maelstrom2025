@@ -17,19 +17,19 @@ public class FarSixBallRedPaths
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(56.000, 9.000).mirror(), new Pose(56.000, 16.000).mirror())
+                        new BezierLine(new Pose(56.000, 9.000).mirror(), new Pose(56.000, 18.000).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(90))
                 .build();
 
         Path2 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(56.000, 16.000).mirror(),
+                                new Pose(56.000, 18.000).mirror(),
                                 new Pose(57.173, 42.465).mirror(),
-                                new Pose(39.855, 35.110).mirror(),
-                                new Pose(7.800, 35.822).mirror()
+                                new Pose(44.125, 37.957).mirror(),
+                                new Pose(7.800, 38.000).mirror()
                         )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
@@ -41,18 +41,18 @@ public class FarSixBallRedPaths
                         new BezierCurve(
                                 new Pose(7.800, 35.822).mirror(),
                                 new Pose(49.582, 31.077).mirror(),
-                                new Pose(56.000, 16.000).mirror()
+                                new Pose(56.000, 18.000).mirror()
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(0),Math.toRadians(90))
                 .build();
 
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(56.000, 16.000).mirror(), new Pose(39.000, 13.000).mirror())
+                        new BezierLine(new Pose(56.000, 18.000).mirror(), new Pose(39.000, 13.000).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setConstantHeadingInterpolation(Math.toRadians(90))
                 .build();
     }
 }

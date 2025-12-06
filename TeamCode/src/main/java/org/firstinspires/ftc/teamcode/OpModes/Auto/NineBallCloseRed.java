@@ -18,24 +18,25 @@ import org.firstinspires.ftc.teamcode.Commands.ShootWithKicker;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithSensor;
 import org.firstinspires.ftc.teamcode.Paths.NineBallBluePaths;
 import org.firstinspires.ftc.teamcode.Paths.NineBallBluePaths2;
+import org.firstinspires.ftc.teamcode.Paths.NineBallRedPaths;
 import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
-@Autonomous(name="NineBallCloseBlueV2")
-public class NineBallCloseBlueV2 extends CommandOpMode
+@Autonomous(name="NineBallCloseRed")
+public class NineBallCloseRed extends CommandOpMode
 {
     private Maelstrom robot;
     private Follower follower;
-    private NineBallBluePaths2 paths;
+    private NineBallRedPaths paths;
 
     @Override
     public void initialize()
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         follower=robot.dt.follower;
-        follower.setStartingPose(new Pose(25.5,129,Math.toRadians(143)));
+        follower.setStartingPose(new Pose(25.5,129,Math.toRadians(143)).mirror());
         robot.shooter.shootMid();
-        paths= new NineBallBluePaths2(follower);
+        paths= new NineBallRedPaths(follower);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
@@ -46,7 +47,7 @@ public class NineBallCloseBlueV2 extends CommandOpMode
                                 new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                         new InstantCommand(() -> robot.turret.setPointMode()),
-                                        new InstantCommand(() -> robot.turret.setManualAngle(45)),
+                                        new InstantCommand(() -> robot.turret.setManualAngle(0)),
                                         new FollowPathCommand(follower,paths.Path1,true)
                                 ),
                                 new WaitCommand(50),
@@ -67,7 +68,8 @@ public class NineBallCloseBlueV2 extends CommandOpMode
                                 new FinalShootCommand(robot),
                                 new FollowPathCommand(follower,paths.Path6),
                                 new InstantCommand(() -> robot.shooter.stopFlywheel()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(0)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(45)),
+                                new InstantCommand(robot.turret::stopAndReset),
                                 new InstantCommand(() -> robot.reset())
                         )
                 )

@@ -14,39 +14,38 @@ import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.Commands.FinalShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.FollowPath;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithSensor;
-import org.firstinspires.ftc.teamcode.Paths.FarNineBallBluePaths;
 import org.firstinspires.ftc.teamcode.Paths.FarSixBallBluePaths;
+import org.firstinspires.ftc.teamcode.Paths.FarSixBallRedPaths;
 import org.firstinspires.ftc.teamcode.Paths.NineBallBluePaths2;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
-@Autonomous(name="NineBallFarBlue")
-public class NineBallFarBlue extends CommandOpMode
+@Autonomous(name="SixBallFarRed")
+public class SixBallFarRed extends CommandOpMode
 {
 
     private Maelstrom robot;
     private Follower follower;
-    private FarNineBallBluePaths paths;
+    private FarSixBallRedPaths paths;
 
     @Override
     public void initialize()
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         follower=robot.dt.follower;
-        follower.setStartingPose(new Pose(56,9,Math.toRadians(180)));
+        follower.setStartingPose(new Pose(56,9,Math.toRadians(90)).mirror());
         robot.shooter.setTargetVelocity(2000);
-        paths= new FarNineBallBluePaths(follower);
+        paths= new FarSixBallRedPaths(follower);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.shooter.setHood(0.7)),
+                        new InstantCommand(() -> robot.shooter.setHood(0.6)),
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(76)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(24)),
                                 new FollowPathCommand(follower,paths.Path1,true)
                         ),
-                        new WaitCommand(500),
                         new FinalShootCommand(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPath(robot,paths.Path2,true,1).withTimeout(2500),
@@ -55,13 +54,7 @@ public class NineBallFarBlue extends CommandOpMode
                         new FollowPathCommand(follower,paths.Path3),
                         new InstantCommand(() -> robot.intake.stop()),
                         new FinalShootCommand(robot),
-                        new InstantCommand(() -> robot.intake.spinIn()),
-                        new FollowPath(robot,paths.Path4,false,1).withTimeout(3000),
-                        new WaitCommand(750),
-                        new InstantCommand(() -> robot.intake.idle()),
-                        new FollowPathCommand(follower,paths.Path5),
-                        new FinalShootCommand(robot),
-                        new FollowPathCommand(follower,paths.Path6),
+                        new FollowPathCommand(follower,paths.Path4),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         new InstantCommand(() -> robot.turret.setManualAngle(0)),
                         new InstantCommand(() -> robot.reset())

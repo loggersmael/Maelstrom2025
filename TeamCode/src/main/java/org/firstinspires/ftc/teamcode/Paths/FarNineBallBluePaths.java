@@ -65,7 +65,12 @@ public class FarNineBallBluePaths
         Path5 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(10.201, 6.643), new Pose(56.100, 18.000))
+                        new BezierCurve(
+                                new Pose(10.201, 6.643),
+                                new Pose(7.591, 38.906),
+                                new Pose(34.399, 18.504),
+                                new Pose(56.100, 18.000)
+                        )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(250), Math.toRadians(180))
                 .build();

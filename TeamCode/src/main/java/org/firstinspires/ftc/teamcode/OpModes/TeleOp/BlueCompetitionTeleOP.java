@@ -15,6 +15,7 @@ public class BlueCompetitionTeleOP extends OpMode
     {
         Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         Robot.dt.enableTeleop();
+        Robot.turret.setOffsetAngle(40);
     }
 
     @Override
