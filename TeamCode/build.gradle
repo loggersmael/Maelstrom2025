@@ -11,9 +11,23 @@
 
 // Custom definitions may go here
 
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://repo.dairy.foundation/releases"
+        }
+    }
+    dependencies {
+        classpath "dev.frozenmilk:Load:0.2.4"
+    }
+}
+
 // Include common definitions from above.
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
+apply plugin: 'dev.frozenmilk.sinister.sloth.load'
 
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
@@ -62,4 +76,8 @@ dependencies {
 
     // Panels Dashboard
     implementation "com.bylazar:fullpanels:1.0.5"
+
+    // Sloth
+    implementation("dev.frozenmilk.dairy:Core:2.2.4")
+    implementation("com.acmerobotics.slothboard:dashboard:0.2.4+0.4.17")
 }
