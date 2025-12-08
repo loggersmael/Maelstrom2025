@@ -1,11 +1,14 @@
-package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
+package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
+
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.RunCommand;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
+@TeleOp(name="TurretTuner")
 public class TurretTuner extends OpMode
 {
     private Maelstrom robot;
@@ -19,13 +22,15 @@ public class TurretTuner extends OpMode
 
     public void loop()
     {
+        robot.periodic();
         if(gamepad1.right_bumper)
         {
-            robot.turret.setManualAngle(90);
+            robot.turret.setManualAngle(-90);
         }
         if(gamepad1.left_bumper)
         {
             robot.turret.setManualAngle(0);
         }
+        telemetry.update();
     }
 }

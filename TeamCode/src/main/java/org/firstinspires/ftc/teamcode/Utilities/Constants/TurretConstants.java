@@ -23,7 +23,7 @@ public class TurretConstants
     public static double sF=0;
     public static double max=0;
 
-    public static double PIDFSwitch=50;
+    public static double PIDFSwitch=20;
 
     public static double angleTolerance=3;
 }
