@@ -14,9 +14,16 @@ public class TurretConstants
 
     public static double kP= 0.04;
     public static double kI= 0;
-    public static double kD= 0.0026;
+    public static double kD= 0.00;
     public static double kF= 0;
+
+    public static double sP= 0.01;
+    public static double sI=0;
+    public static double sD=0.0001;
+    public static double sF=0;
     public static double max=0;
+
+    public static double PIDFSwitch=50;
 
     public static double angleTolerance=3;
 }

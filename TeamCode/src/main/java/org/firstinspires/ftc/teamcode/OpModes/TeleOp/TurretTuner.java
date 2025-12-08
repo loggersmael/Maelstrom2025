@@ -1,0 +1,31 @@
+package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.seattlesolvers.solverslib.command.CommandOpMode;
+import com.seattlesolvers.solverslib.command.RunCommand;
+
+import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
+
+public class TurretTuner extends OpMode
+{
+    private Maelstrom robot;
+
+    @Override
+    public void init()
+    {
+        robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
+        robot.turret.setPointMode();
+    }
+
+    public void loop()
+    {
+        if(gamepad1.right_bumper)
+        {
+            robot.turret.setManualAngle(90);
+        }
+        if(gamepad1.left_bumper)
+        {
+            robot.turret.setManualAngle(0);
+        }
+    }
+}

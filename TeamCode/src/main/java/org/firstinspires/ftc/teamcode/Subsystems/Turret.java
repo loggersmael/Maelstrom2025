@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
 import static org.firstinspires.ftc.teamcode.Subsystems.Turret.TurretState.MANUALPOWER;
-import static org.firstinspires.ftc.teamcode.Subsystems.Turret.TurretState.TRACKING;
+import static org.firstinspires.ftc.teamcode.Subsystems.Turret.TurretState.POSETRACKING;
+import static org.firstinspires.ftc.teamcode.Subsystems.Turret.TurretState.VISIONTRACKING;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.PIDFSwitch;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.angleTolerance;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kD;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kF;
@@ -11,8 +13,13 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxLimit;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxPos;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.minLimit;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.sD;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.sF;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.sI;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.sP;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.startingPos;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -31,17 +38,19 @@ import java.util.List;
 public class Turret extends SubsystemBase
 {
     public enum TurretState{
-        MANUALPOWER,MANUALANGLE,TRACKING,IDLE;
+        MANUALPOWER,MANUALANGLE,VISIONTRACKING,POSETRACKING,IDLE;
     }
     public TurretState state;
     private MotorEx turretMotor;
     private Motor.Encoder encoder;
     private PIDFController turretController = new PIDFController(kP,kI,kD,kF);
+    private PIDFController secondaryController = new PIDFController(sP,sI,sD,sF);
 
     private Telemetry telemetry;
 
     private double currentAngle;
     private double targetAngle=0;
+    private double targetPoseAngle=0;
     private double manualAngle=0;
     public double manualPower;
 
@@ -52,10 +61,11 @@ public class Turret extends SubsystemBase
         this.telemetry=telemetry;
         turretMotor= new MotorEx(hMap,"turret");
         encoder=turretMotor.encoder;
-        turretMotor.motorEx.setDirection(DcMotorSimple.Direction.REVERSE);
+        turretMotor.motorEx.setDirection(DcMotorSimple.Direction.FORWARD);
         turretMotor.setRunMode(Motor.RunMode.RawPower);
         turretMotor.stopAndResetEncoder();
         state=TurretState.IDLE;
+        secondaryController.setTolerance(angleTolerance);
     }
 
     @Override
@@ -67,28 +77,34 @@ public class Turret extends SubsystemBase
         telemetry.addData("Inverse Turret Encoder: ", getInversePosition());
         telemetry.addData("Manual Power: ",manualPower);
 
+        turretController.setPIDF(kP,kI,kD,kF);
+        secondaryController.setPIDF(sP,sI,sD,sF);
+
         switch(state)
         {
-            case TRACKING:
-                if(Math.abs(getAngle()-targetAngle)>angleTolerance)
-                {
-                    turretController.setPIDF(kP,kI,kD,kF*Math.signum(targetAngle-getAngle()));
+            case VISIONTRACKING:
+                if(Math.abs(getAngle()-targetAngle)>PIDFSwitch) {
                     turretMotor.set(turretController.calculate(getAngle(), targetAngle));
                 }
-                else
+                else {
+                    turretMotor.set(secondaryController.calculate(getAngle(), targetAngle));
+                }
+                break;
+            case POSETRACKING:
+                if(Math.abs(getAngle()-targetPoseAngle)>PIDFSwitch)
                 {
-                    turretMotor.set(0);
+                    turretMotor.set(turretController.calculate(getAngle(),targetPoseAngle));
+                }
+                else {
+                    turretMotor.set(secondaryController.calculate(getAngle(),targetPoseAngle));
                 }
                 break;
             case MANUALANGLE:
-                if(Math.abs(getAngle()-manualAngle)>angleTolerance)
-                {
-                    turretController.setPIDF(kP,kI,kD,kF*Math.signum(manualAngle-getAngle()));
+                if(Math.abs(getAngle()-manualAngle)>PIDFSwitch) {
                     turretMotor.set(turretController.calculate(getAngle(), manualAngle));
                 }
-                else
-                {
-                    turretMotor.set(0);
+                else {
+                    turretMotor.set(secondaryController.calculate(getAngle(), manualAngle));
                 }
                 break;
             case MANUALPOWER:
@@ -108,15 +124,18 @@ public class Turret extends SubsystemBase
         }
     }
 
+    public void calculatePoseAngle(Pose targetPose, Pose robotPose)
+    {
+        double angleToTargetFromCenter = Math.atan2(targetPose.getY() - robotPose.getY(), targetPose.getX() - robotPose.getX());
+        double robotAngleDiff = normalizeAngle(angleToTargetFromCenter - robotPose.getHeading());
+        targetPoseAngle= Math.toDegrees(robotAngleDiff);
+    }
+
     public void setManualAngle(double angle)
     {
         manualAngle=angle;
     }
 
-    public void aimWithVision()
-    {
-
-    }
     public double getAngle()
     {
         return (encoder.getPosition()*(360.0/4096))/3 + offsetAngle;
@@ -136,9 +155,13 @@ public class Turret extends SubsystemBase
         state= MANUALPOWER;
     }
 
-    public void startTracking()
+    public void startVisionTracking()
     {
-        state= TRACKING;
+        state= TurretState.VISIONTRACKING;
+    }
+    public void startPoseTracking()
+    {
+        state=POSETRACKING;
     }
 
 
@@ -156,5 +179,16 @@ public class Turret extends SubsystemBase
     {
         offsetAngle=angle;
     }
-    
+
+    public boolean atTarget()
+    {
+        return secondaryController.atSetPoint();
+    }
+
+    public static double normalizeAngle(double angleRadians) {
+        double angle = angleRadians % (Math.PI * 2D);
+        if (angle <= -Math.PI) angle += Math.PI * 2D;
+        if (angle > Math.PI) angle -= Math.PI * 2D;
+        return angle;
+    }
 }
