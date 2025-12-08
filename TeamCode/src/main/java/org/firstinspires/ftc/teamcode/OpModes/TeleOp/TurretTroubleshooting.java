@@ -18,7 +18,7 @@ public class TurretTroubleshooting extends OpMode
     {
         turret= new Turret(hardwareMap,telemetry);
         cam= new Vision(hardwareMap,telemetry, Maelstrom.Alliance.BLUE);
-        turret.startVisionTracking();
+        turret.startPoseTracking();
     }
 
     public void loop()

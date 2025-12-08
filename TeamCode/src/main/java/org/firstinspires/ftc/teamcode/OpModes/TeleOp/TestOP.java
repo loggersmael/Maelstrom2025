@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
+package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,7 +14,7 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
-
+@Disabled
 @TeleOp(name = "TestOP")
 public class TestOP extends OpMode
 {
@@ -49,7 +50,7 @@ public class TestOP extends OpMode
 
         if(driver2.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
         {
-            dt.resetHeading();
+            //dt.resetHeading();
         }
 
         if(driver2.getButton(GamepadKeys.Button.A))

@@ -10,22 +10,19 @@ import org.firstinspires.ftc.teamcode.Subsystems.Vision;
 @TeleOp(name="TurretTroubleshooting2")
 public class TurretTroubleshooting2 extends OpMode
 {
-    private SimpleTurretV2 turret;
-    private Vision cam;
+    private Maelstrom robot;
 
     @Override
     public void init()
     {
-        turret= new SimpleTurretV2(hardwareMap,telemetry);
-        cam= new Vision(hardwareMap,telemetry, Maelstrom.Alliance.BLUE);
+        robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
+        robot.turret.startPoseTracking();
     }
 
     @Override
     public void loop()
     {
-        cam.periodic();
-        turret.periodic();
-        turret.trackTag(cam.getTargetX(),cam.targetPresent());
+        robot.periodic();
         telemetry.update();
     }
 }

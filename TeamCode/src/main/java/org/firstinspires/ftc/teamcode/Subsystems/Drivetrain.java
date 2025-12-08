@@ -84,6 +84,24 @@ public class Drivetrain extends SubsystemBase {
         follower.setTeleOpDrive(forward, -strafe, -rotation, !feildCentric);
     }
 
+    public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric, double headingOffset)
+    {
+        follower.setTeleOpDrive(forward, -strafe, -rotation, !feildCentric, headingOffset);
+    }
+
+    public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric, Maelstrom.Alliance color)
+    {
+        if(color.equals(Maelstrom.Alliance.RED))
+        {
+            follower.setTeleOpDrive(forward, -strafe, -rotation, !feildCentric,0);
+        }
+        else if(color.equals(Maelstrom.Alliance.BLUE))
+        {
+            follower.setTeleOpDrive(forward, -strafe, -rotation, !feildCentric, Math.toRadians(180));
+        }
+
+    }
+
     public void setMovementVectors(double strafe, double forward, double rotation) {
         follower.setTeleOpDrive(forward, -strafe, -rotation, false);
     }
@@ -101,9 +119,15 @@ public class Drivetrain extends SubsystemBase {
         follower.startTeleopDrive(true);
     }
 
-    public void resetHeading()
+    public void resetHeading(Maelstrom.Alliance color)
     {
-        follower.setPose(new Pose(follower.getPose().getX(), follower.getPose().getY(), Math.toRadians(0)));
+        if(color.equals(Maelstrom.Alliance.RED)) {
+            follower.setPose(new Pose(follower.getPose().getX(), follower.getPose().getY(), Math.toRadians(0)));
+        }
+        else if(color.equals(Maelstrom.Alliance.BLUE))
+        {
+            follower.setPose(new Pose(follower.getPose().getX(), follower.getPose().getY(), Math.toRadians(180)));
+        }
     }
 
     public void hold()
@@ -124,6 +148,11 @@ public class Drivetrain extends SubsystemBase {
     public double getY()
     {
         return follower.getPose().getY();
+    }
+
+    public Pose getPose()
+    {
+        return follower.getPose();
     }
 }
 

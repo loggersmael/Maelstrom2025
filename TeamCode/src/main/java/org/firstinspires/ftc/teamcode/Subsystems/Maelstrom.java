@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.blueGoal;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.redGoal;
 
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -14,6 +16,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 
 public class Maelstrom extends Robot
 {
@@ -49,9 +52,8 @@ public class Maelstrom extends Robot
         driver1= new GamepadEx(d1);
         driver2= new GamepadEx(d2);
         tTimer=new Timer();
-        this.telemetry=telemetry;
+        this.color=color;
         register(dt,intake,shooter,turret,cams);
-
     }
 
     public void periodic()
@@ -62,6 +64,7 @@ public class Maelstrom extends Robot
         shooter.periodic();
         turret.periodic();
         turret.getTargetAngle(cams.getTargetX(),cams.targetPresent());
+        aimTurretWithPose();
         transferAndShoot();
     }
 
@@ -75,10 +78,11 @@ public class Maelstrom extends Robot
 
     public void controlMap()
     {
-        dt.setMovementVectors(driver1.getLeftX(), driver1.getLeftY(), driver1.getRightX(),true);
+        dt.setMovementVectors(driver1.getLeftX(), driver1.getLeftY(), driver1.getRightX(), true,color);
+
         if(driver1.getButton(GamepadKeys.Button.TOUCHPAD))
         {
-            dt.resetHeading();
+            dt.resetHeading(color);
         }
 
         //turret.turretWithManualLimits(-driver2.getLeftX());
@@ -306,5 +310,17 @@ public class Maelstrom extends Robot
             }
         }
 
+    }
+
+    private void aimTurretWithPose()
+    {
+        if(color.equals(Alliance.BLUE))
+        {
+            turret.calculatePoseAngle(blueGoal,dt.getPose());
+        }
+        else if(color.equals(Alliance.RED))
+        {
+            turret.calculatePoseAngle(redGoal,dt.getPose());
+        }
     }
 }

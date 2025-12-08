@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Utilities.Constants;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.geometry.Pose;
 
 @Configurable
 @Config
@@ -26,4 +27,7 @@ public class TurretConstants
     public static double PIDFSwitch=20;
 
     public static double angleTolerance=3;
+
+    public static Pose blueGoal= new Pose(0,144);
+    public static Pose redGoal= new Pose(144,144);
 }

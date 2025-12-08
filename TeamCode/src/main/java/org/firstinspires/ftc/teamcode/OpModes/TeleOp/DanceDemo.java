@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 
 import org.firstinspires.ftc.teamcode.Paths.DemoPaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
-
+@Disabled
 @TeleOp(name="DanceDemo")
 public class DanceDemo extends LinearOpMode
 {
