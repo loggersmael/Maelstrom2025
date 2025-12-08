@@ -13,4 +13,7 @@ public class DrivetrainConstants
     public static double kP=1;
     public static double kD=0.1;
     public static Pose startPose= new Pose(0,0,Math.toRadians(0));
+
+    public static Pose redReset= new Pose(8.8,8.4,0);
+    public static Pose blueReset= redReset.mirror();
 }
