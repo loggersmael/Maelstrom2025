@@ -95,7 +95,7 @@ public class Turret extends SubsystemBase
                 }
                 break;
             case POSETRACKING:
-                if(/*Math.abs(getAngle()-targetPoseAngle)>PIDFSwitch*/true)
+                if(Math.abs(getAngle()-targetPoseAngle)>PIDFSwitch)
                 {
                     turretMotor.set(turretController.calculate(getAngle(),targetPoseAngle));
                     telemetry.addData("Motor Power: ", turretController.calculate(getAngle(),targetPoseAngle));
@@ -105,7 +105,7 @@ public class Turret extends SubsystemBase
                 }
                 break;
             case MANUALANGLE:
-                if(/*Math.abs(getAngle()-manualAngle)>PIDFSwitch*/true) {
+                if(Math.abs(getAngle()-manualAngle)>PIDFSwitch) {
                     turretMotor.set(turretController.calculate(getAngle(), manualAngle));
                 }
                 else {
