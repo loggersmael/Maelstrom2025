@@ -55,6 +55,7 @@ public class Turret extends SubsystemBase
     public double manualPower;
 
     public static double offsetAngle=0;
+    public static double atan=0;
 
     public Turret(HardwareMap hMap, Telemetry telemetry)
     {
@@ -66,6 +67,7 @@ public class Turret extends SubsystemBase
         turretMotor.stopAndResetEncoder();
         state=TurretState.IDLE;
         secondaryController.setTolerance(angleTolerance);
+        turretController.setTolerance(angleTolerance);
     }
 
     @Override
@@ -76,6 +78,8 @@ public class Turret extends SubsystemBase
         telemetry.addData("Turret Encoder: ", encoder.getPosition());
         telemetry.addData("Inverse Turret Encoder: ", getInversePosition());
         telemetry.addData("Manual Power: ",manualPower);
+        telemetry.addData("Error: ", Math.abs(getAngle()-targetPoseAngle));
+        telemetry.addData("kF: ", sF);
 
         turretController.setPIDF(kP,kI,kD,kF);
         secondaryController.setPIDF(sP,sI,sD,sF);
@@ -91,16 +95,17 @@ public class Turret extends SubsystemBase
                 }
                 break;
             case POSETRACKING:
-                if(Math.abs(getAngle()-targetPoseAngle)>PIDFSwitch)
+                if(/*Math.abs(getAngle()-targetPoseAngle)>PIDFSwitch*/true)
                 {
                     turretMotor.set(turretController.calculate(getAngle(),targetPoseAngle));
+                    telemetry.addData("Motor Power: ", turretController.calculate(getAngle(),targetPoseAngle));
                 }
                 else {
                     turretMotor.set(secondaryController.calculate(getAngle(),targetPoseAngle));
                 }
                 break;
             case MANUALANGLE:
-                if(Math.abs(getAngle()-manualAngle)>PIDFSwitch) {
+                if(/*Math.abs(getAngle()-manualAngle)>PIDFSwitch*/true) {
                     turretMotor.set(turretController.calculate(getAngle(), manualAngle));
                 }
                 else {
@@ -112,6 +117,7 @@ public class Turret extends SubsystemBase
                 break;
             case IDLE:
                 turretMotor.set(0);
+                break;
         }
     }
 
@@ -127,7 +133,10 @@ public class Turret extends SubsystemBase
     public void calculatePoseAngle(Pose targetPose, Pose robotPose)
     {
         double angleToTargetFromCenter = Math.atan2(targetPose.getY() - robotPose.getY(), targetPose.getX() - robotPose.getX());
+        telemetry.addData("Atan: ", Math.toDegrees(angleToTargetFromCenter));
         double robotAngleDiff = normalizeAngle(angleToTargetFromCenter - robotPose.getHeading());
+        telemetry.addData("RobotAngleDiff: ", Math.toDegrees(robotAngleDiff));
+        robotAngleDiff= Math.max(Math.min(robotAngleDiff,Math.toRadians(150)),Math.toRadians(-150));
         targetPoseAngle= Math.toDegrees(robotAngleDiff);
     }
 

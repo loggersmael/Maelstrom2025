@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.blueReset;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.redReset;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.blueGoal;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.redGoal;
 
@@ -83,6 +85,10 @@ public class Maelstrom extends Robot
         if(driver1.getButton(GamepadKeys.Button.TOUCHPAD))
         {
             dt.resetHeading(color);
+        }
+        if(driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
+        {
+            resetPose();
         }
 
         //turret.turretWithManualLimits(-driver2.getLeftX());
@@ -321,6 +327,18 @@ public class Maelstrom extends Robot
         else if(color.equals(Alliance.RED))
         {
             turret.calculatePoseAngle(redGoal,dt.getPose());
+        }
+    }
+
+    private void resetPose()
+    {
+        if(color.equals(Alliance.BLUE))
+        {
+            dt.setPose(blueReset);
+        }
+        else if(color.equals(Alliance.RED))
+        {
+            dt.setPose(redReset);
         }
     }
 }

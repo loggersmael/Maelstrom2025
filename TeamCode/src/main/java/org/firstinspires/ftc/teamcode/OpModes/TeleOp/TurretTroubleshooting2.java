@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
+package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -16,6 +16,7 @@ public class TurretTroubleshooting2 extends OpMode
     public void init()
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
+        robot.turret.stopAndReset();
         robot.turret.startPoseTracking();
     }
 
