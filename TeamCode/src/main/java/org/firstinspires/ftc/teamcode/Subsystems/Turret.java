@@ -5,11 +5,13 @@ import static org.firstinspires.ftc.teamcode.Subsystems.Turret.TurretState.POSET
 import static org.firstinspires.ftc.teamcode.Subsystems.Turret.TurretState.VISIONTRACKING;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.PIDFSwitch;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.angleTolerance;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.fS;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kD;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kF;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kI;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kP;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kS;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kV;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.max;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxLimit;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxPos;
@@ -29,6 +31,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.controller.PIDFController;
+import com.seattlesolvers.solverslib.controller.wpilibcontroller.SimpleMotorFeedforward;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
@@ -47,6 +50,7 @@ public class Turret extends SubsystemBase
     private Motor.Encoder encoder;
     private PIDFController turretController = new PIDFController(kP,kI,kD,kF);
     private PIDFController secondaryController = new PIDFController(sP,sI,sD,sF);
+    private SimpleMotorFeedforward frictionController= new SimpleMotorFeedforward(fS,kV);
 
     private Telemetry telemetry;
 
@@ -65,7 +69,7 @@ public class Turret extends SubsystemBase
         this.telemetry=telemetry;
         turretMotor= new MotorEx(hMap,"turret");
         encoder=turretMotor.encoder;
-        turretMotor.motorEx.setDirection(DcMotorSimple.Direction.FORWARD);
+        turretMotor.motorEx.setDirection(DcMotorSimple.Direction.REVERSE);
         turretMotor.setRunMode(Motor.RunMode.RawPower);
         turretMotor.stopAndResetEncoder();
         state=TurretState.IDLE;
@@ -84,6 +88,8 @@ public class Turret extends SubsystemBase
         telemetry.addData("Error: ", Math.abs(getAngle()-targetPoseAngle));
         telemetry.addData("kF: ", sF);
         telemetry.addData("Velocity: ",turretMotor.getVelocity());
+        telemetry.addData("sP: ", sP);
+        telemetry.addData("fS: ", fS);
 
         turretController.setPIDF(kP,kI,kD,kF);
         secondaryController.setPIDF(sP,sI,sD,sF);
@@ -107,7 +113,8 @@ public class Turret extends SubsystemBase
                 }
                 else {
                     motorPower=secondaryController.calculate(getAngle(),targetPoseAngle);
-                    applyFeedForward();
+                    //applyFeedForward();
+                    useFFcontroller();
                 }
                 break;
             case MANUALANGLE:
@@ -116,7 +123,8 @@ public class Turret extends SubsystemBase
                 }
                 else {
                     motorPower=secondaryController.calculate(getAngle(), manualAngle);
-                    applyFeedForward();
+                    //applyFeedForward();
+                    useFFcontroller();
                 }
                 break;
             case MANUALPOWER:
@@ -134,7 +142,7 @@ public class Turret extends SubsystemBase
         if(hasTarget)
         {
             targetAngle = getAngle() + tx;
-            targetAngle = Math.max(0, Math.min(300, targetAngle));
+            targetAngle = Math.max(-150, Math.min(150, targetAngle));
         }
     }
 
@@ -223,5 +231,20 @@ public class Turret extends SubsystemBase
             }
             motorPower=Math.max(Math.min(motorPower,1),-1);
         }
+    }
+
+    private void useFFcontroller()
+    {
+        if(!secondaryController.atSetPoint()){
+            if(motorPower>0)
+            {
+                motorPower+=frictionController.calculate(400);
+            }
+            else if(motorPower<0)
+            {
+                motorPower-=frictionController.calculate(400);
+            }
+        }
+
     }
 }

@@ -17,7 +17,7 @@ public class TurretTroubleshooting2 extends OpMode
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.RED,gamepad1,gamepad2);
         robot.turret.stopAndReset();
-        robot.turret.startPoseTracking();
+        robot.turret.startVisionTracking();
     }
 
     @Override

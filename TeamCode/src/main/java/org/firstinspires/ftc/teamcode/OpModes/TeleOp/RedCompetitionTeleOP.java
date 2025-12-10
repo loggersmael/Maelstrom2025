@@ -38,7 +38,7 @@ public class RedCompetitionTeleOP extends OpMode
     @Override
     public void start()
     {
-        Robot.turret.startPoseTracking();
+        Robot.turret.startVisionTracking();
     }
 
     @Override

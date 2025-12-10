@@ -20,7 +20,7 @@ public class Vision extends SubsystemBase
     private Maelstrom.Alliance alliance;
     private Telemetry telemetry;
     private double targetx;
-    private double distance;
+    public double distance=0;
 
     public Vision(HardwareMap hMap, Telemetry telemetry, Maelstrom.Alliance color)
     {
@@ -55,11 +55,13 @@ public class Vision extends SubsystemBase
             // If result is invalid, clear the tag list
             tagList = new ArrayList<>();
         }
+        calcDistance();
         
         telemetry.addData("Target X: ", targetx);
+        telemetry.addData("target y; ",getTargetYDegrees());
         telemetry.addData("Target Present: ", targetPresent());
         telemetry.addData("Fiducial Count: ", tagList != null ? tagList.size() : 0);
-        telemetry.addData("Distance: ",calcDistance());
+        telemetry.addData("Distance: ",distance);
     }
     public LLResultTypes.FiducialResult getTag()
     {
@@ -116,13 +118,16 @@ public class Vision extends SubsystemBase
         }
         return 0;
     }
-    public double calcDistance()
+    public void calcDistance()
     {
         if(getTag()!=null)
         {
-            distance=goalHeight/(Math.tan(cameraPitch+getTargetYDegrees()));
-            return distance;
+            distance=Math.abs(goalHeight/(Math.tan(Math.toRadians(cameraPitch+getTargetYDegrees()))));
         }
-        return 0;
+    }
+
+    public double getDistance()
+    {
+        return distance;
     }
 }

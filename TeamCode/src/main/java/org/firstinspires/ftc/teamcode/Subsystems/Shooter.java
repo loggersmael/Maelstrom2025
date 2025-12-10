@@ -24,16 +24,17 @@ import org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants;
 public class Shooter extends SubsystemBase {
     public DcMotorEx shooterMotor;
     private Servo hoodServo;
+    private double hoodAngle;
     private Servo light;
     private Vision cam;
-    //private InterpLUT table;
+    private InterpLUT table;
     private Maelstrom.Alliance alliance;
     private Telemetry telemetry;
     public double currentVelocity;
     public double targetVelocity;
-    //public double autoVelocity;
+    public double autoVelocity;
     public boolean flywheelOn;
-    //private double distance;
+    private double distance;
     public PIDFController velocityController= new PIDFController(kP,kI,kD,ShooterConstants.kF);
 
     public Shooter(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color) {
@@ -50,15 +51,16 @@ public class Shooter extends SubsystemBase {
 
         light = aHardwareMap.get(Servo.class, "light");
         cam = new Vision(aHardwareMap,telemetry,color);
-        //distance=0;
-        //autoVelocity=0;
-        /*
+        distance=0;
+        autoVelocity=0;
+
         table= new InterpLUT();
-        table.add(0,closeVelocity);
-        table.add(2,midVelocity);
-        table.add(3,farVelocity);
+        table.add(0,0);
+        table.add(37,1400);
+        table.add(70.5,1600);
+        table.add(149,2000);
         table.createLUT();
-        */
+
 
 
         flywheelOn = false;
@@ -85,6 +87,8 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Flywheel On", flywheelOn);
         telemetry.addData("Current Velocity", currentVelocity);
         telemetry.addData("Target Velocity", targetVelocity);
+        telemetry.addData("Distance: ",cam.getDistance());
+        telemetry.addData("Auto Velocity: ", autoVelocity);
         //telemetry.addData("Auto Velocity",autoVelocity);
     }
 
@@ -155,7 +159,7 @@ public class Shooter extends SubsystemBase {
 
     public void updateDistance()
     {
-        //distance= cam.calcDistance();
+        distance= cam.getDistance();
     }
     public void updateAutoVelocity()
     {
@@ -169,6 +173,11 @@ public class Shooter extends SubsystemBase {
     public void setHood(double d)
     {
         hoodServo.setPosition(d);
+    }
+
+    private void autoHood()
+    {
+
     }
 
 }
