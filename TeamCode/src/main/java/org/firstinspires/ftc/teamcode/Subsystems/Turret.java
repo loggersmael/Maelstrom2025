@@ -19,6 +19,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.sI;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.sP;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.startingPos;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.turretVelocityTolerance;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -82,6 +83,7 @@ public class Turret extends SubsystemBase
         telemetry.addData("Manual Power: ",manualPower);
         telemetry.addData("Error: ", Math.abs(getAngle()-targetPoseAngle));
         telemetry.addData("kF: ", sF);
+        telemetry.addData("Velocity: ",turretMotor.getVelocity());
 
         turretController.setPIDF(kP,kI,kD,kF);
         secondaryController.setPIDF(sP,sI,sD,sF);
@@ -209,7 +211,7 @@ public class Turret extends SubsystemBase
 
     private void applyFeedForward()
     {
-        if(!secondaryController.atSetPoint() && Math.abs(motorPower)>0.01)
+        if(!secondaryController.atSetPoint() && Math.abs(motorPower)>0.01 && Math.abs(turretMotor.getVelocity())<turretVelocityTolerance)
         {
             if(motorPower>0)
             {

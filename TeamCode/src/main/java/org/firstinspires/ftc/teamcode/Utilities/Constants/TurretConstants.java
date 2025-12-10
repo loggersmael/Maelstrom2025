@@ -24,6 +24,7 @@ public class TurretConstants
     public static double sF=0.0005;
 
     public static double kS=0.3;
+    public static double turretVelocityTolerance=0.01;
     public static double max=0;
 
     public static double PIDFSwitch=10;
