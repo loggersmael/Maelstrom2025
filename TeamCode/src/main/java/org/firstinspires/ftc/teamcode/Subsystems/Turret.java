@@ -9,6 +9,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kF;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kI;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kP;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.kS;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.max;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxLimit;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.maxPos;
@@ -53,7 +54,8 @@ public class Turret extends SubsystemBase
     private double targetPoseAngle=0;
     private double manualAngle=0;
     public double manualPower;
-
+    public double motorPower=0;
+    public double ksPower=kS;
     public static double offsetAngle=0;
     public static double atan=0;
 
@@ -83,42 +85,46 @@ public class Turret extends SubsystemBase
 
         turretController.setPIDF(kP,kI,kD,kF);
         secondaryController.setPIDF(sP,sI,sD,sF);
+        ksPower=kS;
 
         switch(state)
         {
             case VISIONTRACKING:
                 if(Math.abs(getAngle()-targetAngle)>PIDFSwitch) {
-                    turretMotor.set(turretController.calculate(getAngle(), targetAngle));
+                    motorPower=turretController.calculate(getAngle(), targetAngle);
                 }
                 else {
-                    turretMotor.set(secondaryController.calculate(getAngle(), targetAngle));
+                    motorPower=secondaryController.calculate(getAngle(), targetAngle);
                 }
                 break;
             case POSETRACKING:
                 if(Math.abs(getAngle()-targetPoseAngle)>PIDFSwitch)
                 {
-                    turretMotor.set(turretController.calculate(getAngle(),targetPoseAngle));
-                    telemetry.addData("Motor Power: ", turretController.calculate(getAngle(),targetPoseAngle));
+                    motorPower=turretController.calculate(getAngle(),targetPoseAngle);
+                    telemetry.addData("Motor Power: ", motorPower);
                 }
                 else {
-                    turretMotor.set(secondaryController.calculate(getAngle(),targetPoseAngle));
+                    motorPower=secondaryController.calculate(getAngle(),targetPoseAngle);
+                    applyFeedForward();
                 }
                 break;
             case MANUALANGLE:
                 if(Math.abs(getAngle()-manualAngle)>PIDFSwitch) {
-                    turretMotor.set(turretController.calculate(getAngle(), manualAngle));
+                    motorPower=turretController.calculate(getAngle(), manualAngle);
                 }
                 else {
-                    turretMotor.set(secondaryController.calculate(getAngle(), manualAngle));
+                    motorPower=secondaryController.calculate(getAngle(), manualAngle);
+                    applyFeedForward();
                 }
                 break;
             case MANUALPOWER:
-                turretMotor.set(manualPower);
+                motorPower=manualPower;
                 break;
             case IDLE:
-                turretMotor.set(0);
+                motorPower=0;
                 break;
         }
+        turretMotor.set(motorPower);
     }
 
     public void getTargetAngle(double tx,boolean hasTarget)
@@ -199,5 +205,21 @@ public class Turret extends SubsystemBase
         if (angle <= -Math.PI) angle += Math.PI * 2D;
         if (angle > Math.PI) angle -= Math.PI * 2D;
         return angle;
+    }
+
+    private void applyFeedForward()
+    {
+        if(!secondaryController.atSetPoint() && Math.abs(motorPower)>0.01)
+        {
+            if(motorPower>0)
+            {
+                motorPower+=ksPower;
+            }
+            else
+            {
+                motorPower-=ksPower;
+            }
+            motorPower=Math.max(Math.min(motorPower,1),-1);
+        }
     }
 }
