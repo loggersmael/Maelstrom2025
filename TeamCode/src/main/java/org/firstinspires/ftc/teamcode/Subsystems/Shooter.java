@@ -21,6 +21,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants;
 
+import dev.frozenmilk.dairy.core.util.controller.calculation.pid.DoubleComponent;
+
 public class Shooter extends SubsystemBase {
     public DcMotorEx shooterMotor;
     private Servo hoodServo;
@@ -28,12 +30,14 @@ public class Shooter extends SubsystemBase {
     private Servo light;
     private Vision cam;
     private InterpLUT table;
+    private InterpLUT hoodTable;
     private Maelstrom.Alliance alliance;
     private Telemetry telemetry;
     public double currentVelocity;
     public double targetVelocity;
     public double autoVelocity;
     public boolean flywheelOn;
+    public boolean useAuto=false;
     private double distance;
     public PIDFController velocityController= new PIDFController(kP,kI,kD,ShooterConstants.kF);
 
@@ -61,6 +65,13 @@ public class Shooter extends SubsystemBase {
         table.add(149,2000);
         table.createLUT();
 
+        hoodTable= new InterpLUT();
+        hoodTable.add(0,0);
+        hoodTable.add(37,0.15);
+        hoodTable.add(70.5,0.2);
+        hoodTable.add(149,0.6);
+        table.createLUT();
+
 
 
         flywheelOn = false;
@@ -69,8 +80,14 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        updateDistance();
         updateAutoVelocity();
+        autoHood();
+
+        if(useAuto)
+        {
+            targetVelocity=autoVelocity;
+            setHood(hoodAngle);
+        }
 
         // Update shooter velocity
         if (flywheelOn) {
@@ -157,9 +174,10 @@ public class Shooter extends SubsystemBase {
         return Math.abs(currentVelocity - targetVelocity) < velocityTolerance;
     }
 
-    public void updateDistance()
+    public void updateDistance(double dist)
     {
-        distance= cam.getDistance();
+        //distance= cam.getDistance();
+        distance=dist;
     }
     public void updateAutoVelocity()
     {
@@ -177,7 +195,7 @@ public class Shooter extends SubsystemBase {
 
     private void autoHood()
     {
-
+        //hoodAngle=hoodTable.get(distance);
     }
 
 }

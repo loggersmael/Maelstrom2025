@@ -62,6 +62,7 @@ public class Maelstrom extends Robot
     {
         dt.periodic();
         cams.periodic();
+        shooter.updateDistance(cams.distance);
         intake.periodic();
         shooter.periodic();
         turret.periodic();
