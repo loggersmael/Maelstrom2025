@@ -18,9 +18,9 @@ public class TurretConstants
     public static double kD= 0;
     public static double kF= 0;
 
-    public static double sP= 0.01; //0.04;
+    public static double sP= 0.08; //0.04;
     public static double sI=0;
-    public static double sD=0.003;
+    public static double sD=0.002;
     public static double sF=0;
 
     public static double fS=0.1;

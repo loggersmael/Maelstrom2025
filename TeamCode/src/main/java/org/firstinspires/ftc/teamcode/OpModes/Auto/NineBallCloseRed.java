@@ -47,7 +47,7 @@ public class NineBallCloseRed extends CommandOpMode
                                 new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                         new InstantCommand(() -> robot.turret.setPointMode()),
-                                        new InstantCommand(() -> robot.turret.setManualAngle(0)),
+                                        new InstantCommand(() -> robot.turret.setManualAngle(50)),
                                         new FollowPathCommand(follower,paths.Path1,true)
                                 ),
                                 new WaitCommand(50),
@@ -61,7 +61,7 @@ public class NineBallCloseRed extends CommandOpMode
                                 new WaitCommand(50),
                                 new FinalShootCommand(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
-                                new FollowPath(robot,paths.Path4,true,0.8).withTimeout(2500),
+                                new FollowPath(robot,paths.Path4,true,0.9).withTimeout(2500),
                                 new WaitCommand(500),
                                 new InstantCommand(() -> robot.intake.idle()),
                                 new FollowPathCommand(follower,paths.Path5),

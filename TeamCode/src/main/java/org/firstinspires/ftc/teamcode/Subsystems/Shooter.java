@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.ShooterConstants;
 
-import dev.frozenmilk.dairy.core.util.controller.calculation.pid.DoubleComponent;
+//import dev.frozenmilk.dairy.core.util.controller.calculation.pid.DoubleComponent;
 
 public class Shooter extends SubsystemBase {
     public DcMotorEx shooterMotor;
@@ -38,7 +38,7 @@ public class Shooter extends SubsystemBase {
     public double autoVelocity;
     public boolean flywheelOn;
     public boolean useAuto=false;
-    private double distance;
+    private double distance=1;
     public PIDFController velocityController= new PIDFController(kP,kI,kD,ShooterConstants.kF);
 
     public Shooter(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color) {
@@ -55,22 +55,23 @@ public class Shooter extends SubsystemBase {
 
         light = aHardwareMap.get(Servo.class, "light");
         cam = new Vision(aHardwareMap,telemetry,color);
-        distance=0;
+        distance=1;
         autoVelocity=0;
 
         table= new InterpLUT();
         table.add(0,0);
         table.add(37,1400);
+        table.add(42.5,1500);
         table.add(70.5,1600);
         table.add(149,2000);
         table.createLUT();
 
-        hoodTable= new InterpLUT();
+        hoodTable = new InterpLUT();
         hoodTable.add(0,0);
-        hoodTable.add(37,0.15);
-        hoodTable.add(70.5,0.2);
+        hoodTable.add(37,0.1);
+        hoodTable.add(70.5,0.15);
         hoodTable.add(149,0.6);
-        table.createLUT();
+        hoodTable.createLUT();
 
 
 
@@ -82,12 +83,8 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         updateAutoVelocity();
         autoHood();
+        setHood(hoodAngle);
 
-        if(useAuto)
-        {
-            targetVelocity=autoVelocity;
-            setHood(hoodAngle);
-        }
 
         // Update shooter velocity
         if (flywheelOn) {
@@ -106,6 +103,7 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Target Velocity", targetVelocity);
         telemetry.addData("Distance: ", distance);
         telemetry.addData("Auto Velocity: ", autoVelocity);
+        telemetry.addData("Use Auto: ",useAuto);
         //telemetry.addData("Auto Velocity",autoVelocity);
     }
 
@@ -132,7 +130,7 @@ public class Shooter extends SubsystemBase {
 
     public void shootAutoVelocity()
     {
-        //targetVelocity=autoVelocity;
+        targetVelocity=autoVelocity;
     }
 
     public void reverseWheel() {
@@ -177,11 +175,11 @@ public class Shooter extends SubsystemBase {
     public void updateDistance(double dist)
     {
         //distance= cam.getDistance();
-        distance=dist;
+        distance=Math.max(Math.min(dist,148),1);
     }
     public void updateAutoVelocity()
     {
-        //autoVelocity=table.get(distance);
+        autoVelocity=table.get(distance);
     }
     public void hoodUp()
     {
@@ -195,7 +193,12 @@ public class Shooter extends SubsystemBase {
 
     private void autoHood()
     {
-        //hoodAngle=hoodTable.get(distance);
+        hoodAngle=hoodTable.get(distance);
+    }
+
+    public void toggleAuto()
+    {
+        useAuto=!useAuto;
     }
 
 }

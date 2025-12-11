@@ -32,18 +32,18 @@ public class SixBallFarRed extends CommandOpMode
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         follower=robot.dt.follower;
-        follower.setStartingPose(new Pose(56,9,Math.toRadians(90)).mirror());
-        robot.shooter.setTargetVelocity(2000);
+        follower.setStartingPose(new Pose(56,9,Math.toRadians(180)).mirror());
+        robot.shooter.setTargetVelocity(1950);
         paths= new FarSixBallRedPaths(follower);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.shooter.setHood(0.6)),
+                        new InstantCommand(() -> robot.shooter.setHood(0.7)),
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(24)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(76)),
                                 new FollowPathCommand(follower,paths.Path1,true)
                         ),
                         new WaitCommand(500),
@@ -53,6 +53,7 @@ public class SixBallFarRed extends CommandOpMode
                         new WaitCommand(750),
                         new InstantCommand(() -> robot.intake.idle()),
                         new FollowPathCommand(follower,paths.Path3),
+                        new WaitCommand(500),
                         new InstantCommand(() -> robot.intake.stop()),
                         new FinalShootCommand(robot),
                         new FollowPathCommand(follower,paths.Path4),

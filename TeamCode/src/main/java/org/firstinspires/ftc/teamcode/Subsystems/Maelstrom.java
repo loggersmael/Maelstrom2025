@@ -87,7 +87,7 @@ public class Maelstrom extends Robot
         {
             dt.resetHeading(color);
         }
-        if(driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
+        if(driver1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
         {
             resetPose();
         }
@@ -186,6 +186,11 @@ public class Maelstrom extends Robot
         {
             shooter.setHoodServo(0.6);
         }
+
+        if(driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
+        {
+            shooter.shootAutoVelocity();
+        }
     }
 
     private void setState(int x)
@@ -259,7 +264,7 @@ public class Maelstrom extends Robot
                 }
                 break;
             case 9:
-                if(tTimer.getElapsedTimeSeconds()>0.5 /*&& shooter.atSpeed()*/)
+                if(tTimer.getElapsedTimeSeconds()>0.2 /*&& shooter.atSpeed()*/)
                 {
                     intake.kickerUp();
                     setState(10);

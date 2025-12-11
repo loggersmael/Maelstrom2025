@@ -69,7 +69,7 @@ public class Turret extends SubsystemBase
         this.telemetry=telemetry;
         turretMotor= new MotorEx(hMap,"turret");
         encoder=turretMotor.encoder;
-        turretMotor.motorEx.setDirection(DcMotorSimple.Direction.REVERSE);
+        turretMotor.motorEx.setDirection(DcMotorSimple.Direction.FORWARD);
         turretMotor.setRunMode(Motor.RunMode.RawPower);
         turretMotor.stopAndResetEncoder();
         state=TurretState.IDLE;
@@ -113,8 +113,8 @@ public class Turret extends SubsystemBase
                 }
                 else {
                     motorPower=secondaryController.calculate(getAngle(),targetPoseAngle);
-                    //applyFeedForward();
-                    useFFcontroller();
+                    applyFeedForward();
+                    //useFFcontroller();
                 }
                 break;
             case MANUALANGLE:
@@ -123,8 +123,8 @@ public class Turret extends SubsystemBase
                 }
                 else {
                     motorPower=secondaryController.calculate(getAngle(), manualAngle);
-                    //applyFeedForward();
-                    useFFcontroller();
+                    applyFeedForward();
+                    //useFFcontroller();
                 }
                 break;
             case MANUALPOWER:
@@ -142,7 +142,7 @@ public class Turret extends SubsystemBase
         if(hasTarget)
         {
             targetAngle = getAngle() + tx;
-            targetAngle = Math.max(-150, Math.min(150, targetAngle));
+            targetAngle = Math.max(-100, Math.min(100, targetAngle));
         }
     }
 
@@ -152,7 +152,7 @@ public class Turret extends SubsystemBase
         telemetry.addData("Atan: ", Math.toDegrees(angleToTargetFromCenter));
         double robotAngleDiff = normalizeAngle(angleToTargetFromCenter - robotPose.getHeading());
         telemetry.addData("RobotAngleDiff: ", Math.toDegrees(robotAngleDiff));
-        robotAngleDiff= Math.max(Math.min(robotAngleDiff,Math.toRadians(150)),Math.toRadians(-150));
+        robotAngleDiff= Math.max(Math.min(robotAngleDiff,Math.toRadians(90)),Math.toRadians(-90));
         targetPoseAngle= Math.toDegrees(robotAngleDiff);
     }
 

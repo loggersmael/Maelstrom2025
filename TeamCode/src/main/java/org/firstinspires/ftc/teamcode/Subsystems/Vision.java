@@ -20,7 +20,7 @@ public class Vision extends SubsystemBase
     private Maelstrom.Alliance alliance;
     private Telemetry telemetry;
     private double targetx;
-    public double distance;
+    public double distance=1;
 
     public Vision(HardwareMap hMap, Telemetry telemetry, Maelstrom.Alliance color)
     {

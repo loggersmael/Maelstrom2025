@@ -42,7 +42,7 @@ public class SixBallFarBlue extends CommandOpMode
                         new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                         new InstantCommand(() -> robot.turret.setPointMode()),
-                                        new InstantCommand(() -> robot.turret.setManualAngle(72)),
+                                        new InstantCommand(() -> robot.turret.setManualAngle(-72)),
                                         new FollowPathCommand(follower,paths.Path1,true)
                         ),
                         new WaitCommand(500),
@@ -52,6 +52,7 @@ public class SixBallFarBlue extends CommandOpMode
                         new WaitCommand(750),
                         new InstantCommand(() -> robot.intake.idle()),
                         new FollowPathCommand(follower,paths.Path3),
+                        new WaitCommand(500),
                         new InstantCommand(() -> robot.intake.stop()),
                         new FinalShootCommand(robot),
                         new FollowPathCommand(follower,paths.Path4),

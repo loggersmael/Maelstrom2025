@@ -19,7 +19,7 @@ public class FarSixBallRedPaths
                 .addPath(
                         new BezierLine(new Pose(56.000, 9.000).mirror(), new Pose(56.000, 18.000).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(90))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         Path2 = follower
@@ -44,7 +44,7 @@ public class FarSixBallRedPaths
                                 new Pose(56.000, 18.000).mirror()
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0),Math.toRadians(90))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
         Path4 = follower
@@ -52,7 +52,7 @@ public class FarSixBallRedPaths
                 .addPath(
                         new BezierLine(new Pose(56.000, 18.000).mirror(), new Pose(39.000, 13.000).mirror())
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(90))
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
     }
 }
