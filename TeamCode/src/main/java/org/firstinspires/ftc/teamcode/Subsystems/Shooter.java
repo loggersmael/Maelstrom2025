@@ -104,7 +104,7 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Flywheel On", flywheelOn);
         telemetry.addData("Current Velocity", currentVelocity);
         telemetry.addData("Target Velocity", targetVelocity);
-        telemetry.addData("Distance: ",cam.getDistance());
+        telemetry.addData("Distance: ", distance);
         telemetry.addData("Auto Velocity: ", autoVelocity);
         //telemetry.addData("Auto Velocity",autoVelocity);
     }
