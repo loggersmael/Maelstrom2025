@@ -134,7 +134,7 @@ public class Turret extends SubsystemBase
                 motorPower=0;
                 break;
         }
-        motorPower=Math.min(motorPower,0.8);
+        motorPower=Math.max(Math.min(motorPower,0.8),-0.8);
         turretMotor.set(motorPower);
     }
 
