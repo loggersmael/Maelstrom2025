@@ -16,4 +16,7 @@ public class DrivetrainConstants
 
     public static Pose redReset= new Pose(8.8,8.4,0);
     public static Pose blueReset= redReset.mirror();
+
+    public static Pose redFlyReset= new Pose(72,72,Math.toRadians(0));
+    public static Pose blueFlyReset= redFlyReset.mirror();
 }

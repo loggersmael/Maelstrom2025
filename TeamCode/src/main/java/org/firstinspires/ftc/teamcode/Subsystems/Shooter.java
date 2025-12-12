@@ -83,7 +83,9 @@ public class Shooter extends SubsystemBase {
     public void periodic() {
         updateAutoVelocity();
         autoHood();
-        setHood(hoodAngle);
+        if(useAuto) {
+            setHood(hoodAngle);
+        }
 
 
         // Update shooter velocity

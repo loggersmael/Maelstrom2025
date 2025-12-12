@@ -69,7 +69,7 @@ public class NineBallCloseRed extends CommandOpMode
                                 new FinalShootCommand(robot),
                                 new FollowPathCommand(follower,paths.Path6),
                                 new InstantCommand(() -> robot.shooter.stopFlywheel()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(45)),
+                                new InstantCommand(() -> robot.turret.setManualAngle(0)),
                                 new InstantCommand(robot.turret::stopAndReset),
                                 new InstantCommand(() -> robot.reset())
                         )
