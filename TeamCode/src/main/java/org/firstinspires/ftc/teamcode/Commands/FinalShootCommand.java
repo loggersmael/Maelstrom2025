@@ -41,7 +41,7 @@ public class FinalShootCommand extends SequentialCommandGroup
                 new InstantCommand(intake::kickerDown),
                 new WaitCommand(300),
                 new InstantCommand(intake::spinIn),
-                new WaitUntilCommand(intake::ballReady).raceWith(new WaitCommand(2000))/*.alongWith(new WaitUntilCommand(shooter::atSpeed))*/,
+                new WaitUntilCommand(intake::ballReady).raceWith(new WaitCommand(750))/*.alongWith(new WaitUntilCommand(shooter::atSpeed))*/,
                 new InstantCommand(intake::kickerUp),
                 new WaitCommand(500),
                 new InstantCommand(intake::kickerDown),
