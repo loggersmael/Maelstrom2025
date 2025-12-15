@@ -39,6 +39,7 @@ public class SixBallFarBlue extends CommandOpMode
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.shooter.setHood(0.7)),
+                        new InstantCommand(() -> robot.turret.setTempOffset(-72)),
                         new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                         new InstantCommand(() -> robot.turret.setPointMode()),

@@ -13,6 +13,7 @@ import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -76,6 +77,7 @@ public class Maelstrom extends Robot
     {
         intake.stop();
         shooter.flywheelOn=false;
+        turret.setTempOffset(turret.getAngle());
         Drivetrain.startPose=dt.follower.getPose();
     }
 

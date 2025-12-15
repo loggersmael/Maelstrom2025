@@ -43,6 +43,7 @@ public class NineBallCloseBlueV2 extends CommandOpMode
                         new WaitUntilCommand(this::opModeIsActive),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.shooter.setHood(0.15)),
+                                new InstantCommand(() -> robot.turret.setTempOffset(-47)),
                                 new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                         new InstantCommand(() -> robot.turret.setPointMode()),
@@ -68,7 +69,7 @@ public class NineBallCloseBlueV2 extends CommandOpMode
                                 new FinalShootCommand(robot),
                                 new FollowPathCommand(follower,paths.Path6),
                                 new InstantCommand(() -> robot.shooter.stopFlywheel()),
-                                new InstantCommand(() -> robot.turret.setManualAngle(0)),
+                                //new InstantCommand(() -> robot.turret.setManualAngle(0)),
                                 new InstantCommand(() -> robot.reset())
                         )
                 )

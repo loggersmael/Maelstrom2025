@@ -62,6 +62,7 @@ public class Turret extends SubsystemBase
     public double motorPower=0;
     public double ksPower=kS;
     public static double offsetAngle=0;
+    public static double tempOffset=0;
     public static double atan=0;
 
     public Turret(HardwareMap hMap, Telemetry telemetry)
@@ -204,6 +205,14 @@ public class Turret extends SubsystemBase
     public void setOffsetAngle(double angle)
     {
         offsetAngle=angle;
+    }
+    public void setTempOffset(double angle)
+    {
+        tempOffset=angle;
+    }
+    public void updateOffset()
+    {
+        offsetAngle=tempOffset;
     }
 
     public boolean atTarget()

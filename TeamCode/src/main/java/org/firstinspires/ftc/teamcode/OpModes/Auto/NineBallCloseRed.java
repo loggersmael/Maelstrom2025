@@ -44,6 +44,7 @@ public class NineBallCloseRed extends CommandOpMode
                         new WaitUntilCommand(this::opModeIsActive),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.shooter.setHood(0.15)),
+                                new InstantCommand(() -> robot.turret.setTempOffset(50)),
                                 new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                         new InstantCommand(() -> robot.turret.setPointMode()),
