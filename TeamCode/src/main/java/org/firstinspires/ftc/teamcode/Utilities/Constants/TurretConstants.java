@@ -35,6 +35,6 @@ public class TurretConstants
 
     public static double angleTolerance=2;
 
-    public static Pose blueGoal= new Pose(0,144);
-    public static Pose redGoal= new Pose(144,144);
+    public static Pose blueGoal= new Pose(6,138);
+    public static Pose redGoal= new Pose(138,138);
 }
