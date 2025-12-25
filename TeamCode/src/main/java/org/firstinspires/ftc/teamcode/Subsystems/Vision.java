@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.VisionConstants
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.VisionConstants.goalHeight;
 
 import com.pedropathing.ftc.FTCCoordinates;
+import com.pedropathing.ftc.InvertedFTCCoordinates;
 import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -148,7 +149,7 @@ public class Vision extends SubsystemBase
                     poseInches.x,
                     poseInches.y,
                     botpose.getOrientation().getYaw(),
-                    FTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
+                    InvertedFTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
         }
     }
 }
