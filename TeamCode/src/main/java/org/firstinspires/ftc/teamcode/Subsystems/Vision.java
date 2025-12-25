@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.VisionConstants.cameraPitch;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.VisionConstants.goalHeight;
 
+import com.pedropathing.ftc.FTCCoordinates;
+import com.pedropathing.geometry.PedroCoordinates;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -11,6 +14,9 @@ import com.seattlesolvers.solverslib.command.SubsystemBase;
 import java.util.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.VisionConstants;
 
 public class Vision extends SubsystemBase
@@ -21,6 +27,7 @@ public class Vision extends SubsystemBase
     private Telemetry telemetry;
     private double targetx;
     public double distance=1;
+    public Pose pedroPose= new Pose(0,0,0);
 
     public Vision(HardwareMap hMap, Telemetry telemetry, Maelstrom.Alliance color)
     {
@@ -129,5 +136,19 @@ public class Vision extends SubsystemBase
     public double getDistance()
     {
         return distance;
+    }
+
+    public void getBotPose()
+    {
+        LLResult result = cam.getLatestResult();
+        if (result != null && result.isValid()) {
+            Pose3D botpose= result.getBotpose_MT2();
+            Position poseInches= botpose.getPosition().toUnit(DistanceUnit.INCH);
+            pedroPose= new Pose(
+                    poseInches.x,
+                    poseInches.y,
+                    botpose.getOrientation().getYaw(),
+                    FTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
+        }
     }
 }
