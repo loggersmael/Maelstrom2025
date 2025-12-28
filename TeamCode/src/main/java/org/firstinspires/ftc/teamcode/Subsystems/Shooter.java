@@ -68,9 +68,9 @@ public class Shooter extends SubsystemBase {
 
         hoodTable = new InterpLUT();
         hoodTable.add(0,0);
-        hoodTable.add(37,0.1);
-        hoodTable.add(70.5,0.15);
-        hoodTable.add(149,0.6);
+        hoodTable.add(1400,0.1);
+        hoodTable.add(1600,0.15);
+        hoodTable.add(2050,0.6);
         hoodTable.createLUT();
 
 
@@ -196,7 +196,8 @@ public class Shooter extends SubsystemBase {
 
     private void autoHood()
     {
-        hoodAngle=hoodTable.get(distance);
+        double vel= Math.max(Math.min(shooterMotor.getVelocity(),2049),1);
+        hoodAngle=hoodTable.get(vel);
     }
 
     public void toggleAuto()
