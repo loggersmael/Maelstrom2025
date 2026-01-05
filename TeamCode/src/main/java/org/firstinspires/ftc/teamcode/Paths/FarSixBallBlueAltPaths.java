@@ -1,0 +1,60 @@
+package org.firstinspires.ftc.teamcode.Paths;
+
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
+
+public class FarSixBallBlueAltPaths
+{
+    public PathChain Start;
+    public PathChain Pickup1;
+    public PathChain Return1;
+    public PathChain Leave;
+
+    public FarSixBallBlueAltPaths(Follower follower) {
+        Start = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(56.000, 9.000), new Pose(56.000, 18.000))
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
+
+        Pickup1 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(56.000, 18.000),
+                                new Pose(9.600, 27.000),
+                                new Pose(11.700, 21.000),
+                                new Pose(7.900, 6.500)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+
+        Return1 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(7.900, 6.500),
+                                new Pose(13.100, 34.500),
+                                new Pose(20.600, 19.600),
+                                new Pose(56.000, 18.000)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(255), Math.toRadians(180))
+                .setReversed()
+                .build();
+
+        Leave = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(56.000, 18.000), new Pose(43.000, 18.000))
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(180))
+                .build();
+    }
+}
