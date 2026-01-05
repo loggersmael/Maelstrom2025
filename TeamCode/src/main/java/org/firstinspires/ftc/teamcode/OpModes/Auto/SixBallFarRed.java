@@ -59,7 +59,7 @@ public class SixBallFarRed extends CommandOpMode
                         new FinalShootCommand(robot),
                         new FollowPathCommand(follower,paths.Path4),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
-                        new InstantCommand(() -> robot.turret.setManualAngle(0)),
+                        //new InstantCommand(() -> robot.turret.setManualAngle(0)),
                         new InstantCommand(() -> robot.reset())
                 )
         );
