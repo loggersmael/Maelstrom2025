@@ -166,6 +166,15 @@ public class Maelstrom extends Robot
             {
                 intake.kickerDown();
             }
+
+            if(driver2.getButton(GamepadKeys.Button.DPAD_LEFT))
+            {
+                intake.kicker2Up();
+            }
+            else
+            {
+                intake.kicker2down();
+            }
         }
 
         if(!shooter.flywheelOn)
