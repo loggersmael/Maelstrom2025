@@ -16,7 +16,6 @@ public class TwelveBallBluePaths
     public PathChain Return2;
     public PathChain Pickup3;
     public PathChain Return3;
-    public PathChain Leave;
 
     public TwelveBallBluePaths(Follower follower) {
         Start = follower
@@ -97,24 +96,14 @@ public class TwelveBallBluePaths
                 .setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
-        Return3 = follower
-                .pathBuilder()
-                .addPath(
+        Return3 = follower.pathBuilder().addPath(
                         new BezierCurve(
                                 new Pose(5.000, 34.000),
                                 new Pose(58.090, 32.019),
-                                new Pose(58.300, 85.000)
+                                new Pose(57.000, 107.000)
                         )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
-        Leave = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(58.300, 85.000), new Pose(38.000, 85.000))
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
-                .build();
     }
 }

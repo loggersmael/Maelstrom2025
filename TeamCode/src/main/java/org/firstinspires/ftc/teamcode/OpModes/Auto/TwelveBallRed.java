@@ -69,9 +69,9 @@ public class TwelveBallRed extends CommandOpMode
                                 new FollowPathCommand(follower,paths.Pickup3,true).withTimeout(3000),
                                 new WaitCommand(500),
                                 new InstantCommand(() -> robot.intake.idle()),
+                                new InstantCommand(() -> robot.turret.setManualAngle(30)),
                                 new FollowPathCommand(follower,paths.Return3,true),
                                 new FinalShootCommand(robot),
-                                new FollowPathCommand(follower,paths.Leave,true),
                                 new InstantCommand(() -> robot.shooter.stopFlywheel()),
                                 //new InstantCommand(() -> robot.turret.setManualAngle(0)),
                                 new InstantCommand(() -> robot.reset())
