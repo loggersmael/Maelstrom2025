@@ -264,10 +264,15 @@ public class Maelstrom extends Robot
             case 6:
                 if(tTimer.getElapsedTimeSeconds()>0.5 || intake.ballReady())
                 {
-                    intake.kicker2Up();
                     setState(7);
                 }
             case 7:
+                if(tTimer.getElapsedTimeSeconds()>0.1)
+                {
+                    intake.kicker2Up();
+                    setState(8);
+                }
+            case 8:
                 if(tTimer.getElapsedTimeSeconds()>0.2)
                 {
                     intake.kicker2down();

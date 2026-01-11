@@ -27,6 +27,7 @@ public class ShootCommandV2 extends SequentialCommandGroup
                 new InstantCommand(intake::spinIn),
                 new WaitCommand(500),
                 new WaitUntilCommand(intake::ballReady).withTimeout(300),
+                new WaitCommand(50),
                 new InstantCommand(intake::kicker2Up),
                 new WaitCommand(100),
                 new InstantCommand(intake::kicker2down),
