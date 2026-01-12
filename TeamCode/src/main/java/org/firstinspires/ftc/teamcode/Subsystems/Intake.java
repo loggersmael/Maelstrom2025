@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase
         colors2=sensor2.getNormalizedColors();
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        kicker.setPosition(0.15);
+        kicker.setPosition(0.07);
         kicker2.setPosition(0);
         stop();
     }
@@ -88,7 +88,7 @@ public class Intake extends SubsystemBase
 
     public void kickerDown()
     {
-        kicker.setPosition(0.05);
+        kicker.setPosition(0.07);
     }
 
     public void kickerUp()
