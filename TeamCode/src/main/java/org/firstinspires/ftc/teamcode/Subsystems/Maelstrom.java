@@ -256,13 +256,13 @@ public class Maelstrom extends Robot
                 }
                 break;
             case 5:
-                if(tTimer.getElapsedTimeSeconds()>0.5)
+                if(tTimer.getElapsedTimeSeconds()>2)
                 {
                     setState(6);
                 }
                 break;
             case 6:
-                if(tTimer.getElapsedTimeSeconds()>0.5 || intake.ballReady())
+                if(tTimer.getElapsedTimeSeconds()>1 || intake.ballReady())
                 {
                     setState(7);
                 }
