@@ -70,7 +70,7 @@ public class Intake extends SubsystemBase
     }
     public void slowSpinOut()
     {
-        intakeMotor.setPower(-0.5);
+        intakeMotor.setPower(-0.8);
     }
     public void spinOut()
     {
