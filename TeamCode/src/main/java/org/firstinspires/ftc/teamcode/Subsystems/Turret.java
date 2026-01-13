@@ -230,6 +230,7 @@ public class Turret extends SubsystemBase
 
     private void applyFeedForward()
     {
+        /*
         if(!secondaryController.atSetPoint() && Math.abs(motorPower)>0.01 && Math.abs(turretMotor.getVelocity())<turretVelocityTolerance)
         {
             if(motorPower>0)
@@ -241,6 +242,15 @@ public class Turret extends SubsystemBase
                 motorPower-=ksPower;
             }
             motorPower=Math.max(Math.min(motorPower,1),-1);
+        }
+
+         */
+        if(targetAngle-getAngle()>0)
+        {
+            motorPower+=ksPower;
+        }
+        else {
+            motorPower-=ksPower;
         }
     }
 
