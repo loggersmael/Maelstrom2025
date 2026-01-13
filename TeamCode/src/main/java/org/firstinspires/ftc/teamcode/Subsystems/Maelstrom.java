@@ -235,7 +235,7 @@ public class Maelstrom extends Robot
                 setState(2);
                 break;
             case 2:
-                if(tTimer.getElapsedTimeSeconds()>0.2)
+                if(tTimer.getElapsedTimeSeconds()>0.1)
                 {
                     intake.stop();
                     setState(3);

@@ -29,7 +29,12 @@ public class TwelveBallRedPaths
         Pickup1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(58.300, 85.000).mirror(), new Pose(18.000, 84.000).mirror())
+                        new BezierCurve(
+                                new Pose(58.300, 85.000).mirror(),
+                                new Pose(55.700, 57.400).mirror(),
+                                new Pose(43.200, 55.000).mirror(),
+                                new Pose(5.000, 54.000).mirror()
+                        )
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
@@ -38,8 +43,8 @@ public class TwelveBallRedPaths
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(18.000, 84.000).mirror(),
-                                new Pose(31.320, 76.287).mirror(),
+                                new Pose(5.000, 54.000).mirror(),
+                                new Pose(36, 62).mirror(),
                                 new Pose(18.000, 70.513).mirror()
                         )
                 )
@@ -51,7 +56,7 @@ public class TwelveBallRedPaths
                 .addPath(
                         new BezierCurve(
                                 new Pose(18.000, 70.513).mirror(),
-                                new Pose(51.000, 69.000).mirror(),
+                                new Pose(62.000, 70.000).mirror(),
                                 new Pose(58.300, 85.000).mirror()
                         )
                 )
@@ -61,12 +66,7 @@ public class TwelveBallRedPaths
         Pickup2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierCurve(
-                                new Pose(58.300, 85.000).mirror(),
-                                new Pose(55.700, 57.400).mirror(),
-                                new Pose(43.200, 55.000).mirror(),
-                                new Pose(5.000, 54.000).mirror()
-                        )
+                        new BezierLine(new Pose(58.300, 85.000).mirror(), new Pose(18.000, 84.000).mirror())
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
@@ -74,11 +74,7 @@ public class TwelveBallRedPaths
         Return2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierCurve(
-                                new Pose(5.000, 54.000).mirror(),
-                                new Pose(53.891, 52.316).mirror(),
-                                new Pose(58.300, 85.000).mirror()
-                        )
+                        new BezierLine(new Pose(18.000, 84.000).mirror(), new Pose(58.300, 85.000).mirror())
                 )
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
@@ -96,14 +92,17 @@ public class TwelveBallRedPaths
                 .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
 
-        Return3 = follower.pathBuilder().addPath(
+        Return3 = follower
+                .pathBuilder()
+                .addPath(
                         new BezierCurve(
                                 new Pose(5.000, 34.000).mirror(),
                                 new Pose(58.090, 32.019).mirror(),
                                 new Pose(57.000, 107.000).mirror()
                         )
-                ).setConstantHeadingInterpolation(Math.toRadians(0))
+                )
+                .setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
-
     }
 }
+

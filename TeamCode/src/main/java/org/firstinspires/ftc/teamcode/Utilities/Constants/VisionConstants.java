@@ -6,5 +6,5 @@ import com.acmerobotics.dashboard.config.Config;
 public class VisionConstants
 {
     public static double goalHeight=17.5;
-    public static double cameraPitch=23.5;
+    public static double cameraPitch=23.58;
 }
