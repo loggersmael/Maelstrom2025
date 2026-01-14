@@ -204,7 +204,7 @@ public class Maelstrom extends Robot
         }
         if(driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>0.5)
         {
-            shooter.useAuto=true;
+            shooter.shootAutoVelocity();
         }
         if(driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER)>0.5)
         {

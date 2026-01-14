@@ -84,7 +84,7 @@ public class Shooter extends SubsystemBase {
         updateAutoVelocity();
         autoHood();
         if(useAuto) {
-            shootAutoVelocity();
+            //shootAutoVelocity();
         }
         setHood(hoodAngle);
 
