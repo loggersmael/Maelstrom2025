@@ -13,6 +13,7 @@ import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
 import org.firstinspires.ftc.teamcode.Commands.FinalShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.FollowPath;
+import org.firstinspires.ftc.teamcode.Commands.ShootCommandV2;
 import org.firstinspires.ftc.teamcode.Paths.TwelveBallBluePaths;
 import org.firstinspires.ftc.teamcode.Paths.TwelveBallRedPaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
@@ -48,30 +49,30 @@ public class TwelveBallRed extends CommandOpMode
                                         new FollowPathCommand(follower,paths.Start,true)
                                 ),
                                 new WaitCommand(50),
-                                new FinalShootCommand(robot),
+                                new ShootCommandV2(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPathCommand(follower,paths.Pickup1,true,1),
                                 new WaitCommand(200),
-                                new InstantCommand(() -> robot.intake.idle()),
+                                new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPathCommand(follower,paths.Gate,true),
                                 new FollowPathCommand(follower,paths.Return1,true),
                                 new InstantCommand(robot.intake::stop),
                                 new WaitCommand(50),
-                                new FinalShootCommand(robot),
+                                new ShootCommandV2(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPath(robot,paths.Pickup2,true,0.9).withTimeout(2500),
                                 new WaitCommand(500),
-                                new InstantCommand(() -> robot.intake.idle()),
+                                new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPathCommand(follower,paths.Return2),
                                 new InstantCommand(() -> robot.intake.stop()),
-                                new FinalShootCommand(robot),
+                                new ShootCommandV2(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
-                                new FollowPathCommand(follower,paths.Pickup3,true).withTimeout(3000),
-                                new WaitCommand(500),
-                                new InstantCommand(() -> robot.intake.idle()),
+                                new FollowPath(robot,paths.Pickup3,true,0.9).withTimeout(3000),
+                                new WaitCommand(250),
+                                new InstantCommand(() -> robot.intake.spinIn()),
                                 new InstantCommand(() -> robot.turret.setManualAngle(30)),
                                 new FollowPathCommand(follower,paths.Return3,true),
-                                new FinalShootCommand(robot),
+                                new ShootCommandV2(robot),
                                 new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                                         new InstantCommand(() -> robot.reset())
