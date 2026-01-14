@@ -59,7 +59,7 @@ public class Shooter extends SubsystemBase {
         autoVelocity=0;
 
         table= new InterpLUT();
-        table.add(0,0);
+        table.add(0,1000);
         table.add(37,1400);
         table.add(42.5,1500);
         table.add(70.5,1600);
@@ -67,7 +67,7 @@ public class Shooter extends SubsystemBase {
         table.createLUT();
 
         hoodTable = new InterpLUT();
-        hoodTable.add(0,0);
+        hoodTable.add(1000,0);
         hoodTable.add(1400,0.1);
         hoodTable.add(1600,0.15);
         hoodTable.add(2050,0.6);
