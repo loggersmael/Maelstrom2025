@@ -196,7 +196,7 @@ public class Shooter extends SubsystemBase {
 
     private void autoHood()
     {
-        double vel= Math.max(Math.min(shooterMotor.getVelocity(),2049),1);
+        double vel= Math.max(Math.min(shooterMotor.getVelocity(),2049),1001);
         hoodAngle=hoodTable.get(vel);
     }
 
