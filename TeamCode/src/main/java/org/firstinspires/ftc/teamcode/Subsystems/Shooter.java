@@ -46,7 +46,7 @@ public class Shooter extends SubsystemBase {
         this.alliance = color;
 
         shooterMotor = aHardwareMap.get(DcMotorEx.class, "shooter");
-        shooterMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooterMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         shooterMotor.setVelocityPIDFCoefficients(kP, kI, kD, 0);
 
         hoodServo = aHardwareMap.get(Servo.class, "hood");
@@ -69,8 +69,8 @@ public class Shooter extends SubsystemBase {
         hoodTable = new InterpLUT();
         hoodTable.add(1000,0);
         hoodTable.add(1400,0.1);
-        hoodTable.add(1600,0.15);
-        hoodTable.add(2050,0.6);
+        hoodTable.add(1600,0.25);
+        hoodTable.add(2050,0.86);
         hoodTable.createLUT();
 
 
@@ -186,7 +186,7 @@ public class Shooter extends SubsystemBase {
     }
     public void hoodUp()
     {
-        hoodServo.setPosition(0.8);
+        hoodServo.setPosition(0.96);
     }
 
     public void setHood(double d)

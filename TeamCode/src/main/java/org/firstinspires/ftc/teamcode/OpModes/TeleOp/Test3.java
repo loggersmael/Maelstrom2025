@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.TeleOP;
+package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -131,7 +131,7 @@ public class Test3 extends OpMode
         }
         if(gamepad2.left_stick_button)
         {
-            hood.setPosition(0.2);
+            hood.setPosition(0.04);
         }
 
     }

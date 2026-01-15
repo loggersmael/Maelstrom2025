@@ -195,7 +195,7 @@ public class Maelstrom extends Robot
         }
         if(driver1.getButton(GamepadKeys.Button.DPAD_UP))
         {
-            shooter.setHoodServo(0.6);
+            shooter.setHoodServo(0.96);
         }
 
         if(driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
