@@ -54,7 +54,7 @@ public class NineBallCloseBlueV2 extends CommandOpMode
                                 new WaitCommand(50),
                                 new ShootCommandV2(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
-                                new FollowPathCommand(follower,paths.Path2,true,1),
+                                new FollowPath(robot,paths.Path2,true,1),
                                 new WaitCommand(500),
                                 new InstantCommand(() -> robot.intake.idle()),
                                 new FollowPathCommand(follower,paths.Path3,true),

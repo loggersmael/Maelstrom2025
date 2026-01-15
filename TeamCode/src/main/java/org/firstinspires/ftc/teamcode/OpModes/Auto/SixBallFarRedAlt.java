@@ -13,6 +13,7 @@ import com.seattlesolvers.solverslib.pedroCommand.FollowPathCommand;
 
 import org.firstinspires.ftc.teamcode.Commands.FinalShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.FollowPath;
+import org.firstinspires.ftc.teamcode.Commands.ShootCommandV2;
 import org.firstinspires.ftc.teamcode.Paths.FarSixBallRedAltPaths;
 import org.firstinspires.ftc.teamcode.Paths.FarSixBallRedPaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
@@ -45,7 +46,7 @@ public class SixBallFarRedAlt extends CommandOpMode
                                 new FollowPathCommand(follower,paths.Start,true)
                         ),
                         new WaitCommand(500),
-                        new FinalShootCommand(robot),
+                        new ShootCommandV2(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPath(robot,paths.Pickup1,true,1).withTimeout(2500),
                         new WaitCommand(750),
@@ -53,7 +54,7 @@ public class SixBallFarRedAlt extends CommandOpMode
                         new FollowPathCommand(follower,paths.Return1),
                         new WaitCommand(500),
                         new InstantCommand(() -> robot.intake.stop()),
-                        new FinalShootCommand(robot),
+                        new ShootCommandV2(robot),
                         new FollowPathCommand(follower,paths.Leave),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         //new InstantCommand(() -> robot.turret.setManualAngle(0)),
