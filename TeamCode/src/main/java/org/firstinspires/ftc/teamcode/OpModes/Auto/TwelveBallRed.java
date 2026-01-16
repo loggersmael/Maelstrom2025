@@ -55,6 +55,7 @@ public class TwelveBallRed extends CommandOpMode
                                 new WaitCommand(200),
                                 new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPathCommand(follower,paths.Gate,true),
+                                new WaitCommand(50),
                                 new FollowPathCommand(follower,paths.Return1,true),
                                 //new InstantCommand(robot.intake::stop),
                                 new WaitCommand(50),
