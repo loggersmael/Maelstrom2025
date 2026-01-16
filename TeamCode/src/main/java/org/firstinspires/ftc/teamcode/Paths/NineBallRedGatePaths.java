@@ -30,9 +30,9 @@ public class NineBallRedGatePaths
         Pickup1 = follower.pathBuilder().addPath(
                         new BezierCurve(
                                 new Pose(58.300, 85.000).mirror(),
-                                new Pose(55.700, 57.400).mirror(),
-                                new Pose(43.200, 55.000).mirror(),
-                                new Pose(5.000, 54.000).mirror()
+                                new Pose(55.700, 58.400).mirror(),
+                                new Pose(43.200, 56.000).mirror(),
+                                new Pose(5.000, 55.000).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
 

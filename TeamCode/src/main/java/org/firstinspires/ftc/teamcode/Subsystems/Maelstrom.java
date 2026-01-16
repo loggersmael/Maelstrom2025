@@ -77,7 +77,7 @@ public class Maelstrom extends Robot
     {
         intake.stop();
         shooter.flywheelOn=false;
-        turret.setTempOffset(turret.getAngle());
+        //turret.setTempOffset(turret.getAngle());
         Drivetrain.startPose=dt.follower.getPose();
     }
 

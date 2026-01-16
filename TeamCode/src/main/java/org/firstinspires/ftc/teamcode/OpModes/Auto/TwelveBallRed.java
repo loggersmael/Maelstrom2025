@@ -41,11 +41,11 @@ public class TwelveBallRed extends CommandOpMode
                         new WaitUntilCommand(this::opModeIsActive),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.shooter.setHood(0.15)),
-                                new InstantCommand(() -> robot.turret.setTempOffset(50)),
+                                //new InstantCommand(() -> robot.turret.setTempOffset(45)),
                                 new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                         new InstantCommand(() -> robot.turret.setPointMode()),
-                                        new InstantCommand(() -> robot.turret.setManualAngle(50)),
+                                        new InstantCommand(() -> robot.turret.setManualAngle(45)),
                                         new FollowPathCommand(follower,paths.Start,true)
                                 ),
                                 new WaitCommand(50),

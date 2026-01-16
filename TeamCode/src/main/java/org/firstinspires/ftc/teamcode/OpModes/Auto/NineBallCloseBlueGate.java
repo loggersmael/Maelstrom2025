@@ -41,7 +41,7 @@ public class NineBallCloseBlueGate extends CommandOpMode
                         new WaitUntilCommand(this::opModeIsActive),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.shooter.setHood(0.15)),
-                                new InstantCommand(() -> robot.turret.setTempOffset(-47)),
+                                //new InstantCommand(() -> robot.turret.setTempOffset(-47)),
                                 new ParallelCommandGroup(
                                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                         new InstantCommand(() -> robot.turret.setPointMode()),
@@ -51,8 +51,8 @@ public class NineBallCloseBlueGate extends CommandOpMode
                                 new WaitCommand(50),
                                 new ShootCommandV2(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
-                                new FollowPath(robot,paths.Pickup1,true,1),
-                                new WaitCommand(500),
+                                new FollowPath(robot,paths.Pickup1,true,0.8),
+                                new WaitCommand(600),
                                 new InstantCommand(() -> robot.intake.idle()),
                                 new FollowPathCommand(follower,paths.Gate,true),
                                 new FollowPathCommand(follower,paths.Return1,true),
@@ -60,7 +60,7 @@ public class NineBallCloseBlueGate extends CommandOpMode
                                 new WaitCommand(50),
                                 new ShootCommandV2(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
-                                new FollowPath(robot,paths.Pickup2,true,0.9).withTimeout(2500),
+                                new FollowPath(robot,paths.Pickup2,true,0.8).withTimeout(2500),
                                 new WaitCommand(500),
                                 new InstantCommand(() -> robot.intake.idle()),
                                 new FollowPath(robot,paths.Return2),

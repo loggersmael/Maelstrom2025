@@ -84,6 +84,8 @@ public class Turret extends SubsystemBase
         telemetry.addData("Current Angle: ",getAngle());
         telemetry.addData("Target Angle: ", targetAngle);
         telemetry.addData("Turret Encoder: ", encoder.getPosition());
+        telemetry.addData("Offset: ", offsetAngle);
+        telemetry.addData("Temp Offset: ", tempOffset);
         telemetry.addData("Inverse Turret Encoder: ", getInversePosition());
         telemetry.addData("Manual Power: ",manualPower);
         telemetry.addData("Error: ", Math.abs(getAngle()-targetPoseAngle));
@@ -230,7 +232,7 @@ public class Turret extends SubsystemBase
 
     private void applyFeedForward()
     {
-        /*
+
         if(!secondaryController.atSetPoint() && Math.abs(motorPower)>0.01 && Math.abs(turretMotor.getVelocity())<turretVelocityTolerance)
         {
             if(motorPower>0)
@@ -244,7 +246,8 @@ public class Turret extends SubsystemBase
             motorPower=Math.max(Math.min(motorPower,1),-1);
         }
 
-         */
+
+        /*
         if(targetAngle-getAngle()>0)
         {
             motorPower+=ksPower;
@@ -252,6 +255,7 @@ public class Turret extends SubsystemBase
         else {
             motorPower-=ksPower;
         }
+         */
     }
 
     private void useFFcontroller()

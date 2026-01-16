@@ -41,14 +41,14 @@ public class SixBallFarRed extends CommandOpMode
                 new WaitUntilCommand(this::opModeIsActive),
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.shooter.setHood(0.7)),
-                        new InstantCommand(() -> robot.turret.setTempOffset(76)),
+                        //new InstantCommand(() -> robot.turret.setTempOffset(76)),
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
                                 new InstantCommand(() -> robot.turret.setManualAngle(76)),
                                 new FollowPathCommand(follower,paths.Path1,true)
                         ),
-                        new WaitCommand(500),
+                        new WaitCommand(600),
                         new ShootCommandV2(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
                         new FollowPath(robot,paths.Path2,true,1).withTimeout(2500),

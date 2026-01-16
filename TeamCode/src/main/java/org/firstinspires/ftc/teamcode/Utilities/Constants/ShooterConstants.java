@@ -22,8 +22,8 @@ public class ShooterConstants
     public static double midVelocity=1600;
     public static double velocityTolerance=40;
 
-    public static double kP=0.0025;
+    public static double kP=0.003;
     public static double kI=0;
-    public static double kD=0.00005;
-    public static double kF=0.0004;
+    public static double kD=0;
+    public static double kF=0.00037;
 }
