@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -10,12 +11,13 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 import org.firstinspires.ftc.teamcode.Commands.FollowPath;
 import org.firstinspires.ftc.teamcode.Paths.blueClose;
-
+@Disabled
 @Autonomous
 public class BucketAutoBlueClose extends com.seattlesolvers.solverslib.command.CommandOpMode {
 
     private Maelstrom r;
     private GamepadEx g1, g2;
+
 
     @Override
     public void initialize(){

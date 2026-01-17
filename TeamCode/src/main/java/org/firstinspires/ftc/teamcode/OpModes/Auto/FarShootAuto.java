@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -10,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
 import java.lang.reflect.MalformedParameterizedTypeException;
-
+@Disabled
 @Autonomous(name="FarShootAuto")
 public class FarShootAuto extends LinearOpMode
 {
