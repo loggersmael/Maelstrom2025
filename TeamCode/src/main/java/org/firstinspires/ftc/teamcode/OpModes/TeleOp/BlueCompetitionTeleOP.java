@@ -23,7 +23,7 @@ public class BlueCompetitionTeleOP extends OpMode
     @Override
     public void start()
     {
-        Robot.turret.updateOffset();
+        //Robot.turret.updateOffset();
         Robot.turret.startPoseTracking();
     }
 

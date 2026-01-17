@@ -44,7 +44,7 @@ public class TwelveBallRedPaths
                 .addPath(
                         new BezierCurve(
                                 new Pose(5.000, 54.000).mirror(),
-                                new Pose(37, 62).mirror(),
+                                new Pose(42, 62).mirror(),
                                 new Pose(18.000, 70.513).mirror()
                         )
                 )
@@ -101,7 +101,7 @@ public class TwelveBallRedPaths
                                 new Pose(57.000, 107.000).mirror()
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(37))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(36))
                 .build();
     }
 }

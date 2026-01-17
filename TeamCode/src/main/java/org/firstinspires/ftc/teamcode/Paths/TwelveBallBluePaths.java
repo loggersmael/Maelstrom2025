@@ -101,7 +101,7 @@ public class TwelveBallBluePaths
                                 new Pose(57.000, 107.000)
                         )
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(143))
+                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(147))
                 .build();
     }
 }
