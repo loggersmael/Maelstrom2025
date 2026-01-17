@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -21,7 +22,7 @@ import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths;
 import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths2;
 import org.firstinspires.ftc.teamcode.Paths.SixBallRedPaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
-
+@Disabled
 @Autonomous(name="SixBallCloseRed")
 public class SixBallCloseRed extends CommandOpMode
 {

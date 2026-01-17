@@ -101,7 +101,7 @@ public class TwelveBallRedPaths
                                 new Pose(57.000, 107.000).mirror()
                         )
                 )
-                .setConstantHeadingInterpolation(Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(37))
                 .build();
     }
 }

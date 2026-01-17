@@ -65,7 +65,7 @@ public class NineBallFarBlue extends CommandOpMode
                         new ShootCommandV2(robot),
                         new FollowPathCommand(follower,paths.Path6),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
-                        //new InstantCommand(() -> robot.turret.setManualAngle(0)),
+                        new InstantCommand(() -> robot.turret.setManualAngle(0)),
                         new InstantCommand(() -> robot.reset())
                 )
         );

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -18,13 +19,14 @@ import org.firstinspires.ftc.teamcode.Commands.ShootWithKicker;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithSensor;
 import org.firstinspires.ftc.teamcode.Paths.SixBallBluePaths;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
-
+@Disabled
 @Autonomous(name="SixBallCloseBlue")
 public class SixBallCloseBlue extends CommandOpMode
 {
     private Maelstrom robot;
     private Follower follower;
     private SixBallBluePaths paths;
+
 
     @Override
     public void initialize()
