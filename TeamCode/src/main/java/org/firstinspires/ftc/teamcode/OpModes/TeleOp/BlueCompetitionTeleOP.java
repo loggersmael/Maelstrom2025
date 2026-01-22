@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.TeleOp;
 
+import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -10,10 +11,12 @@ import org.firstinspires.ftc.teamcode.Subsystems.Turret;
 public class BlueCompetitionTeleOP extends OpMode
 {
     private Maelstrom Robot;
+    private Timer loop;
 
     @Override
     public void init()
     {
+        loop= new Timer();
         Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         Robot.dt.enableTeleop();
         telemetry.addData("tempOffset: ", Turret.tempOffset);
@@ -25,6 +28,7 @@ public class BlueCompetitionTeleOP extends OpMode
     {
         //Robot.turret.updateOffset();
         Robot.turret.startPoseTracking();
+        loop.resetTimer();
     }
 
     @Override
@@ -32,5 +36,7 @@ public class BlueCompetitionTeleOP extends OpMode
     {
         Robot.periodic();
         Robot.controlMap();
+        //telemetry.addData("Loop times: ", loop.getElapsedTime());
+        loop.resetTimer();
     }
 }

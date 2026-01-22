@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
     private double distance=1;
     public PIDFController velocityController= new PIDFController(kP,kI,kD,ShooterConstants.kF);
 
-    public Shooter(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color) {
+    public Shooter(HardwareMap aHardwareMap, Telemetry telemetry, Maelstrom.Alliance color, Vision cam) {
         this.telemetry = telemetry;
         this.alliance = color;
 
@@ -54,7 +54,7 @@ public class Shooter extends SubsystemBase {
         hoodServo.setPosition(0);
 
         light = aHardwareMap.get(Servo.class, "light");
-        cam = new Vision(aHardwareMap,telemetry,color);
+        this.cam = cam;
         distance=1;
         autoVelocity=0;
 

@@ -30,6 +30,8 @@ public class Intake extends SubsystemBase
     private NormalizedRGBA colors2;
     private Motor.Encoder intakeEncoder;
     private Telemetry telemetry;
+    private int loopCounter=0;
+
     public Intake(HardwareMap aHardwareMap, Telemetry telemetry)
     {
         this.telemetry=telemetry;
@@ -51,13 +53,16 @@ public class Intake extends SubsystemBase
     @Override
     public void periodic()
     {
-        colors1=sensor1.getNormalizedColors();
-        colors2=sensor2.getNormalizedColors();
+        //colors1=sensor1.getNormalizedColors();
+        //colors2=sensor2.getNormalizedColors();
 
-        telemetry.addData("Sensor 1 distance: ", sensor1.getDistance(DistanceUnit.INCH));
-        telemetry.addData("Sensor 2 Distance: ", sensor2.getDistance(DistanceUnit.INCH));
-        telemetry.addData("Sensor 1 Color: ",colors1.red + " " + colors1.green + " " + colors1.blue );
-        telemetry.addData("Sensor 2 Color: ",colors2.red + " " + colors2.green + " " + colors2.blue );
+        //telemetry.addData("Sensor 1 distance: ", sensor1.getDistance(DistanceUnit.INCH));
+        if(loopCounter%4==0) {
+            telemetry.addData("Sensor 2 Distance: ", sensor2.getDistance(DistanceUnit.INCH));
+        }
+        //telemetry.addData("Sensor 1 Color: ",colors1.red + " " + colors1.green + " " + colors1.blue );
+        //telemetry.addData("Sensor 2 Color: ",colors2.red + " " + colors2.green + " " + colors2.blue );
+        loopCounter++;
     }
     public void spinIn()
     {

@@ -64,12 +64,16 @@ public class Vision extends SubsystemBase
             tagList = new ArrayList<>();
         }
         calcDistance();
-        
+        getBotPose();
+
         telemetry.addData("Target X: ", targetx);
         telemetry.addData("target y; ",getTargetYDegrees());
         telemetry.addData("Target Present: ", targetPresent());
         telemetry.addData("Fiducial Count: ", tagList != null ? tagList.size() : 0);
         telemetry.addData("Distance: ",distance);
+        telemetry.addData("Pedro X: ", pedroPose.getX());
+        telemetry.addData("Pedro Y: ", pedroPose.getY());
+        telemetry.addData("Pedro Heading: ", pedroPose.getHeading());
     }
     public LLResultTypes.FiducialResult getTag()
     {
@@ -143,7 +147,7 @@ public class Vision extends SubsystemBase
     {
         LLResult result = cam.getLatestResult();
         if (result != null && result.isValid()) {
-            Pose3D botpose= result.getBotpose_MT2();
+            Pose3D botpose= result.getBotpose();
             Position poseInches= botpose.getPosition().toUnit(DistanceUnit.INCH);
             pedroPose= new Pose(
                     poseInches.x,
@@ -151,5 +155,10 @@ public class Vision extends SubsystemBase
                     botpose.getOrientation().getYaw(),
                     InvertedFTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
         }
+    }
+
+    public Pose getPedro()
+    {
+        return pedroPose;
     }
 }

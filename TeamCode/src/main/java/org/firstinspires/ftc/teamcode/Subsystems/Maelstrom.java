@@ -45,13 +45,13 @@ public class Maelstrom extends Robot
 
     public Maelstrom(HardwareMap hMap, Telemetry telemetry, Alliance color, Gamepad d1, Gamepad d2)
     {
-        dt= new Drivetrain(hMap,telemetry);
+        cams= new Vision(hMap,telemetry,color);
+        dt= new Drivetrain(hMap,telemetry,cams);
         this.telemetry=telemetry;
         intake= new Intake(hMap,telemetry);
         intake.stop();
-        shooter= new Shooter(hMap,telemetry,color);
         turret= new Turret(hMap,telemetry);
-        cams= new Vision(hMap,telemetry,color);
+        shooter= new Shooter(hMap,telemetry,color,cams);
         driver1= new GamepadEx(d1);
         driver2= new GamepadEx(d2);
         tTimer=new Timer();

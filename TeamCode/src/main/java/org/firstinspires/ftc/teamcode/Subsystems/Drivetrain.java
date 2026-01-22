@@ -38,11 +38,12 @@ public class Drivetrain extends SubsystemBase {
    // private Motor rightRear;
 
     public Follower follower;
+    private Vision cams;
     public static Pose startPose= new Pose(0,0,0);
 
     private Telemetry telemetry;
 
-    public Drivetrain(HardwareMap aHardwareMap, Telemetry telemetry) {
+    public Drivetrain(HardwareMap aHardwareMap, Telemetry telemetry, Vision cam) {
       /*  leftFront = new Motor(aHardwareMap, DrivetrainConstants.fLMotorID, Motor.GoBILDA.RPM_312);
         rightFront = new Motor(aHardwareMap, DrivetrainConstants.fRMotorID, Motor.GoBILDA.RPM_312);
         leftRear = new Motor(aHardwareMap, DrivetrainConstants.bLMotorID, Motor.GoBILDA.RPM_312);
@@ -66,17 +67,20 @@ public class Drivetrain extends SubsystemBase {
 
 
         follower = Constants.createFollower(aHardwareMap);
-
+        cams=cam;
         this.telemetry = telemetry;
     }
 
     @Override
     public void periodic() {
-        follower.updatePose();
+        long startTime= System.nanoTime();
+//        follower.updatePose();
         follower.update();
         telemetry.addData("Drivetrain Pose X", follower.getPose().getX());
         telemetry.addData("Drivetrain Pose Y", follower.getPose().getY());
         telemetry.addData("Drivetrain Heading", follower.getPose().getHeading());
+        long totalTime= System.nanoTime()-startTime;
+        telemetry.addData("Loop Time: ", totalTime/1000000);
     }
 
     public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric) {
