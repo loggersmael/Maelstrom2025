@@ -82,4 +82,10 @@ public class TwelveBallBlue extends CommandOpMode
                 )
         );
     }
+
+    @Override
+    public void end()
+    {
+
+    }
 }
