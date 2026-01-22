@@ -37,6 +37,7 @@ import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants;
+import org.firstinspires.ftc.teamcode.Utilities.Storage;
 
 import java.util.List;
 
@@ -211,11 +212,11 @@ public class Turret extends SubsystemBase
     }
     public void setTempOffset(double angle)
     {
-        tempOffset=angle;
+        Storage.turretOffset=angle;
     }
     public void updateOffset()
     {
-        offsetAngle=tempOffset;
+        offsetAngle= Storage.turretOffset;
     }
 
     public boolean atTarget()
