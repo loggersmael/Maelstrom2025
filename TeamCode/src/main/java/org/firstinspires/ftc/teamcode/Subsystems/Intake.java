@@ -36,8 +36,9 @@ public class Intake extends SubsystemBase
     {
         this.telemetry=telemetry;
         kicker= aHardwareMap.get(Servo.class,"kicker");
+        kicker.setDirection(Servo.Direction.FORWARD);
         kicker2= aHardwareMap.get(Servo.class,"kicker2");
-        kicker2.setDirection(Servo.Direction.REVERSE);
+        kicker2.setDirection(Servo.Direction.FORWARD);
         intakeMotor= aHardwareMap.get(DcMotorEx.class,"intake");
         sensor1= aHardwareMap.get(RevColorSensorV3.class,"sensor1");
         sensor2= aHardwareMap.get(RevColorSensorV3.class,"sensor2");
@@ -98,7 +99,7 @@ public class Intake extends SubsystemBase
 
     public void kickerUp()
     {
-        kicker.setPosition(0.3);
+        kicker.setPosition(0.6);
     }
 
     public void kickerHalfway()

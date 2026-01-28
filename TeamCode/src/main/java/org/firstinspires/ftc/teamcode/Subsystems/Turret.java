@@ -83,7 +83,7 @@ public class Turret extends SubsystemBase
     public void periodic()
     {
         telemetry.addData("Current Angle: ",getAngle());
-        telemetry.addData("Target Angle: ", targetAngle);
+        telemetry.addData("Target Angle: ", manualAngle);
         telemetry.addData("Turret Encoder: ", encoder.getPosition());
         telemetry.addData("Offset: ", offsetAngle);
         telemetry.addData("Temp Offset: ", tempOffset);
@@ -112,22 +112,22 @@ public class Turret extends SubsystemBase
             case POSETRACKING:
                 if(Math.abs(getAngle()-targetPoseAngle)>PIDFSwitch)
                 {
-                    motorPower=turretController.calculate(getAngle(),targetPoseAngle);
+                    motorPower=-turretController.calculate(getAngle(),targetPoseAngle);
                     telemetry.addData("Motor Power: ", motorPower);
                 }
                 else {
-                    motorPower=secondaryController.calculate(getAngle(),targetPoseAngle);
-                    applyFeedForward();
+                    motorPower=-secondaryController.calculate(getAngle(),targetPoseAngle);
+                    //applyFeedForward();
                     //useFFcontroller();
                 }
                 break;
             case MANUALANGLE:
                 if(Math.abs(getAngle()-manualAngle)>PIDFSwitch) {
-                    motorPower=turretController.calculate(getAngle(), manualAngle);
+                    motorPower=-turretController.calculate(getAngle(), manualAngle);
                 }
                 else {
-                    motorPower=secondaryController.calculate(getAngle(), manualAngle);
-                    applyFeedForward();
+                    motorPower=-secondaryController.calculate(getAngle(), manualAngle);
+                    //applyFeedForward();
                     //useFFcontroller();
                 }
                 break;
@@ -169,7 +169,7 @@ public class Turret extends SubsystemBase
 
     public double getAngle()
     {
-        return (encoder.getPosition()*(360.0/537.7))/3 + offsetAngle;
+        return (-encoder.getPosition()*(360/537.7))/3 + offsetAngle ;
     }
 
     public double getInversePosition()
@@ -200,6 +200,7 @@ public class Turret extends SubsystemBase
     {
         state=TurretState.MANUALANGLE;
     }
+
 
     public void stopAndReset()
     {
