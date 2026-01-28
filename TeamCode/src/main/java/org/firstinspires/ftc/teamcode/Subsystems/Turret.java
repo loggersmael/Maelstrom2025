@@ -169,7 +169,7 @@ public class Turret extends SubsystemBase
 
     public double getAngle()
     {
-        return (encoder.getPosition()*(360.0/4096))/3 + offsetAngle;
+        return (encoder.getPosition()*(360.0/537.7))/3 + offsetAngle;
     }
 
     public double getInversePosition()
