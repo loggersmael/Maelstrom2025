@@ -210,6 +210,17 @@ public class Maelstrom extends Robot
         {
             shooter.useAuto=false;
         }
+        if(driver1.getButton(GamepadKeys.Button.A))
+        {
+            dt.parkUp();
+        }
+        else if(driver1.getButton(GamepadKeys.Button.B))
+        {
+            dt.parkDown();
+        }
+        else {
+            dt.stopPark();
+        }
     }
 
     private void setState(int x)
@@ -231,50 +242,39 @@ public class Maelstrom extends Robot
         switch(transferState)
         {
             case 1:
-                intake.slowSpinOut();
-                setState(2);
+                if(tTimer.getElapsedTimeSeconds()>0.1)
+                {
+                    intake.kickerUp();
+                    setState(2);
+                }
                 break;
             case 2:
-                if(tTimer.getElapsedTimeSeconds()>0.125)
+                if(tTimer.getElapsedTimeSeconds()>0.1)
                 {
-                    intake.stop();
+                    intake.spinIn();
                     setState(3);
                 }
                 break;
             case 3:
-                if(tTimer.getElapsedTimeSeconds()>0.1)
+                if(tTimer.getElapsedTimeSeconds()>1.5)
                 {
-                    intake.kickerUp();
                     setState(4);
                 }
                 break;
             case 4:
-                if(tTimer.getElapsedTimeSeconds()>0.1)
+                if(tTimer.getElapsedTimeSeconds()>1 || intake.ballReady())
                 {
-                    intake.spinIn();
                     setState(5);
                 }
                 break;
             case 5:
-                if(tTimer.getElapsedTimeSeconds()>2)
+                if(tTimer.getElapsedTimeSeconds()>0.1)
                 {
+                    intake.kicker2Up();
                     setState(6);
                 }
                 break;
             case 6:
-                if(tTimer.getElapsedTimeSeconds()>1 || intake.ballReady())
-                {
-                    setState(7);
-                }
-                break;
-            case 7:
-                if(tTimer.getElapsedTimeSeconds()>0.1)
-                {
-                    intake.kicker2Up();
-                    setState(8);
-                }
-                break;
-            case 8:
                 if(tTimer.getElapsedTimeSeconds()>0.2)
                 {
                     intake.kicker2down();

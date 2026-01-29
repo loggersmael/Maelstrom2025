@@ -8,6 +8,7 @@ import com.pedropathing.localization.Localizer;
 import com.pedropathing.geometry.Pose;
 
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -18,6 +19,7 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import com.seattlesolvers.solverslib.geometry.Pose2d;
+import com.seattlesolvers.solverslib.hardware.motors.CRServoEx;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -38,6 +40,7 @@ public class Drivetrain extends SubsystemBase {
    // private Motor rightRear;
 
     public Follower follower;
+    private com.qualcomm.robotcore.hardware.CRServo park;
     private Vision cams;
     public static Pose startPose= new Pose(0,0,0);
 
@@ -68,6 +71,7 @@ public class Drivetrain extends SubsystemBase {
 
         follower = Constants.createFollower(aHardwareMap);
         cams=cam;
+        park=aHardwareMap.get(CRServo.class,"park");
         this.telemetry = telemetry;
     }
 
@@ -157,6 +161,19 @@ public class Drivetrain extends SubsystemBase {
     public Pose getPose()
     {
         return follower.getPose();
+    }
+
+    public void parkUp()
+    {
+        park.setPower(1);
+    }
+    public void parkDown()
+    {
+        park.setPower(-1);
+    }
+    public void stopPark()
+    {
+        park.setPower(0);
     }
 }
 

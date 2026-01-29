@@ -19,9 +19,9 @@ public class ShootCommandV2 extends SequentialCommandGroup
         intake=robot.intake;
         shooter=robot.shooter;
         addCommands(
-                new InstantCommand(intake::slowSpinOut),
-                new WaitCommand(50),
-                new InstantCommand(intake::stop),
+                //new InstantCommand(intake::slowSpinOut),
+                //new WaitCommand(50),
+                //new InstantCommand(intake::stop),
                 new InstantCommand(intake::kickerUp),
                 new WaitCommand(100),
                 new InstantCommand(intake::spinIn),
