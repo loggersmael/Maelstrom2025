@@ -157,6 +157,19 @@ public class Vision extends SubsystemBase
         }
     }
 
+    public void updateBotPose()
+    {
+        LLResult result = cam.getLatestResult();
+        if (result != null && result.isValid()) {
+            Pose3D botpose= result.getBotpose();
+            Position poseInches= botpose.getPosition().toUnit(DistanceUnit.INCH);
+            pedroPose= new Pose(
+                    poseInches.y+72,
+                    -poseInches.x+72,
+                    botpose.getOrientation().getYaw());
+        }
+    }
+
     public Pose getPedro()
     {
         return pedroPose;
