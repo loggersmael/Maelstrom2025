@@ -65,6 +65,12 @@ public class Intake extends SubsystemBase
         //telemetry.addData("Sensor 2 Color: ",colors2.red + " " + colors2.green + " " + colors2.blue );
         loopCounter++;
     }
+
+    public void setPower(double p)
+    {
+        intakeMotor.setPower(p);
+    }
+
     public void spinIn()
     {
             intakeMotor.setPower(1);
