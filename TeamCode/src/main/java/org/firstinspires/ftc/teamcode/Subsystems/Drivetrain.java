@@ -100,6 +100,7 @@ public class Drivetrain extends SubsystemBase {
         yFilter.setProcessNoise(processNoise2);
         yFilter.setMeasurementNoise(measurementNoise2);
         follower.update();
+        cams.setMT2Orientation(follower.getPose());
         megaTagPose = cams.getPedro();
         fusedPose= getFusedPose(follower.getPose(), megaTagPose);
         //follower.setPose(fusedPose);

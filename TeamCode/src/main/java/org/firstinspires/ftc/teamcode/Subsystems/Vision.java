@@ -174,4 +174,10 @@ public class Vision extends SubsystemBase
     {
         return pedroPose;
     }
+
+    public void setMT2Orientation(Pose pose)
+    {
+        Pose transformed= pose.getAsCoordinateSystem(FTCCoordinates.INSTANCE);
+        cam.updateRobotOrientation(transformed.getHeading());
+    }
 }
