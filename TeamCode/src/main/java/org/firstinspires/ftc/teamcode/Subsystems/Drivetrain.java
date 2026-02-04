@@ -5,6 +5,8 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConst
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.processNoise;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.processNoise2;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.startPose;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.blueGoal;
+import static org.firstinspires.ftc.teamcode.Utilities.Constants.TurretConstants.redGoal;
 
 import com.pedropathing.control.KalmanFilter;
 import com.pedropathing.follower.Follower;
@@ -50,6 +52,8 @@ public class Drivetrain extends SubsystemBase {
     public static Pose startPose = new Pose(0, 0, 0);
     private Pose megaTagPose = new Pose(0, 0, 0);
     private Pose fusedPose= new Pose(0,0,0);
+
+    private double distance=0;
 
     private final KalmanFilter xFilter;
     private final KalmanFilter yFilter;
@@ -196,6 +200,22 @@ public class Drivetrain extends SubsystemBase {
         public void stopPark()
         {
             park.setPower(0);
+        }
+
+        public void calcDistance(Maelstrom.Alliance color)
+        {
+            double x;
+            double y;
+            if(color.equals(Maelstrom.Alliance.BLUE)) {
+                x = Math.pow(follower.getPose().getX() - blueGoal.getX(),2);
+                y = Math.pow(follower.getPose().getY() - blueGoal.getY(),2);
+            }
+            else
+            {
+                x = Math.pow(follower.getPose().getX() - redGoal.getX(),2);
+                y = Math.pow(follower.getPose().getY() - redGoal.getY(),2);
+            }
+            distance= Math.sqrt(x+y);
         }
 
         private static class KalmanFilter {
