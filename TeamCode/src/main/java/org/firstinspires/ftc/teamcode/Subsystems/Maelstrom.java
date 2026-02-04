@@ -36,6 +36,7 @@ public class Maelstrom extends Robot
     public GamepadEx driver2;
     private Telemetry telemetry;
     private int transferState=-1;
+    private int closeState=-1;
     private Timer tTimer;
     private PathChain redPark;
     private PathChain bluePark;
@@ -69,7 +70,8 @@ public class Maelstrom extends Robot
         turret.periodic();
         turret.getTargetAngle(cams.getTargetX(),cams.targetPresent());
         aimTurretWithPose();
-        transferAndShoot();
+        farTransferAndShoot();
+        closeTransferAndShoot();
     }
 
     @Override
@@ -96,7 +98,10 @@ public class Maelstrom extends Robot
 
         //turret.turretWithManualLimits(-driver2.getLeftX());
 
-
+        if(driver2.getButton(GamepadKeys.Button.A))
+        {
+            startCloseTransfer();
+        }
         if(driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
             startTransfer();
@@ -228,16 +233,76 @@ public class Maelstrom extends Robot
         transferState=x;
         tTimer.resetTimer();
     }
+
+    private void setCloseState(int x)
+    {
+        closeState=x;
+        tTimer.resetTimer();
+    }
     private void startTransfer()
     {
         setState(1);
     }
+    private void startCloseTransfer()
+    {
+        setCloseState(1);
+    }
     private void cancelTransfer()
     {
         setState(-1);
+        setCloseState(-1);
     }
 
-    private void transferAndShoot()
+    private void closeTransferAndShoot()
+    {
+        switch(closeState)
+        {
+            case 1:
+                if(tTimer.getElapsedTimeSeconds()>0.1)
+                {
+                    intake.kickerUp();
+                    setCloseState(2);
+                }
+                break;
+            case 2:
+                if(tTimer.getElapsedTimeSeconds()>0.15)
+                {
+                    intake.setPower(1);
+                    setCloseState(3);
+                }
+                break;
+            case 3:
+                if(tTimer.getElapsedTimeSeconds()>.8)
+                {
+                    setCloseState(4);
+                }
+                break;
+            case 4:
+                if(tTimer.getElapsedTimeSeconds()>.3 || intake.ballReady())
+                {
+                    setCloseState(5);
+                }
+                break;
+            case 5:
+                if(tTimer.getElapsedTimeSeconds()>0.1)
+                {
+                    intake.kicker2Up();
+                    setCloseState(6);
+                }
+                break;
+            case 6:
+                if(tTimer.getElapsedTimeSeconds()>0.25)
+                {
+                    intake.kicker2down();
+                    intake.stop();
+                    intake.kickerDown();
+                    setCloseState(-1);
+                }
+                break;
+        }
+    }
+
+    private void farTransferAndShoot()
     {
         switch(transferState)
         {

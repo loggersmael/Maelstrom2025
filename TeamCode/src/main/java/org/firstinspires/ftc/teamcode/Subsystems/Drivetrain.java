@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConst
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.processNoise2;
 import static org.firstinspires.ftc.teamcode.Utilities.Constants.DrivetrainConstants.startPose;
 
+import com.pedropathing.control.KalmanFilter;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.localization.Localizer;
