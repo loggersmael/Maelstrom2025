@@ -24,7 +24,7 @@ public class FarShootCommand extends SequentialCommandGroup
                 //new InstantCommand(intake::stop),
                 new InstantCommand(intake::kickerUp),
                 new WaitCommand(200),
-                new InstantCommand(()->intake.setPower(0.8)),
+                new InstantCommand(()->intake.setPower(0.7)),
                 new WaitCommand(500),
                 new WaitUntilCommand(intake::ballReady).withTimeout(300),
                 new WaitCommand(50),

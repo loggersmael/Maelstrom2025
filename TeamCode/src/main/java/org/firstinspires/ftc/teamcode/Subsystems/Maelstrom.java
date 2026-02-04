@@ -251,18 +251,18 @@ public class Maelstrom extends Robot
             case 2:
                 if(tTimer.getElapsedTimeSeconds()>0.15)
                 {
-                    intake.spinIn();
+                    intake.setPower(0.7);
                     setState(3);
                 }
                 break;
             case 3:
-                if(tTimer.getElapsedTimeSeconds()>1.5)
+                if(tTimer.getElapsedTimeSeconds()>.8)
                 {
                     setState(4);
                 }
                 break;
             case 4:
-                if(tTimer.getElapsedTimeSeconds()>1 || intake.ballReady())
+                if(tTimer.getElapsedTimeSeconds()>.3 || intake.ballReady())
                 {
                     setState(5);
                 }

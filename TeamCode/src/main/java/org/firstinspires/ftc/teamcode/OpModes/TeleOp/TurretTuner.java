@@ -25,11 +25,11 @@ public class TurretTuner extends OpMode
         robot.periodic();
         if(gamepad1.right_bumper)
         {
-            robot.turret.setManualAngle(-50);
+            robot.turret.setManualAngle(-70);
         }
         if(gamepad1.left_bumper)
         {
-            robot.turret.setManualAngle(0);
+            robot.turret.setManualAngle(70);
         }
         telemetry.update();
     }

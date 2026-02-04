@@ -20,7 +20,7 @@ public class TurretConstants
 
     public static double sP= 0.04; //0.04;
     public static double sI=0;
-    public static double sD=0.00275;
+    public static double sD=0.002;
     public static double sF=0;
 
     public static double fS=0.1;
@@ -35,6 +35,6 @@ public class TurretConstants
 
     public static double angleTolerance=2;
 
-    public static Pose blueGoal= new Pose(6,138);
-    public static Pose redGoal= new Pose(138,138);
+    public static Pose blueGoal= new Pose(9,138);
+    public static Pose redGoal= blueGoal.mirror();
 }

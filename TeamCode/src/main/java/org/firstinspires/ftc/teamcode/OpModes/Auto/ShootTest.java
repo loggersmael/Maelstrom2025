@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.Commands.FarShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.FinalShootCommand;
 import org.firstinspires.ftc.teamcode.Commands.ShootCommandV2;
 import org.firstinspires.ftc.teamcode.Commands.ShootWithSensor;
@@ -21,14 +22,14 @@ public class ShootTest extends CommandOpMode
     public void initialize()
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
-        robot.shooter.setTargetVelocity(1600);
+        robot.shooter.setTargetVelocity(2100);
 
         schedule(
                 new SequentialCommandGroup(
                         new WaitUntilCommand(this::opModeIsActive),
                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                         new WaitCommand(2000),
-                        new ShootCommandV2(robot)
+                        new FarShootCommand(robot)
                 )
         );
     }

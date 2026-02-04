@@ -18,8 +18,8 @@ public class ShooterConstants
     public static double transferEfficiency=0.8;
     public static double wheelRadius=0;
     public static double closeVelocity=1400;
-    public static double farVelocity=2300;
-    public static double midVelocity=1650;
+    public static double farVelocity=2200;
+    public static double midVelocity=1700;
     public static double velocityTolerance=40;
 
     public static double kP=0.003;
