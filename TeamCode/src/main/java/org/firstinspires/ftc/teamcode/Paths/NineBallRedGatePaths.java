@@ -21,7 +21,7 @@ public class NineBallRedGatePaths
                         new BezierLine(
                                 new Pose(25.500, 129.000).mirror(),
 
-                                new Pose(58.300, 85.000).mirror()
+                                new Pose(58.300, 85.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(37), Math.toRadians(0))
 
@@ -30,9 +30,9 @@ public class NineBallRedGatePaths
         Pickup1 = follower.pathBuilder().addPath(
                         new BezierCurve(
                                 new Pose(58.300, 85.000).mirror(),
-                                new Pose(55.700, 58.400).mirror(),
-                                new Pose(43.200, 56.000).mirror(),
-                                new Pose(5.000, 55.000).mirror()
+                                new Pose(56.225, 56.000).mirror(),
+                                new Pose(44.600, 57.275).mirror(),
+                                new Pose(14.000, 57.000).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
 
@@ -40,8 +40,8 @@ public class NineBallRedGatePaths
 
         Gate = follower.pathBuilder().addPath(
                         new BezierCurve(
-                                new Pose(5.000, 54.000).mirror(),
-                                new Pose(30.366, 56.936).mirror(),
+                                new Pose(14.000, 57.000).mirror(),
+                                new Pose(33.865, 61.485).mirror(),
                                 new Pose(18.000, 70.513).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
@@ -82,7 +82,7 @@ public class NineBallRedGatePaths
                         new BezierLine(
                                 new Pose(58.300, 85.000).mirror(),
 
-                                new Pose(38.000, 85.000).mirror()
+                                new Pose(34.000, 85.000).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
 

@@ -29,9 +29,9 @@ public class NineBallBlueGatePaths {
         Pickup1 = follower.pathBuilder().addPath(
                         new BezierCurve(
                                 new Pose(58.300, 85.000),
-                                new Pose(55.700, 58.400),
-                                new Pose(43.200, 56.000),
-                                new Pose(5.000, 55.000)
+                                new Pose(56.225, 56.000),
+                                new Pose(44.600, 57.275),
+                                new Pose(14.000, 57.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
@@ -39,8 +39,8 @@ public class NineBallBlueGatePaths {
 
         Gate = follower.pathBuilder().addPath(
                         new BezierCurve(
-                                new Pose(5.000, 54.000),
-                                new Pose(30.366, 56.936),
+                                new Pose(14.000, 57.000),
+                                new Pose(33.865, 61.485),
                                 new Pose(18.000, 70.513)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
@@ -81,7 +81,7 @@ public class NineBallBlueGatePaths {
                         new BezierLine(
                                 new Pose(58.300, 85.000),
 
-                                new Pose(38.000, 85.000)
+                                new Pose(34.000, 85.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
