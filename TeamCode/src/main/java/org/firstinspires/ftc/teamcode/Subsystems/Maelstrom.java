@@ -38,6 +38,7 @@ public class Maelstrom extends Robot
     private int transferState=-1;
     private int closeState=-1;
     private Timer tTimer;
+    private Timer cTimer;
     private PathChain redPark;
     private PathChain bluePark;
     private static Pose blueZone= new Pose(105.3,33,Math.toRadians(0));
@@ -56,6 +57,7 @@ public class Maelstrom extends Robot
         driver1= new GamepadEx(d1);
         driver2= new GamepadEx(d2);
         tTimer=new Timer();
+        cTimer= new Timer();
         this.color=color;
         register(dt,intake,shooter,turret,cams);
     }
@@ -237,7 +239,7 @@ public class Maelstrom extends Robot
     private void setCloseState(int x)
     {
         closeState=x;
-        tTimer.resetTimer();
+        cTimer.resetTimer();
     }
     private void startTransfer()
     {
