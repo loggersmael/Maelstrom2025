@@ -53,7 +53,7 @@ public class Drivetrain extends SubsystemBase {
     private Pose megaTagPose = new Pose(0, 0, 0);
     private Pose fusedPose= new Pose(0,0,0);
 
-    private double distance=0;
+    public double distance=0;
 
     private final KalmanFilter xFilter;
     private final KalmanFilter yFilter;
@@ -109,6 +109,7 @@ public class Drivetrain extends SubsystemBase {
         telemetry.addData("Drivetrain Heading", follower.getPose().getHeading());
         telemetry.addData("Fused X: ", fusedPose.getX());
         telemetry.addData("Fused Y: ", fusedPose.getY());
+        telemetry.addData("Odo Distance: ", distance);
         long totalTime = System.nanoTime() - startTime;
         telemetry.addData("Loop Time: ", totalTime / 1000000);
     }

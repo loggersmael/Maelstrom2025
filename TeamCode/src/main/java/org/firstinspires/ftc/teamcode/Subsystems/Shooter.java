@@ -63,14 +63,14 @@ public class Shooter extends SubsystemBase {
         table.add(37,1400);
         table.add(42.5,1500);
         table.add(70.5,1700);
-        table.add(149,2250);
+        table.add(149,2150);
         table.createLUT();
 
         hoodTable = new InterpLUT();
         hoodTable.add(1000,0);
         hoodTable.add(1400,0.1);
         hoodTable.add(1600,0.45);
-        hoodTable.add(2250,0.86);
+        hoodTable.add(2150,0.86);
         hoodTable.createLUT();
 
 

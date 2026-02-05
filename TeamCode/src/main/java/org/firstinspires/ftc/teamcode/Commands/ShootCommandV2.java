@@ -21,7 +21,7 @@ public class ShootCommandV2 extends SequentialCommandGroup
         addCommands(
                 //new InstantCommand(intake::slowSpinOut),
                 //new WaitCommand(50),
-                //new InstantCommand(intake::stop),
+                new InstantCommand(intake::stop),
                 new InstantCommand(intake::kickerUp),
                 new WaitCommand(200),
                 new InstantCommand(intake::spinIn),

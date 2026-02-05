@@ -20,7 +20,7 @@ public class Constants {
             .mass(13.3047714)
             .forwardZeroPowerAcceleration(-35.7065)
             .lateralZeroPowerAcceleration(-56)
-            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(0.175, 0.053053893736843306, 0.0023581200572454666))
+            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(0.2, 0.053053893736843306, 0.0023581200572454666))
             .translationalPIDFCoefficients(new PIDFCoefficients(0.15, 0, 0.02, 0))
             .useSecondaryTranslationalPIDF(false)
             .secondaryTranslationalPIDFCoefficients(new PIDFCoefficients(0.3,0,0.04,0.015))

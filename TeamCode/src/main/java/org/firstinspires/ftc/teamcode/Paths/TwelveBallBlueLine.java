@@ -1,23 +1,25 @@
 package org.firstinspires.ftc.teamcode.Paths;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-public class TwelveBallBluePaths
-{
+public class TwelveBallBlueLine {
     public PathChain Start;
     public PathChain Pickup1;
+    public PathChain Pickup12;
     public PathChain Gate;
+    public PathChain Gate2;
     public PathChain Return1;
+    public PathChain Return12;
     public PathChain Pickup2;
     public PathChain Return2;
     public PathChain Pickup3;
+    public PathChain Pickup32;
     public PathChain Return3;
 
-    public TwelveBallBluePaths(Follower follower) {
+    public TwelveBallBlueLine(Follower follower) {
         Start = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(25.500, 129.000),
@@ -29,30 +31,59 @@ public class TwelveBallBluePaths
                 .build();
 
         Pickup1 = follower.pathBuilder().addPath(
-                        new BezierCurve(
+                        new BezierLine(
                                 new Pose(58.300, 85.000),
-                                new Pose(56.225, 56.000),
-                                new Pose(44.600, 57.275),
-                                new Pose(12.000, 57.000)
+
+                                new Pose(43.417, 60.000)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Pickup12 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(43.417, 60.000),
+
+                                new Pose(10.000, 59.288)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
                 .build();
 
         Gate = follower.pathBuilder().addPath(
-                        new BezierCurve(
-                                new Pose(12.000, 57.000),
-                                new Pose(36.315, 62.185),
-                                new Pose(18.000, 70.513)
+                        new BezierLine(
+                                new Pose(10.000, 59.288),
+
+                                new Pose(23.723, 60.731)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Gate2 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(23.723, 60.731),
+
+                                new Pose(15.138, 70.165)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
                 .build();
 
         Return1 = follower.pathBuilder().addPath(
-                        new BezierCurve(
-                                new Pose(18.000, 70.513),
-                                new Pose(62.000, 70.000),
+                        new BezierLine(
+                                new Pose(15.138, 70.165),
+
+                                new Pose(39.048, 71.478)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Return12 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(39.048, 71.478),
+
                                 new Pose(58.300, 85.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
@@ -80,23 +111,34 @@ public class TwelveBallBluePaths
                 .build();
 
         Pickup3 = follower.pathBuilder().addPath(
-                        new BezierCurve(
+                        new BezierLine(
                                 new Pose(58.300, 85.000),
-                                new Pose(57.000, 38.700),
-                                new Pose(65.400, 33.800),
-                                new Pose(12.000, 34.000)
+
+                                new Pose(43.180, 36.610)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Pickup32 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(43.180, 36.610),
+
+                                new Pose(11, 35.627)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
                 .build();
 
         Return3 = follower.pathBuilder().addPath(
-                        new BezierCurve(
-                                new Pose(12.000, 34.000),
-                                new Pose(58.090, 32.019),
+                        new BezierLine(
+                                new Pose(11, 35.627),
+
                                 new Pose(57.000, 107.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
     }
 }
+
+

@@ -66,7 +66,7 @@ public class Maelstrom extends Robot
     {
         dt.periodic();
         cams.periodic();
-        shooter.updateDistance(cams.distance);
+        shooter.updateDistance(dt.distance);
         intake.periodic();
         shooter.periodic();
         turret.periodic();
@@ -74,6 +74,9 @@ public class Maelstrom extends Robot
         aimTurretWithPose();
         farTransferAndShoot();
         closeTransferAndShoot();
+        dt.calcDistance(color);
+        telemetry.addData("Close Transfer State: ", closeState);
+        telemetry.addData("Far Transfer State: ", transferState);
     }
 
     @Override
@@ -100,7 +103,7 @@ public class Maelstrom extends Robot
 
         //turret.turretWithManualLimits(-driver2.getLeftX());
 
-        if(driver2.getButton(GamepadKeys.Button.A))
+        if(driver2.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
         {
             startCloseTransfer();
         }
@@ -108,7 +111,7 @@ public class Maelstrom extends Robot
         {
             startTransfer();
         }
-        if(driver1.getButton(GamepadKeys.Button.LEFT_BUMPER))
+        if(driver1.getButton(GamepadKeys.Button.LEFT_BUMPER) || driver2.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON))
         {
             cancelTransfer();
         }
@@ -142,7 +145,7 @@ public class Maelstrom extends Robot
             shooter.shootMid();
         }
 
-        if(transferState==-1) {
+        if(transferState==-1 && closeState==-1) {
             if (driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5)
             {
                 intake.spinOut();
@@ -260,40 +263,40 @@ public class Maelstrom extends Robot
         switch(closeState)
         {
             case 1:
-                if(tTimer.getElapsedTimeSeconds()>0.1)
+                if(cTimer.getElapsedTimeSeconds()>0.1)
                 {
                     intake.kickerUp();
                     setCloseState(2);
                 }
                 break;
             case 2:
-                if(tTimer.getElapsedTimeSeconds()>0.15)
+                if(cTimer.getElapsedTimeSeconds()>0.15)
                 {
                     intake.setPower(1);
                     setCloseState(3);
                 }
                 break;
             case 3:
-                if(tTimer.getElapsedTimeSeconds()>.8)
+                if(cTimer.getElapsedTimeSeconds()>.8)
                 {
                     setCloseState(4);
                 }
                 break;
             case 4:
-                if(tTimer.getElapsedTimeSeconds()>.3 || intake.ballReady())
+                if(cTimer.getElapsedTimeSeconds()>.3 || intake.ballReady())
                 {
                     setCloseState(5);
                 }
                 break;
             case 5:
-                if(tTimer.getElapsedTimeSeconds()>0.1)
+                if(cTimer.getElapsedTimeSeconds()>0.1)
                 {
                     intake.kicker2Up();
                     setCloseState(6);
                 }
                 break;
             case 6:
-                if(tTimer.getElapsedTimeSeconds()>0.25)
+                if(cTimer.getElapsedTimeSeconds()>0.25)
                 {
                     intake.kicker2down();
                     intake.stop();
