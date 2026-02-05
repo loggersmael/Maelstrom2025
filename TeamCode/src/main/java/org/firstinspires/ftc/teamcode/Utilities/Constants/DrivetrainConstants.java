@@ -20,8 +20,8 @@ public class DrivetrainConstants
     public static Pose redFlyReset= new Pose(72,72,Math.toRadians(0));
     public static Pose blueFlyReset= redFlyReset.mirror();
 
-    public static double processNoise=0.2;
-    public static double measurementNoise=0.5;
+    public static double processNoise=0.15;
+    public static double measurementNoise=0.6;
     public static double processNoise2=0.2;
     public static double measurementNoise2=0.5;
 }
