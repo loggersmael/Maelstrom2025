@@ -39,11 +39,19 @@ public class Maelstrom extends Robot
     private int closeState=-1;
     private Timer tTimer;
     private Timer cTimer;
-    private PathChain redPark;
-    private PathChain bluePark;
-    private static Pose blueZone= new Pose(105.3,33,Math.toRadians(0));
-    private static Pose redZone= blueZone.mirror();
+    //private PathChain redPark;
+    //private PathChain bluePark;
+    private static Pose blueCorner1= new Pose(99,40,Math.toRadians(315));
+    private static Pose redCorner1= blueCorner1.mirror();
 
+    private static Pose blueCorner2= new Pose(112,40,Math.toRadians(315));
+    private static Pose redCorner2= blueCorner2.mirror();
+
+    private static Pose blueCorner3= new Pose(99,26,Math.toRadians(45));
+    private static Pose redCorner3= blueCorner3.mirror();
+
+    private static Pose blueCorner4= new Pose(112,26,Math.toRadians(135));
+    private static Pose redCorner4= blueCorner4.mirror();
 
     public Maelstrom(HardwareMap hMap, Telemetry telemetry, Alliance color, Gamepad d1, Gamepad d2)
     {
@@ -199,6 +207,24 @@ public class Maelstrom extends Robot
             }
         }
 
+        if(driver1.getButton(GamepadKeys.Button.DPAD_UP))
+        {
+            park1();
+        }
+        if(driver1.getButton(GamepadKeys.Button.DPAD_RIGHT))
+        {
+            park2();
+        }
+        if(driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
+        {
+            park3();
+        }
+        if(driver1.getButton(GamepadKeys.Button.DPAD_LEFT))
+        {
+            park4();
+        }
+
+        /*
         if(driver1.getButton(GamepadKeys.Button.DPAD_DOWN))
         {
             shooter.setHoodServo(0);
@@ -212,6 +238,8 @@ public class Maelstrom extends Robot
         {
             shooter.shootAutoVelocity();
         }
+         */
+
         if(driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)>0.5)
         {
             shooter.shootAutoVelocity();
@@ -356,11 +384,11 @@ public class Maelstrom extends Robot
         }
     }
 
-    private void park()
+    private void park1()
     {
         if(color.equals(Alliance.BLUE))
         {
-            bluePark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),blueZone)).setConstantHeadingInterpolation(0).build();
+            PathChain bluePark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),blueCorner1)).setLinearHeadingInterpolation(dt.follower.getHeading(), blueCorner1.getHeading()).build();
             if(!dt.follower.isBusy())
             {
                 dt.follower.followPath(bluePark,true);
@@ -368,7 +396,70 @@ public class Maelstrom extends Robot
         }
         else if(color.equals(Alliance.RED))
         {
-            redPark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),redZone)).setConstantHeadingInterpolation(0).build();
+            PathChain redPark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),redCorner1)).setLinearHeadingInterpolation(dt.follower.getHeading(), redCorner1.getHeading()).build();
+            if(!dt.follower.isBusy())
+            {
+                dt.follower.followPath(redPark,true);
+            }
+        }
+
+    }
+
+    private void park2()
+    {
+        if(color.equals(Alliance.BLUE))
+        {
+            PathChain bluePark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),blueCorner2)).setLinearHeadingInterpolation(dt.follower.getHeading(), blueCorner2.getHeading()).build();
+            if(!dt.follower.isBusy())
+            {
+                dt.follower.followPath(bluePark,true);
+            }
+        }
+        else if(color.equals(Alliance.RED))
+        {
+            PathChain redPark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),redCorner2)).setLinearHeadingInterpolation(dt.follower.getHeading(), redCorner2.getHeading()).build();
+            if(!dt.follower.isBusy())
+            {
+                dt.follower.followPath(redPark,true);
+            }
+        }
+
+    }
+
+    private void park3()
+    {
+        if(color.equals(Alliance.BLUE))
+        {
+            PathChain bluePark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),blueCorner3)).setLinearHeadingInterpolation(dt.follower.getHeading(), blueCorner3.getHeading()).build();
+            if(!dt.follower.isBusy())
+            {
+                dt.follower.followPath(bluePark,true);
+            }
+        }
+        else if(color.equals(Alliance.RED))
+        {
+            PathChain redPark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),redCorner3)).setLinearHeadingInterpolation(dt.follower.getHeading(), redCorner3.getHeading()).build();
+            if(!dt.follower.isBusy())
+            {
+                dt.follower.followPath(redPark,true);
+            }
+        }
+
+    }
+
+    private void park4()
+    {
+        if(color.equals(Alliance.BLUE))
+        {
+            PathChain bluePark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),blueCorner4)).setLinearHeadingInterpolation(dt.follower.getHeading(), blueCorner4.getHeading()).build();
+            if(!dt.follower.isBusy())
+            {
+                dt.follower.followPath(bluePark,true);
+            }
+        }
+        else if(color.equals(Alliance.RED))
+        {
+            PathChain redPark= dt.follower.pathBuilder().addPath(new BezierLine(dt.follower.getPose(),redCorner4)).setLinearHeadingInterpolation(dt.follower.getHeading(), redCorner4.getHeading()).build();
             if(!dt.follower.isBusy())
             {
                 dt.follower.followPath(redPark,true);
