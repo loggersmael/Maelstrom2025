@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.Commands.FollowPath;
 import org.firstinspires.ftc.teamcode.Commands.ShootCommandV2;
 import org.firstinspires.ftc.teamcode.Paths.FarNineBallBluePaths;
 import org.firstinspires.ftc.teamcode.Paths.FarNineBallRedPaths;
+import org.firstinspires.ftc.teamcode.Paths.FarNineBallRedPathsV2;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
 @Autonomous
@@ -23,7 +25,7 @@ public class NineBallFarRed extends CommandOpMode
 {
     private Maelstrom robot;
     private Follower follower;
-    private FarNineBallRedPaths paths;
+    private FarNineBallRedPathsV2 paths;
 
     @Override
     public void initialize()
@@ -32,7 +34,7 @@ public class NineBallFarRed extends CommandOpMode
         follower=robot.dt.follower;
         follower.setStartingPose(new Pose(56,9,Math.toRadians(180)).mirror());
         robot.shooter.setTargetVelocity(2000);
-        paths= new FarNineBallRedPaths(follower);
+        paths= new FarNineBallRedPathsV2(follower);
 
         schedule(
                 new WaitUntilCommand(this::opModeIsActive),
@@ -43,28 +45,46 @@ public class NineBallFarRed extends CommandOpMode
                                 new InstantCommand(() -> robot.shooter.enableFlywheel()),
                                 new InstantCommand(() -> robot.turret.setPointMode()),
                                 new InstantCommand(() -> robot.turret.setManualAngle(72)),
-                                new FollowPathCommand(follower,paths.Path1,true)
+                                new FollowPathCommand(follower,paths.Start,true)
                         ),
                         new WaitCommand(500),
                         new ShootCommandV2(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
-                        new FollowPath(robot,paths.Path2,true,1).withTimeout(2500),
-                        new WaitCommand(750),
+                        new FollowPath(robot,paths.Pickup1,true,1).withTimeout(2500),
+                        new FollowPathCommand(follower,paths.Pickup12,false).withTimeout(1000),
+                        new WaitCommand(500),
+                        new FollowPathCommand(follower,paths.Pickup13,false),
+                        new FollowPathCommand(follower,paths.Pickup14,false).withTimeout(1000),
+                        new WaitCommand(500),
                         new InstantCommand(() -> robot.intake.idle()),
-                        new FollowPathCommand(follower,paths.Path3),
+                        new FollowPathCommand(follower,paths.Return1),
                         new InstantCommand(() -> robot.intake.stop()),
                         new ShootCommandV2(robot),
                         new InstantCommand(() -> robot.intake.spinIn()),
-                        new FollowPath(robot,paths.Path4,false,1).withTimeout(3000),
-                        new WaitCommand(750),
+                        new FollowPath(robot,paths.Pickup2,false,1),
+                        new FollowPathCommand(follower,paths.Pickup22,true).withTimeout(2500),
+                        new WaitCommand(500),
                         new InstantCommand(() -> robot.intake.idle()),
-                        new FollowPathCommand(follower,paths.Path5),
+                        new FollowPathCommand(follower,paths.Return2),
                         new ShootCommandV2(robot),
-                        new FollowPathCommand(follower,paths.Path6),
+                        new FollowPathCommand(follower,paths.Leave),
                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                         new InstantCommand(() -> robot.turret.setManualAngle(0)),
                         new InstantCommand(() -> robot.reset())
                 )
         );
+    }
+
+    @Override
+    public void end()
+    {
+        if(robot!=null)
+        {
+            for (int i=0; i<150; i++)
+            {
+                robot.dt.follower.update();
+            }
+            Drivetrain.startPose=robot.dt.follower.getPose();
+        }
     }
 }

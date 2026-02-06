@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.Commands.ShootWithSensor;
 import org.firstinspires.ftc.teamcode.Paths.FarSixBallBluePaths;
 import org.firstinspires.ftc.teamcode.Paths.FarSixBallRedPaths;
 import org.firstinspires.ftc.teamcode.Paths.NineBallBluePaths2;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
 @Autonomous(name="SixBallFarRed")
@@ -65,5 +66,18 @@ public class SixBallFarRed extends CommandOpMode
                         new InstantCommand(() -> robot.reset())
                 )
         );
+    }
+
+    @Override
+    public void end()
+    {
+        if(robot!=null)
+        {
+            for (int i=0; i<150; i++)
+            {
+                robot.dt.follower.update();
+            }
+            Drivetrain.startPose=robot.dt.follower.getPose();
+        }
     }
 }

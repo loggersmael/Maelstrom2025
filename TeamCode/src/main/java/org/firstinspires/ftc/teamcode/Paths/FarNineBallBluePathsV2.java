@@ -10,78 +10,114 @@ public class FarNineBallBluePathsV2
 {
     public PathChain Start;
     public PathChain Pickup1;
+    public PathChain Pickup12;
+    public PathChain Pickup13;
+    public PathChain Pickup14;
     public PathChain Return1;
     public PathChain Pickup2;
+    public PathChain Pickup22;
     public PathChain Return2;
     public PathChain Leave;
 
     public FarNineBallBluePathsV2(Follower follower) {
-        Start = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(56.000, 9.000), new Pose(56.000, 18.000))
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
-                .build();
+        Start = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(56.000, 9.000),
 
-        Pickup1 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(56.000, 18.000),
-                                new Pose(9.600, 27.000),
-                                new Pose(11.700, 21.000),
-                                new Pose(7.900, 6.500)
-                        )
-                )
-                .setTangentHeadingInterpolation()
-                .build();
-
-        Return1 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(7.900, 6.500),
-                                new Pose(13.100, 34.500),
-                                new Pose(20.600, 19.600),
                                 new Pose(56.000, 18.000)
                         )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(255), Math.toRadians(180))
-                .setReversed()
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
                 .build();
 
-        Pickup2 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierCurve(
+        Pickup1 = follower.pathBuilder().addPath(
+                        new BezierLine(
                                 new Pose(56.000, 18.000),
-                                new Pose(57.000, 42.500),
-                                new Pose(44.000, 37.000),
-                                new Pose(7.800, 38.000)
+
+                                new Pose(15.574, 9.000)
                         )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
                 .build();
 
-        Return2 = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(7.800, 38.000),
-                                new Pose(55.000, 39.000),
+        Pickup12 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(15.574, 9.000),
+
+                                new Pose(8.500, 8.500)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Pickup13 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(8.500, 8.500),
+
+                                new Pose(15.490, 8.500)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Pickup14 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(15.490, 8.500),
+
+                                new Pose(8.500, 8.500)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Return1 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(8.500, 8.500),
+
                                 new Pose(56.000, 18.000)
                         )
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
                 .build();
 
-        Leave = follower
-                .pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(56.000, 18.000), new Pose(43.000, 18.000))
-                )
-                .setConstantHeadingInterpolation(Math.toRadians(180))
+        Pickup2 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(56.000, 18.000),
+
+                                new Pose(46.371, 35.591)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Pickup22 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(46.371, 35.591),
+
+                                new Pose(7.800, 36.102)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Return2 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(7.800, 36.102),
+
+                                new Pose(56.000, 18.000)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Leave = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(56.000, 18.000),
+
+                                new Pose(43.000, 18.000)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
                 .build();
     }
 }

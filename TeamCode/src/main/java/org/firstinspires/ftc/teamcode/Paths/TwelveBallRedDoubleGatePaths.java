@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.Paths;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-public class NineBallRedGatePaths
+public class TwelveBallRedDoubleGatePaths
 {
     public PathChain Start;
     public PathChain Pickup1;
@@ -16,10 +15,14 @@ public class NineBallRedGatePaths
     public PathChain Return1;
     public PathChain Return12;
     public PathChain Pickup2;
+    public PathChain Gate21;
+    public PathChain Gate22;
     public PathChain Return2;
-    public PathChain Leave;
+    public PathChain Pickup3;
+    public PathChain Pickup32;
+    public PathChain Return3;
 
-    public NineBallRedGatePaths(Follower follower) {
+    public TwelveBallRedDoubleGatePaths(Follower follower) {
         Start = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(25.500, 129.000).mirror(),
@@ -100,9 +103,29 @@ public class NineBallRedGatePaths
 
                 .build();
 
-        Return2 = follower.pathBuilder().addPath(
+        Gate21 = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(18.000, 84.000).mirror(),
+
+                                new Pose(23.271, 70.513).mirror()
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(0))
+
+                .build();
+
+        Gate22 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(23.271, 70.513).mirror(),
+
+                                new Pose(15.100, 70.200).mirror()
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(0))
+
+                .build();
+
+        Return2 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(15.100, 70.200).mirror(),
 
                                 new Pose(58.300, 85.000).mirror()
                         )
@@ -110,14 +133,33 @@ public class NineBallRedGatePaths
 
                 .build();
 
-        Leave = follower.pathBuilder().addPath(
+        Pickup3 = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(58.300, 85.000).mirror(),
 
-                                new Pose(36.079, 84.553).mirror()
+                                new Pose(43.180, 36.610).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
 
+                .build();
+
+        Pickup32 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(43.180, 36.610).mirror(),
+
+                                new Pose(13.912, 35.627).mirror()
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(0))
+
+                .build();
+
+        Return3 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(13.912, 35.627).mirror(),
+
+                                new Pose(57.000, 107.000).mirror()
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
     }
 }

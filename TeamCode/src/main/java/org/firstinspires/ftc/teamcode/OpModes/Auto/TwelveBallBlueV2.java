@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.Commands.ShootCommandV2;
 import org.firstinspires.ftc.teamcode.Paths.NineBallBluePaths2;
 import org.firstinspires.ftc.teamcode.Paths.TwelveBallBlueLine;
 import org.firstinspires.ftc.teamcode.Paths.TwelveBallBluePaths;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
 @Autonomous(name="TwelveBallBlueV2")
@@ -57,7 +58,7 @@ public class TwelveBallBlueV2 extends CommandOpMode
                                 new WaitCommand(200),
                                 new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPathCommand(follower,paths.Gate,true),
-                                new FollowPathCommand(follower,paths.Gate2,true),
+                                new FollowPathCommand(follower,paths.Gate2,true).withTimeout(1000),
                                 new WaitCommand(50),
                                 new FollowPathCommand(follower,paths.Return1,false),
                                 new FollowPathCommand(follower,paths.Return12,true),
@@ -91,6 +92,13 @@ public class TwelveBallBlueV2 extends CommandOpMode
     @Override
     public void end()
     {
-
+        if(robot!=null)
+        {
+            for (int i=0; i<150; i++)
+            {
+                robot.dt.follower.update();
+            }
+            Drivetrain.startPose=robot.dt.follower.getPose();
+        }
     }
 }

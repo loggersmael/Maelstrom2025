@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Paths.NineBallBluePaths2;
 import org.firstinspires.ftc.teamcode.Paths.TwelveBallBlueLine;
 import org.firstinspires.ftc.teamcode.Paths.TwelveBallBluePaths;
 import org.firstinspires.ftc.teamcode.Paths.TwelveBallRedLine;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
 @Autonomous(name="TwelveBallRedV2")
@@ -92,6 +93,13 @@ public class TwelveBallRedV2 extends CommandOpMode
     @Override
     public void end()
     {
-
+        if(robot!=null)
+        {
+            for (int i=0; i<150; i++)
+            {
+                robot.dt.follower.update();
+            }
+            Drivetrain.startPose=robot.dt.follower.getPose();
+        }
     }
 }

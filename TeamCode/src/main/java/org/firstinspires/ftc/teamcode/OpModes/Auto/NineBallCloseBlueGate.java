@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Commands.FollowPath;
 import org.firstinspires.ftc.teamcode.Commands.ShootCommandV2;
 import org.firstinspires.ftc.teamcode.Paths.NineBallBlueGatePaths;
 import org.firstinspires.ftc.teamcode.Paths.TwelveBallBluePaths;
+import org.firstinspires.ftc.teamcode.Subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 
 @Autonomous(name="NineBallCloseBlueGate")
@@ -51,18 +52,21 @@ public class NineBallCloseBlueGate extends CommandOpMode
                                 new WaitCommand(50),
                                 new ShootCommandV2(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
-                                new FollowPath(robot,paths.Pickup1,true,0.8),
+                                new FollowPath(robot,paths.Pickup1,true,1),
+                                new FollowPathCommand(follower,paths.Pickup12,true).withTimeout(2500),
                                 new WaitCommand(600),
-                                new InstantCommand(() -> robot.intake.idle()),
-                                new FollowPathCommand(follower,paths.Gate,true),
+                                new InstantCommand(() -> robot.intake.stop()),
+                                new FollowPathCommand(follower,paths.Gate,false),
+                                new FollowPathCommand(follower,paths.Gate2,true).withTimeout(1000),
                                 new FollowPathCommand(follower,paths.Return1,true),
+                                new FollowPathCommand(follower,paths.Return12,true),
                                 new InstantCommand(robot.intake::stop),
                                 new WaitCommand(50),
                                 new ShootCommandV2(robot),
                                 new InstantCommand(() -> robot.intake.spinIn()),
-                                new FollowPath(robot,paths.Pickup2,true,0.8).withTimeout(2500),
+                                new FollowPath(robot,paths.Pickup2,true,1).withTimeout(2500),
                                 new WaitCommand(500),
-                                new InstantCommand(() -> robot.intake.idle()),
+                                new InstantCommand(() -> robot.intake.stop()),
                                 new FollowPath(robot,paths.Return2),
                                 new InstantCommand(() -> robot.intake.stop()),
                                 new ShootCommandV2(robot),
@@ -73,5 +77,18 @@ public class NineBallCloseBlueGate extends CommandOpMode
                         )
                 )
         );
+    }
+
+    @Override
+    public void end()
+    {
+        if(robot!=null)
+        {
+            for (int i=0; i<150; i++)
+            {
+                robot.dt.follower.update();
+            }
+            Drivetrain.startPose=robot.dt.follower.getPose();
+        }
     }
 }

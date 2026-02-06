@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.Paths;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-public class NineBallBlueGatePaths {
+public class TwelveBallBlueDoubleGatePaths
+{
     public PathChain Start;
     public PathChain Pickup1;
     public PathChain Pickup12;
@@ -15,10 +15,14 @@ public class NineBallBlueGatePaths {
     public PathChain Return1;
     public PathChain Return12;
     public PathChain Pickup2;
+    public PathChain Gate21;
+    public PathChain Gate22;
     public PathChain Return2;
-    public PathChain Leave;
+    public PathChain Pickup3;
+    public PathChain Pickup32;
+    public PathChain Return3;
 
-    public NineBallBlueGatePaths(Follower follower) {
+    public TwelveBallBlueDoubleGatePaths(Follower follower) {
         Start = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(25.500, 129.000),
@@ -99,9 +103,29 @@ public class NineBallBlueGatePaths {
 
                 .build();
 
-        Return2 = follower.pathBuilder().addPath(
+        Gate21 = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(18.000, 84.000),
+
+                                new Pose(23.271, 70.513)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Gate22 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(23.271, 70.513),
+
+                                new Pose(15.100, 70.200)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Return2 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(15.100, 70.200),
 
                                 new Pose(58.300, 85.000)
                         )
@@ -109,14 +133,33 @@ public class NineBallBlueGatePaths {
 
                 .build();
 
-        Leave = follower.pathBuilder().addPath(
+        Pickup3 = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(58.300, 85.000),
 
-                                new Pose(36.079, 84.553)
+                                new Pose(43.180, 36.610)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
+                .build();
+
+        Pickup32 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(43.180, 36.610),
+
+                                new Pose(13.912, 35.627)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
+
+                .build();
+
+        Return3 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(13.912, 35.627),
+
+                                new Pose(57.000, 107.000)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
     }
 }
