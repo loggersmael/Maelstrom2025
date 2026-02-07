@@ -41,16 +41,16 @@ public class Maelstrom extends Robot
     private Timer cTimer;
     //private PathChain redPark;
     //private PathChain bluePark;
-    private static Pose blueCorner1= new Pose(99,40,Math.toRadians(315));
+    private static Pose blueCorner1= new Pose(99,40,Math.toRadians(135));
     private static Pose redCorner1= blueCorner1.mirror();
 
-    private static Pose blueCorner2= new Pose(112,40,Math.toRadians(315));
+    private static Pose blueCorner2= new Pose(112,40,Math.toRadians(45));
     private static Pose redCorner2= blueCorner2.mirror();
 
-    private static Pose blueCorner3= new Pose(99,26,Math.toRadians(45));
+    private static Pose blueCorner3= new Pose(99,26,Math.toRadians(225));
     private static Pose redCorner3= blueCorner3.mirror();
 
-    private static Pose blueCorner4= new Pose(112,26,Math.toRadians(135));
+    private static Pose blueCorner4= new Pose(112,26,Math.toRadians(315));
     private static Pose redCorner4= blueCorner4.mirror();
 
     public Maelstrom(HardwareMap hMap, Telemetry telemetry, Alliance color, Gamepad d1, Gamepad d2)
@@ -263,6 +263,21 @@ public class Maelstrom extends Robot
         }
         else {
             dt.stopPark();
+        }
+
+        if(driver1.getButton(GamepadKeys.Button.X))
+        {
+            turret.setManualAngle(0);
+            turret.setPointMode();
+        }
+        if(driver1.getButton(GamepadKeys.Button.Y))
+        {
+            turret.startPoseTracking();
+        }
+
+        if(driver2.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON))
+        {
+            turret.setManualAngle(-90);
         }
     }
 
