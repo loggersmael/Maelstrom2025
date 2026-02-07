@@ -85,6 +85,7 @@ public class TwelveBallRedDoubleGate extends CommandOpMode
                                 new FollowPathCommand(follower,paths.Return3,true),
                                 new ShootCommandV2(robot),
                                 new ParallelCommandGroup(
+                                        new InstantCommand(()->robot.turret.setManualAngle(0)),
                                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                                         new InstantCommand(() -> robot.reset())
                                 )

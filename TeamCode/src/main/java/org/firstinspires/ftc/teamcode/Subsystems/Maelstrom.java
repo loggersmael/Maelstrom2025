@@ -100,6 +100,11 @@ public class Maelstrom extends Robot
     {
         dt.setMovementVectors(driver1.getLeftX(), driver1.getLeftY(), driver1.getRightX(), true,color);
 
+        if(Math.abs(driver1.getLeftX())>0 || Math.abs(driver1.getLeftY())>0 || Math.abs(driver1.getRightX())>0)
+        {
+            //dt.follower.breakFollowing();
+        }
+
         if(driver1.getButton(GamepadKeys.Button.TOUCHPAD))
         {
             dt.resetHeading(color);

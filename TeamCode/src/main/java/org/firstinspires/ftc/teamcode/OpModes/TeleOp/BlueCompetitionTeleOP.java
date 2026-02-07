@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Subsystems.Maelstrom;
 import org.firstinspires.ftc.teamcode.Subsystems.Turret;
+import org.firstinspires.ftc.teamcode.Utilities.Storage;
 
 @TeleOp(name="BlueCompetitionTeleOP")
 public class BlueCompetitionTeleOP extends OpMode
@@ -19,7 +20,7 @@ public class BlueCompetitionTeleOP extends OpMode
         loop= new Timer();
         Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         Robot.dt.enableTeleop();
-        telemetry.addData("tempOffset: ", Turret.tempOffset);
+        telemetry.addData("tempOffset: ", Storage.turretOffset);
         //Robot.turret.setOffsetAngle(0);
     }
 

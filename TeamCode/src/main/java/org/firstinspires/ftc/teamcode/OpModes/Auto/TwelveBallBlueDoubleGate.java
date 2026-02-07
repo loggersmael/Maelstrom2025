@@ -59,7 +59,7 @@ public class TwelveBallBlueDoubleGate extends CommandOpMode
                                 new WaitCommand(200),
                                 new InstantCommand(() -> robot.intake.spinIn()),
                                 new FollowPathCommand(follower,paths.Gate,true),
-                                new FollowPathCommand(follower,paths.Gate2,true),
+                                new FollowPathCommand(follower,paths.Gate2,true).withTimeout(1000),
                                 new WaitCommand(50),
                                 new FollowPathCommand(follower,paths.Return1,false),
                                 new FollowPathCommand(follower,paths.Return12,true),
@@ -84,6 +84,7 @@ public class TwelveBallBlueDoubleGate extends CommandOpMode
                                 new FollowPathCommand(follower,paths.Return3,true),
                                 new ShootCommandV2(robot),
                                 new ParallelCommandGroup(
+                                        new InstantCommand(()->robot.turret.setManualAngle(0)),
                                         new InstantCommand(() -> robot.shooter.stopFlywheel()),
                                         new InstantCommand(() -> robot.reset())
                                 )
