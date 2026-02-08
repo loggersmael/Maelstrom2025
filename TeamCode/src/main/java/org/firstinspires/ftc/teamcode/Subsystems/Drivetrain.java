@@ -15,6 +15,7 @@ import com.pedropathing.localization.Localizer;
 import com.pedropathing.geometry.Pose;
 
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -37,6 +38,7 @@ import org.firstinspires.ftc.teamcode.Utilities.Constants.GlobalConstants;
 import org.firstinspires.ftc.teamcode.Utilities.Constants.GlobalConstants.OpModeType;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
+import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
@@ -52,6 +54,8 @@ public class Drivetrain extends SubsystemBase {
     public static Pose startPose = new Pose(0, 0, 0);
     private Pose megaTagPose = new Pose(0, 0, 0);
     private Pose fusedPose= new Pose(0,0,0);
+
+    private List<LynxModule> allHubs;
 
     public double distance=0;
 
@@ -89,6 +93,11 @@ public class Drivetrain extends SubsystemBase {
         this.telemetry = telemetry;
         xFilter = new KalmanFilter(processNoise, measurementNoise);
         yFilter = new KalmanFilter(processNoise2, measurementNoise2);
+
+        allHubs=aHardwareMap.getAll(LynxModule.class);
+        for (LynxModule hub : allHubs) {
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
     }
 
     @Override
@@ -112,6 +121,10 @@ public class Drivetrain extends SubsystemBase {
         telemetry.addData("Odo Distance: ", distance);
         long totalTime = System.nanoTime() - startTime;
         telemetry.addData("Loop Time: ", totalTime / 1000000);
+
+        for (LynxModule hub : allHubs) {
+            hub.clearBulkCache();
+        }
     }
 
     public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric) {

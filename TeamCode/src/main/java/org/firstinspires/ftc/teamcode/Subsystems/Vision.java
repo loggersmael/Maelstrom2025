@@ -37,7 +37,7 @@ public class Vision extends SubsystemBase
         cam= hMap.get(Limelight3A.class,"limelight");
         
         // CRITICAL: Start the Limelight before trying to get results
-        cam.start();
+        //cam.start();
 
         cam.setPollRateHz(25);
         

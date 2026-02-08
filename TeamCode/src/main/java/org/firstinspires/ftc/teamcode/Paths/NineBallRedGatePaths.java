@@ -74,7 +74,7 @@ public class NineBallRedGatePaths
                         new BezierLine(
                                 new Pose(15.138, 70.165).mirror(),
 
-                                new Pose(39.048, 71.478).mirror()
+                                new Pose(40.048, 71.478).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
 
@@ -82,7 +82,7 @@ public class NineBallRedGatePaths
 
         Return12 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(39.048, 71.478).mirror(),
+                                new Pose(40.048, 71.478).mirror(),
 
                                 new Pose(58.300, 85.000).mirror()
                         )

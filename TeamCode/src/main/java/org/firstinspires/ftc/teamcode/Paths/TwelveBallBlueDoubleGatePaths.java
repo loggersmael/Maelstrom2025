@@ -77,7 +77,7 @@ public class TwelveBallBlueDoubleGatePaths
                         new BezierLine(
                                 new Pose(15.138, 70.165),
 
-                                new Pose(39.048, 71.478)
+                                new Pose(40.048, 71.478)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
@@ -85,7 +85,7 @@ public class TwelveBallBlueDoubleGatePaths
 
         Return12 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(39.048, 71.478),
+                                new Pose(40.048, 71.478),
 
                                 new Pose(58.300, 85.000)
                         )
@@ -137,7 +137,7 @@ public class TwelveBallBlueDoubleGatePaths
                         new BezierLine(
                                 new Pose(58.300, 85.000),
 
-                                new Pose(43.180, 36.610)
+                                new Pose(45.180, 36.610)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
 
@@ -145,7 +145,7 @@ public class TwelveBallBlueDoubleGatePaths
 
         Pickup32 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(43.180, 36.610),
+                                new Pose(45.180, 36.610),
 
                                 new Pose(13.912, 35.627)
                         )
@@ -157,7 +157,7 @@ public class TwelveBallBlueDoubleGatePaths
                         new BezierLine(
                                 new Pose(13.912, 35.627),
 
-                                new Pose(57.000, 107.000)
+                                new Pose(57.000, 111.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();

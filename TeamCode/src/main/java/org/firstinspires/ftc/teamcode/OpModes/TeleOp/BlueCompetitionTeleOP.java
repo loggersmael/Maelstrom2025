@@ -21,14 +21,14 @@ public class BlueCompetitionTeleOP extends OpMode
         Robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
         Robot.dt.enableTeleop();
         telemetry.addData("tempOffset: ", Storage.turretOffset);
-        //Robot.turret.setOffsetAngle(0);
+        Robot.turret.setManualAngle(0);
     }
 
     @Override
     public void start()
     {
         Robot.turret.updateOffset();
-        Robot.turret.startPoseTracking();
+        Robot.turret.setPointMode();
         loop.resetTimer();
     }
 

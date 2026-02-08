@@ -24,7 +24,7 @@ public class Intake extends SubsystemBase
     private DcMotorEx intakeMotor;
     private Servo kicker;
     private Servo kicker2;
-    private RevColorSensorV3 sensor1;
+    //private RevColorSensorV3 sensor1;
     private RevColorSensorV3 sensor2;
     private NormalizedRGBA colors1;
     private NormalizedRGBA colors2;
@@ -40,9 +40,9 @@ public class Intake extends SubsystemBase
         kicker2= aHardwareMap.get(Servo.class,"kicker2");
         kicker2.setDirection(Servo.Direction.FORWARD);
         intakeMotor= aHardwareMap.get(DcMotorEx.class,"intake");
-        sensor1= aHardwareMap.get(RevColorSensorV3.class,"sensor1");
+        //sensor1= aHardwareMap.get(RevColorSensorV3.class,"sensor1");
         sensor2= aHardwareMap.get(RevColorSensorV3.class,"sensor2");
-        colors1=sensor1.getNormalizedColors();
+        //colors1=sensor1.getNormalizedColors();
         colors2=sensor2.getNormalizedColors();
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

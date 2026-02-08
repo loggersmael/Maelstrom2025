@@ -74,7 +74,7 @@ public class TwelveBallRedLine {
                         new BezierLine(
                                 new Pose(15.138, 70.165).mirror(),
 
-                                new Pose(39.048, 71.478).mirror()
+                                new Pose(40.048, 71.478).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
 
@@ -82,7 +82,7 @@ public class TwelveBallRedLine {
 
         Return12 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(39.048, 71.478).mirror(),
+                                new Pose(40.048, 71.478).mirror(),
 
                                 new Pose(58.300, 85.000).mirror()
                         )
@@ -114,7 +114,7 @@ public class TwelveBallRedLine {
                         new BezierLine(
                                 new Pose(58.300, 85.000).mirror(),
 
-                                new Pose(43.180, 36.610).mirror()
+                                new Pose(45.180, 36.610).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
 
@@ -122,7 +122,7 @@ public class TwelveBallRedLine {
 
         Pickup32 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(43.180, 36.610).mirror(),
+                                new Pose(45.180, 36.610).mirror(),
 
                                 new Pose(11, 35.627).mirror()
                         )
@@ -134,7 +134,7 @@ public class TwelveBallRedLine {
                         new BezierLine(
                                 new Pose(11, 35.627).mirror(),
 
-                                new Pose(57.000, 107.000).mirror()
+                                new Pose(57.000, 111.000).mirror()
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(0))
                 .build();
