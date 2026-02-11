@@ -22,14 +22,14 @@ public class ShootTest extends CommandOpMode
     public void initialize()
     {
         robot= new Maelstrom(hardwareMap,telemetry, Maelstrom.Alliance.BLUE,gamepad1,gamepad2);
-        robot.shooter.setTargetVelocity(2100);
+        robot.shooter.setTargetVelocity(2400);
 
         schedule(
                 new SequentialCommandGroup(
                         new WaitUntilCommand(this::opModeIsActive),
                         new InstantCommand(() -> robot.shooter.enableFlywheel()),
                         new WaitCommand(2000),
-                        new FarShootCommand(robot)
+                        new ShootCommandV2(robot)
                 )
         );
     }
