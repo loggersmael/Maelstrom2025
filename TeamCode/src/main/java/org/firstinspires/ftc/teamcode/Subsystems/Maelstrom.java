@@ -118,7 +118,7 @@ public class Maelstrom extends Robot
 
         if(driver2.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON))
         {
-            startTransfer();
+            startCloseTransfer();
         }
         if(driver1.getButton(GamepadKeys.Button.RIGHT_BUMPER))
         {
