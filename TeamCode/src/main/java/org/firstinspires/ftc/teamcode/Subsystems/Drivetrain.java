@@ -13,14 +13,13 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.localization.Localizer;
 import com.pedropathing.geometry.Pose;
-
+import com.pedropathing.math.Vector;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -53,11 +52,11 @@ public class Drivetrain extends SubsystemBase {
     private Vision cams;
     public static Pose startPose = new Pose(0, 0, 0);
     private Pose megaTagPose = new Pose(0, 0, 0);
-    private Pose fusedPose= new Pose(0,0,0);
+    private Pose fusedPose = new Pose(0, 0, 0);
 
     private List<LynxModule> allHubs;
 
-    public double distance=0;
+    public double distance = 0;
 
     private final KalmanFilter xFilter;
     private final KalmanFilter yFilter;
@@ -65,26 +64,31 @@ public class Drivetrain extends SubsystemBase {
     private Telemetry telemetry;
 
     public Drivetrain(HardwareMap aHardwareMap, Telemetry telemetry, Vision cam) {
-      /*  leftFront = new Motor(aHardwareMap, DrivetrainConstants.fLMotorID, Motor.GoBILDA.RPM_312);
-        rightFront = new Motor(aHardwareMap, DrivetrainConstants.fRMotorID, Motor.GoBILDA.RPM_312);
-        leftRear = new Motor(aHardwareMap, DrivetrainConstants.bLMotorID, Motor.GoBILDA.RPM_312);
-        rightRear = new Motor(aHardwareMap, DrivetrainConstants.bRMotorID, Motor.GoBILDA.RPM_312);
-
-        leftFront.setRunMode(Motor.RunMode.RawPower);
-        rightFront.setRunMode(Motor.RunMode.RawPower);
-        leftRear.setRunMode(Motor.RunMode.RawPower);
-        rightRear.setRunMode(Motor.RunMode.RawPower);
-
-        leftFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        leftRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        rightRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-
-        leftFront.setInverted(true);
-        rightFront.setInverted(true);
-        leftRear.setInverted(false);
-        rightRear.setInverted(false); */
-
+        /*
+         * leftFront = new Motor(aHardwareMap, DrivetrainConstants.fLMotorID,
+         * Motor.GoBILDA.RPM_312);
+         * rightFront = new Motor(aHardwareMap, DrivetrainConstants.fRMotorID,
+         * Motor.GoBILDA.RPM_312);
+         * leftRear = new Motor(aHardwareMap, DrivetrainConstants.bLMotorID,
+         * Motor.GoBILDA.RPM_312);
+         * rightRear = new Motor(aHardwareMap, DrivetrainConstants.bRMotorID,
+         * Motor.GoBILDA.RPM_312);
+         * 
+         * leftFront.setRunMode(Motor.RunMode.RawPower);
+         * rightFront.setRunMode(Motor.RunMode.RawPower);
+         * leftRear.setRunMode(Motor.RunMode.RawPower);
+         * rightRear.setRunMode(Motor.RunMode.RawPower);
+         * 
+         * leftFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+         * rightFront.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+         * leftRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+         * rightRear.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+         * 
+         * leftFront.setInverted(true);
+         * rightFront.setInverted(true);
+         * leftRear.setInverted(false);
+         * rightRear.setInverted(false);
+         */
 
         follower = Constants.createFollower(aHardwareMap);
         cams = cam;
@@ -94,7 +98,7 @@ public class Drivetrain extends SubsystemBase {
         xFilter = new KalmanFilter(processNoise, measurementNoise);
         yFilter = new KalmanFilter(processNoise2, measurementNoise2);
 
-        allHubs=aHardwareMap.getAll(LynxModule.class);
+        allHubs = aHardwareMap.getAll(LynxModule.class);
         for (LynxModule hub : allHubs) {
             hub.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
@@ -103,7 +107,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         long startTime = System.nanoTime();
-//        follower.updatePose();
+        // follower.updatePose();
         xFilter.setProcessNoise(processNoise);
         xFilter.setMeasurementNoise(measurementNoise);
         yFilter.setProcessNoise(processNoise2);
@@ -111,8 +115,8 @@ public class Drivetrain extends SubsystemBase {
         follower.update();
         cams.setMT2Orientation(follower.getPose());
         megaTagPose = cams.getPedro();
-        fusedPose= getFusedPose(follower.getPose(), megaTagPose);
-        //follower.setPose(fusedPose);
+        fusedPose = getFusedPose(follower.getPose(), megaTagPose);
+        // follower.setPose(fusedPose);
         telemetry.addData("Drivetrain Pose X", follower.getPose().getX());
         telemetry.addData("Drivetrain Pose Y", follower.getPose().getY());
         telemetry.addData("Drivetrain Heading", follower.getPose().getHeading());
@@ -132,11 +136,13 @@ public class Drivetrain extends SubsystemBase {
         follower.setTeleOpDrive(forward, -strafe, -rotation, !feildCentric);
     }
 
-    public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric, double headingOffset) {
+    public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric,
+            double headingOffset) {
         follower.setTeleOpDrive(forward, -strafe, -rotation, !feildCentric, headingOffset);
     }
 
-    public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric, Maelstrom.Alliance color) {
+    public void setMovementVectors(double strafe, double forward, double rotation, boolean feildCentric,
+            Maelstrom.Alliance color) {
         if (color.equals(Maelstrom.Alliance.RED)) {
             follower.setTeleOpDrive(forward, -strafe, -rotation, !feildCentric, 0);
         } else if (color.equals(Maelstrom.Alliance.BLUE)) {
@@ -157,111 +163,128 @@ public class Drivetrain extends SubsystemBase {
         startPose = pose;
     }
 
-        public Pose getFusedPose(Pose currentPose, Pose limelightPose) {
-            double fusedX = xFilter.update(limelightPose.getX(), currentPose.getX());
-            double fusedY = yFilter.update(limelightPose.getY(), currentPose.getY());
-            double fusedHeading = currentPose.getHeading();
+    public Pose getFusedPose(Pose currentPose, Pose limelightPose) {
+        double fusedX = xFilter.update(limelightPose.getX(), currentPose.getX());
+        double fusedY = yFilter.update(limelightPose.getY(), currentPose.getY());
+        double fusedHeading = currentPose.getHeading();
 
-            return new Pose(fusedX, fusedY, fusedHeading);
-        }
+        return new Pose(fusedX, fusedY, fusedHeading);
+    }
 
-        public void enableTeleop () {
-            follower.setStartingPose(startPose);
-            follower.startTeleopDrive(true);
-        }
+    public void enableTeleop() {
+        follower.setStartingPose(startPose);
+        follower.startTeleopDrive(true);
+    }
 
-        public void resetHeading (Maelstrom.Alliance color)
-        {
-            if (color.equals(Maelstrom.Alliance.RED)) {
-                follower.setPose(new Pose(follower.getPose().getX(), follower.getPose().getY(), Math.toRadians(0)));
-            } else if (color.equals(Maelstrom.Alliance.BLUE)) {
-                follower.setPose(new Pose(follower.getPose().getX(), follower.getPose().getY(), Math.toRadians(180)));
-            }
-        }
-
-        public void hold ()
-        {
-            follower.holdPoint(follower.getPose());
-        }
-
-        public double getHeading ()
-        {
-            return follower.getPose().getHeading();
-        }
-
-        public double getX ()
-        {
-            return follower.getPose().getX();
-        }
-
-        public double getY ()
-        {
-            return follower.getPose().getY();
-        }
-
-        public Pose getPose ()
-        {
-            return follower.getPose();
-        }
-
-        public void parkUp ()
-        {
-            park.setPower(1);
-        }
-        public void parkDown()
-        {
-            park.setPower(-1);
-        }
-        public void stopPark()
-        {
-            park.setPower(0);
-        }
-
-        public void calcDistance(Maelstrom.Alliance color)
-        {
-            double x;
-            double y;
-            if(color.equals(Maelstrom.Alliance.BLUE)) {
-                x = Math.pow(follower.getPose().getX() - blueGoal.getX(),2);
-                y = Math.pow(follower.getPose().getY() - blueGoal.getY(),2);
-            }
-            else
-            {
-                x = Math.pow(follower.getPose().getX() - redGoal.getX(),2);
-                y = Math.pow(follower.getPose().getY() - redGoal.getY(),2);
-            }
-            distance= Math.sqrt(x+y);
-        }
-
-        private static class KalmanFilter {
-            private double processNoise;
-            private double measurementNoise;
-            private double estimate;
-            private double errorCovariance;
-
-            public KalmanFilter(double processNoise, double measurementNoise) {
-                this.processNoise = processNoise;
-                this.measurementNoise = measurementNoise;
-                this.estimate = 0;
-                this.errorCovariance = 1;
-            }
-
-            public double update(double measurement, double prediction) {
-                errorCovariance += processNoise;
-                double kalmanGain = errorCovariance / (errorCovariance + measurementNoise);
-                estimate = prediction + kalmanGain * (measurement - prediction);
-                errorCovariance = (1 - kalmanGain) * errorCovariance;
-                return estimate;
-            }
-
-            public void setMeasurementNoise(double measurementNoise) {
-                this.measurementNoise = measurementNoise;
-            }
-
-            public void setProcessNoise(double processNoise) {
-                this.processNoise = processNoise;
-            }
+    public void resetHeading(Maelstrom.Alliance color) {
+        if (color.equals(Maelstrom.Alliance.RED)) {
+            follower.setPose(new Pose(follower.getPose().getX(), follower.getPose().getY(), Math.toRadians(0)));
+        } else if (color.equals(Maelstrom.Alliance.BLUE)) {
+            follower.setPose(new Pose(follower.getPose().getX(), follower.getPose().getY(), Math.toRadians(180)));
         }
     }
 
+    public void hold() {
+        follower.holdPoint(follower.getPose());
+    }
 
+    public double getHeading() {
+        return follower.getPose().getHeading();
+    }
+
+    public double getX() {
+        return follower.getPose().getX();
+    }
+
+    public double getY() {
+        return follower.getPose().getY();
+    }
+
+    public Pose getPose() {
+        return follower.getPose();
+    }
+
+    public void parkUp() {
+        park.setPower(1);
+    }
+
+    public void parkDown() {
+        park.setPower(-1);
+    }
+
+    public void stopPark() {
+        park.setPower(0);
+    }
+
+    public void calcDistance(Maelstrom.Alliance color) {
+        double x;
+        double y;
+        if (color.equals(Maelstrom.Alliance.BLUE)) {
+            x = Math.pow(follower.getPose().getX() - blueGoal.getX(), 2);
+            y = Math.pow(follower.getPose().getY() - blueGoal.getY(), 2);
+        } else {
+            x = Math.pow(follower.getPose().getX() - redGoal.getX(), 2);
+            y = Math.pow(follower.getPose().getY() - redGoal.getY(), 2);
+        }
+        distance = Math.sqrt(x + y);
+    }
+
+    /** Returns the follower's velocity as a field-frame Vector. */
+    public Vector getVelocityVector() {
+        return follower.getVelocity();
+    }
+
+    /**
+     * Velocity component along the robot→goal direction (positive = approaching
+     * goal).
+     */
+    public double getRadialVelocity(Pose goal) {
+        double angleToGoal = Math.atan2(goal.getY() - getPose().getY(),
+                goal.getX() - getPose().getX());
+        Vector vel = getVelocityVector();
+        return vel.getXComponent() * Math.cos(angleToGoal)
+                + vel.getYComponent() * Math.sin(angleToGoal);
+    }
+
+    /**
+     * Velocity component perpendicular to robot→goal line (positive = left of goal
+     * direction).
+     */
+    public double getTangentialVelocity(Pose goal) {
+        double angleToGoal = Math.atan2(goal.getY() - getPose().getY(),
+                goal.getX() - getPose().getX());
+        Vector vel = getVelocityVector();
+        return -vel.getXComponent() * Math.sin(angleToGoal)
+                + vel.getYComponent() * Math.cos(angleToGoal);
+    }
+
+    private static class KalmanFilter {
+        private double processNoise;
+        private double measurementNoise;
+        private double estimate;
+        private double errorCovariance;
+
+        public KalmanFilter(double processNoise, double measurementNoise) {
+            this.processNoise = processNoise;
+            this.measurementNoise = measurementNoise;
+            this.estimate = 0;
+            this.errorCovariance = 1;
+        }
+
+        public double update(double measurement, double prediction) {
+            errorCovariance += processNoise;
+            double kalmanGain = errorCovariance / (errorCovariance + measurementNoise);
+            estimate = prediction + kalmanGain * (measurement - prediction);
+            errorCovariance = (1 - kalmanGain) * errorCovariance;
+            return estimate;
+        }
+
+        public void setMeasurementNoise(double measurementNoise) {
+            this.measurementNoise = measurementNoise;
+        }
+
+        public void setProcessNoise(double processNoise) {
+            this.processNoise = processNoise;
+        }
+    }
+}
