@@ -71,7 +71,7 @@ public class Turret extends SubsystemBase
         this.telemetry=telemetry;
         turretMotor= new MotorEx(hMap,"turret");
         encoder=turretMotor.encoder;
-        turretMotor.motorEx.setDirection(DcMotorSimple.Direction.FORWARD);
+        turretMotor.motorEx.setDirection(DcMotorSimple.Direction.REVERSE);
         turretMotor.setRunMode(Motor.RunMode.RawPower);
         turretMotor.stopAndResetEncoder();
         state=TurretState.IDLE;

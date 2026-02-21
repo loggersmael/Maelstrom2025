@@ -38,13 +38,13 @@ public class Intake extends SubsystemBase
         kicker= aHardwareMap.get(Servo.class,"kicker");
         kicker.setDirection(Servo.Direction.FORWARD);
         kicker2= aHardwareMap.get(Servo.class,"kicker2");
-        kicker2.setDirection(Servo.Direction.FORWARD);
+        kicker2.setDirection(Servo.Direction.REVERSE);
         intakeMotor= aHardwareMap.get(DcMotorEx.class,"intake");
         //sensor1= aHardwareMap.get(RevColorSensorV3.class,"sensor1");
         sensor2= aHardwareMap.get(RevColorSensorV3.class,"sensor2");
         //colors1=sensor1.getNormalizedColors();
         colors2=sensor2.getNormalizedColors();
-        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         kicker.setPosition(0.6);
         kicker2.setPosition(0);
@@ -58,9 +58,9 @@ public class Intake extends SubsystemBase
         //colors2=sensor2.getNormalizedColors();
 
         //telemetry.addData("Sensor 1 distance: ", sensor1.getDistance(DistanceUnit.INCH));
-        if(loopCounter%4==0) {
-            //telemetry.addData("Sensor 2 Distance: ", sensor2.getDistance(DistanceUnit.INCH));
-        }
+
+        telemetry.addData("Sensor 2 Distance: ", sensor2.getDistance(DistanceUnit.INCH));
+
         //telemetry.addData("Sensor 1 Color: ",colors1.red + " " + colors1.green + " " + colors1.blue );
         //telemetry.addData("Sensor 2 Color: ",colors2.red + " " + colors2.green + " " + colors2.blue );
         loopCounter++;
@@ -115,7 +115,7 @@ public class Intake extends SubsystemBase
 
     public void kicker2Up()
     {
-        kicker2.setPosition(0.35);
+        kicker2.setPosition(0.3);
     }
 
     public void kicker2down()
